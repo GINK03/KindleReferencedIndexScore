@@ -31,14 +31,12 @@ ALL_SCRAPING_DATA = []
 def initiate_data():
     if os.path.isfile('scraped_data.dat'):
         with open('scraped_data.dat', 'r') as file: 
-            for line in file: 
-                ALL_SCRAPING_DATA.append( pickle.loads(line) )
-            print( ALL_SCRAPING_DATA )
-
+            ALL_SCRAPING_DATA = pickle.loads(file.read())
+    for local in ALL_SCRAPING_DATA:
+        print local
 def finish_procedure():
     with open('scraped_data.dat', 'w') as file:
-        for scrating_data in ALL_SCRAPING_DATA:
-            file.writelines( pickle.dumps(scraping_data).replace('\n', '') + '\n' )
+        file.writelines( pickle.dumps(ALL_SCRAPING_DATA) )
 
 if __name__ == '__main__':
     initiate_data()
@@ -63,26 +61,30 @@ if __name__ == '__main__':
                 unquote_url = 'None'
             raw_url     = (lambda x:'https://www.amazon.co.jp' + x if x[0] =='/' else x)(a['href'])
             description = a.string
-            if 'Kindle' in unquote_url:
-                if filter(lambda x:raw_url == x[0], ALL_SCRAPING_DATA ) == []:
-                    #try:
-                        scraping_data = ScrapingData()
-                        scraping_data.url = raw_url
-                        scraping_data.uniq_url = ''
-                        if '=' in raw_url:
-                            scraping_data.uniq_url = '/'.join( raw_url.split('/')[:-1] )
-                        else:
-                            scraping_data.uniq_url = raw_url
-                        #scraping_data.html_raw = urllib2.urlopen(raw_url).read()
-                        # soupの保存は深度エラーになって対応できない
-                        _soup = bs4.BeautifulSoup(scraping_data.html_raw)
-                        scraping_data.title = (lambda x: _soup.title.string if x != None else 'None')(_soup.title)
-                        ALL_SCRAPING_DATA.append( (scraping_data.uniq_url, scraping_data) )
-                        pickle.dumps(scraping_data) 
-                        print 'new', scraping_data.uniq_url, description 
-                    #except :
-                    #    print( 'dispose', i )
-                        pass
+            
+            scraping_data = ScrapingData()
+            scraping_data.uniq_url = ''
+            if '=' in raw_url:
+                scraping_data.uniq_url = '/'.join( raw_url.split('/')[:-1] )
+            else:
+                scraping_data.uniq_url = raw_url
+            # - 
+            if not 'amazon.co.jp' in scraping_data.uniq_url:
+                print '!!!', scraping_data.uniq_url, 'amazon out of service'
+                continue
+            if filter(lambda x:scraping_data.uniq_url in x[0], ALL_SCRAPING_DATA ) != []:
+                print '!!!!', 'already parsed', scraping_data.uniq_url
+                print filter(lambda x:scraping_data.uniq_url == x[0], ALL_SCRAPING_DATA )
+                continue
+            else:
+                #try:
+                scraping_data.url = raw_url
+                # soupの保存は深度エラーになって対応できない
+                # scraping_data.title = (lambda x: _soup.title.string if x != None else 'None')(_soup.title)
+                ALL_SCRAPING_DATA.append( (scraping_data.uniq_url, scraping_data) )
+                print 'new', scraping_data.uniq_url, description 
+                #except :
+                pass
 
     finish_procedure()
 
