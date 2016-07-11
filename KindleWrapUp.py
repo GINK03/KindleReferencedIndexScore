@@ -8,12 +8,20 @@ import os.path
 import anydbm
 import __future__
 import hashlib
+import argparse
+import multiprocessing
+import threading
 
 def fprint(x): print x
 
 
 # defined parameters
 KINDLE_URL = 'https://www.amazon.co.jp/%E3%83%89%E3%83%AA%E3%83%95%E3%82%BF%E3%83%BC%E3%82%BA%EF%BC%88%EF%BC%91%EF%BC%89-%E3%83%A4%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%B3%E3%82%B0%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%82%B9-%E5%B9%B3%E9%87%8E%E8%80%95%E5%A4%AA-ebook/dp/B00CBEUBX4/ref=pd_sim_351_47?ie=UTF8&dpID=51YqRdk-GIL&dpSrc=sims&preST=_AC_UL160_SR114%2C160_&psc=1&refRID=QNE135S3MRAR0TDJMP9A'
+RETRY_NUM = 1
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
+SEED_EXIST = True
+SEED_NO_EXIST = False
+DESIRABLE_THREAD_NUM = 100
 
 class Reviews:
     def __init__(self):
@@ -37,16 +45,23 @@ class ScrapingData:
         self.reviews = []
         self.craw_revision = 0
         self.evaluated = []
+        self.count = 0
 
 # open db
 def initiate_data():
+    res_mode = False
     db = anydbm.open('objects.db', 'c')
     for k, v in db.iteritems():
         loads = pickle.loads(v)
         ALL_SCRAPING_DATA.append( (loads.normalized_url , loads) )
         print loads.normalized_url, loads, map(lambda x:x.from_url, loads.evaluated)
+    if db.keys() > 0 :
+        res_mode = SEED_EXIST
+    else:
+        res_mode = SEED_NO_EXIST
     db.close()
-    sys.exit(0)
+    return res_mode
+    #sys.exit(0)
 # close db
 def finish_procedure():
     db = anydbm.open('objects.db', 'c')
@@ -72,7 +87,7 @@ def get_soup_from_default_node():
             print 'cannot connect to amazon server!' 
             continue
 
-def parse_and_map_data_to_local_db(soup):
+def initialize_parse_and_map_data_to_local_db(soup):
     for i, a in enumerate(soup.find_all('a')):
         if a.has_attr('href'):
             print 'try analyising...', i, '/', len(soup.find_all('a')) 
@@ -89,7 +104,7 @@ def parse_and_map_data_to_local_db(soup):
                 scraping_data.normalized_url = '/'.join( filter(lambda x:not '=' in x, raw_url.split('?').pop(0).split('/') ) )
             else:
                 scraping_data.normalized_url = raw_url
-            if not 'amazon.co.jp' in scraping_data.normalized_url:
+            if not 'www.amazon.co.jp' in scraping_data.normalized_url:
                 print '[!!!]', scraping_data.normalized_url, 'amazon out of service'
                 continue
             if filter(lambda x:scraping_data.normalized_url == x[0], ALL_SCRAPING_DATA ) != []:
@@ -115,10 +130,18 @@ def parse_and_map_data_to_local_db(soup):
                 pass
 
 def map_data_to_local_db_from_url(scraping_data):
-    try:
-        html = urllib2.urlopen(scraping_data.url).read()
-    except:
-        return []
+    html = None
+    for _ in range(RETRY_NUM):
+        try:
+            opener = urllib2.build_opener()
+            opener.addheaders = [('User-agent', USER_AGENT)]
+            html = opener.open(scraping_data.url, timeout = 1).read()
+        except:
+            print 'cannot access to', scraping_data.url
+            continue
+        break
+    if html == None : return []
+    
     soup = bs4.BeautifulSoup(html)
     scraping_data.title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
     ret_list = []
@@ -132,6 +155,8 @@ def map_data_to_local_db_from_url(scraping_data):
             # ASINコードっぽくない奴はパス
             if not filter_is_asin(fixed_url):
                 continue
+            # '\n'コードを削除 ' 'を削除
+            fixed_url = fixed_url.replace('\n','').replace(' ','')
             _scraping_data.url = fixed_url
             _scraping_data.normalized_url = '/'.join( filter( lambda x: not '=' in x, fixed_url.split('?').pop(0).split('/') ) )
             filter_len = len( filter(lambda x: _scraping_data.normalized_url == x[0], ALL_SCRAPING_DATA ) ) 
@@ -143,17 +168,14 @@ def map_data_to_local_db_from_url(scraping_data):
             _scraping_data.url = fixed_url
             _scraping_data.title = 'Untitled'
             ret_list.append( (_scraping_data.normalized_url, _scraping_data) )
-            print 'in ', scraping_data.url, i, fixed_url, _scraping_data.normalized_url, is_already_exist
+            #print 'in ', scraping_data.url, i, fixed_url, _scraping_data.normalized_url, is_already_exist
     return ret_list
 
 def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
     split_url = normalized_url.split('?').pop(0) 
     obj_in_list = filter(lambda x:split_url in x[0], scraping_data_list)
-    # return
     if obj_in_list == []:
-        print 'evaluate will passed, will return', split_url, obj_in_list
         return
-    print '[*special*] evaluate ', split_url
     obj = obj_in_list.pop()[1]
     normalized_from_url = from_url.split('?').pop(0).split('=').pop(0)
     #referenced_objs = filter(lambda x:x.from_url == normalized_from_url, obj.evaluated)
@@ -161,7 +183,7 @@ def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
         referenced_obj = Referenced() 
         referenced_obj.from_url = normalized_from_url
         obj.evaluated.append( referenced_obj )
-        print '[!!!!!!]a entity will be stocked', obj, filter(lambda x:x[0] == normalized_url, scraping_data_list), map(lambda x:x.from_url, obj.evaluated)
+        #print '[!!!!!!]a entity will be stocked', obj, filter(lambda x:x[0] == normalized_url, scraping_data_list), map(lambda x:x.from_url, obj.evaluated)
 
 def filter_is_asin(url):
     is_asin = (lambda x:x.pop() if x != [] else '?')( filter(lambda x:len(x) == 10, url.split('?').pop(0).split('/')) )
@@ -179,21 +201,47 @@ def validate_is_asin(scraping_data_list):
             print 'http://www.amazon.co.jp/dp/' + is_asin, url, scraping_data
     return ret_list
 
-# ALL_SCRAPING_DATA = []
+def search_flatten_threadc(i, chunked_list, to_increse_list):
+    for url, scraping_data in chunked_list:
+        if scraping_data.count >= 1:
+            print 'pass ',  scraping_data.url, scraping_data.count, i, '/', len(ALL_SCRAPING_DATA)
+            continue
+        to_increse_list.extend( map_data_to_local_db_from_url(scraping_data) )
+        scraping_data.count += 1
+        print 'eval ', scraping_data.url, 'counter =', scraping_data.count, i, '/', len(ALL_SCRAPING_DATA)
+
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i+n]
+
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
+    parser.add_argument('--URL', help='set default URL which to scrape at first')
+    parser.add_argument('--depth', help='how number of url this program will scrape')
+    args_obj = vars(parser.parse_args())
+    depth = (lambda x:int(x) if x else 1)( args_obj.get('depth') )
+
+
     global ALL_SCRAPING_DATA
     ALL_SCRAPING_DATA = []
-    initiate_data()
-    #sys.exit(0)
-    soup = get_soup_from_default_node()
-    parse_and_map_data_to_local_db(soup)
-    ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
     
-    to_increse_list = []
-    for (ur, scraping_data) in ALL_SCRAPING_DATA:
-        to_increse_list.extend( map_data_to_local_db_from_url(scraping_data) )
-    ALL_SCRAPING_DATA.extend( to_increse_list )
-    ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
+    # SEEDが存在しないならば初期化
+    if initiate_data() == SEED_NO_EXIST:
+        soup = get_soup_from_default_node()
+        initialize_parse_and_map_data_to_local_db(soup)
+        ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
+  
+    # 深度を決めて幅優先探索
+    for i in range(depth):
+        to_increse_list = []
+        #for i, (url, scraping_data) in enumerate(ALL_SCRAPING_DATA):
+        for i, chunked_list in enumerate(chunks(ALL_SCRAPING_DATA, DESIRABLE_THREAD_NUM ) ):
+            p = threading.Thread(target=search_flatten_threadc, args=(i,chunked_list,to_increse_list,))
+            p.deamon = True
+            p.start()
+        ALL_SCRAPING_DATA.extend( to_increse_list )
+        ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
     
     finish_procedure()
 
