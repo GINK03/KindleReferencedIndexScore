@@ -9,7 +9,7 @@ import anydbm
 import __future__
 import hashlib
 import argparse
-import multiprocessing
+import multiprocessing as mp
 import threading
 
 def fprint(x): print x
@@ -17,11 +17,11 @@ def fprint(x): print x
 
 # defined parameters
 KINDLE_URL = 'https://www.amazon.co.jp/%E3%83%89%E3%83%AA%E3%83%95%E3%82%BF%E3%83%BC%E3%82%BA%EF%BC%88%EF%BC%91%EF%BC%89-%E3%83%A4%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%B3%E3%82%B0%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%82%B9-%E5%B9%B3%E9%87%8E%E8%80%95%E5%A4%AA-ebook/dp/B00CBEUBX4/ref=pd_sim_351_47?ie=UTF8&dpID=51YqRdk-GIL&dpSrc=sims&preST=_AC_UL160_SR114%2C160_&psc=1&refRID=QNE135S3MRAR0TDJMP9A'
-RETRY_NUM = 1
+RETRY_NUM = 10
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
 SEED_EXIST = True
 SEED_NO_EXIST = False
-DESIRABLE_THREAD_NUM = 100
+DESIRABLE_PROCESS_NUM = 18
 
 class Reviews:
     def __init__(self):
@@ -39,7 +39,7 @@ class ScrapingData:
         self.date = 0
         self.title = ''
         self.description = ''
-        self.html_raw = ''
+        self.html = None
         self.html_context = ''
         self.amazon_rating = 0
         self.reviews = []
@@ -52,16 +52,18 @@ def initiate_data():
     res_mode = False
     db = anydbm.open('objects.db', 'c')
     for k, v in db.iteritems():
-        loads = pickle.loads(v)
+        try:
+            loads = pickle.loads(v)
+        except:
+            continue
         ALL_SCRAPING_DATA.append( (loads.normalized_url , loads) )
         print loads.normalized_url, loads, map(lambda x:x.from_url, loads.evaluated)
-    if db.keys() > 0 :
+    if len(db.keys()) > 0 :
         res_mode = SEED_EXIST
     else:
         res_mode = SEED_NO_EXIST
     db.close()
     return res_mode
-    #sys.exit(0)
 # close db
 def finish_procedure():
     db = anydbm.open('objects.db', 'c')
@@ -71,23 +73,28 @@ def finish_procedure():
         #print normalized_url, sha, obj
         db[sha] = dumps
     db.close()
-    #with open('scraped_data.dat', 'w') as file:
-    #    file.writelines( pickle.dumps(ALL_SCRAPING_DATA) )
+# write each 
+def write_each(scraping_data):
+    db = anydbm.open('objects.db', 'c')
+    dumps = pickle.dumps(scraping_data)
+    sha = hashlib.sha224(dumps).hexdigest()
+    db[sha] = dumps
+    db.close()
 
 # set default state to scrape web pages in Amazon Kindle
-def get_soup_from_default_node():
+def initialize_parse_and_map_data_to_local_db():
     while(True):
         try:
-            print 'try connecting to amazon server.' 
-            html = urllib2.urlopen(KINDLE_URL).read()
+            print 'try connecting to amazon server...' 
+            opener = urllib2.build_opener()
+            opener.addheaders = [('User-agent', USER_AGENT)]
+            html = opener.open(KINDLE_URL, timeout = 1).read()
             soup = bs4.BeautifulSoup(html)
             print 'connected to amazon server.' 
-            return soup
+            break
         except:
             print 'cannot connect to amazon server!' 
             continue
-
-def initialize_parse_and_map_data_to_local_db(soup):
     for i, a in enumerate(soup.find_all('a')):
         if a.has_attr('href'):
             print 'try analyising...', i, '/', len(soup.find_all('a')) 
@@ -119,27 +126,30 @@ def initialize_parse_and_map_data_to_local_db(soup):
                     continue
                 # NOTE: soupの保存は深度エラーになって対応できない
                 _soup = None
-                #try:
-                #    _soup = bs4.BeautifulSoup( urllib2.urlopen( scraping_data.url ) )
-                #except:
-                #    print 'an error was occurred! with', scraping_data.url
-                #    pass
                 scraping_data.title = (lambda x: unicode( _soup.title.string ) if x != None and x.title != None else 'Untitled')(_soup)
                 ALL_SCRAPING_DATA.append( (scraping_data.normalized_url, scraping_data) )
                 print '[new]', scraping_data.normalized_url, description 
                 pass
+            #write_each(scraping_data)
 
 def map_data_to_local_db_from_url(scraping_data):
     html = None
-    for _ in range(RETRY_NUM):
-        try:
-            opener = urllib2.build_opener()
-            opener.addheaders = [('User-agent', USER_AGENT)]
-            html = opener.open(scraping_data.url, timeout = 1).read()
-        except:
-            print 'cannot access to', scraping_data.url
-            continue
-        break
+    if scraping_data.html == None:
+        for _ in range(RETRY_NUM):
+            try:
+                opener = urllib2.build_opener()
+                opener.addheaders = [('User-agent', USER_AGENT)]
+                html = opener.open(scraping_data.url, timeout = 1).read()
+            except:
+                print 'cannot access try number is...', _, scraping_data.url
+                continue
+            break
+        scraping_data.html = html
+        # update html
+        write_each(scraping_data)
+    else:
+        html = scraping_data.html
+
     if html == None : return []
     
     soup = bs4.BeautifulSoup(html)
@@ -201,14 +211,18 @@ def validate_is_asin(scraping_data_list):
             print 'http://www.amazon.co.jp/dp/' + is_asin, url, scraping_data
     return ret_list
 
-def search_flatten_threadc(i, chunked_list, to_increse_list):
-    for url, scraping_data in chunked_list:
+def search_flatten_threadc(conn, chunked_list):
+    to_increse_list = []
+    for _, (url, scraping_data) in enumerate(chunked_list):
         if scraping_data.count >= 1:
-            print 'pass ',  scraping_data.url, scraping_data.count, i, '/', len(ALL_SCRAPING_DATA)
+            print 'pass ',  scraping_data.url, scraping_data.count, _, '/', len(chunked_list)
             continue
         to_increse_list.extend( map_data_to_local_db_from_url(scraping_data) )
         scraping_data.count += 1
-        print 'eval ', scraping_data.url, 'counter =', scraping_data.count, i, '/', len(ALL_SCRAPING_DATA)
+        print 'eval ', scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', len(chunked_list), len(ALL_SCRAPING_DATA), mp.current_process() ]) )
+        #print 'data ', to_increse_list
+    conn.send(to_increse_list)
+    conn.close()
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
@@ -222,25 +236,29 @@ if __name__ == '__main__':
     args_obj = vars(parser.parse_args())
     depth = (lambda x:int(x) if x else 1)( args_obj.get('depth') )
 
-
     global ALL_SCRAPING_DATA
     ALL_SCRAPING_DATA = []
     
     # SEEDが存在しないならば初期化
     if initiate_data() == SEED_NO_EXIST:
-        soup = get_soup_from_default_node()
-        initialize_parse_and_map_data_to_local_db(soup)
+        initialize_parse_and_map_data_to_local_db()
         ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
   
     # 深度を決めて幅優先探索
     for i in range(depth):
         to_increse_list = []
+        threads_list = []
         #for i, (url, scraping_data) in enumerate(ALL_SCRAPING_DATA):
-        for i, chunked_list in enumerate(chunks(ALL_SCRAPING_DATA, DESIRABLE_THREAD_NUM ) ):
-            p = threading.Thread(target=search_flatten_threadc, args=(i,chunked_list,to_increse_list,))
+        for i, chunked_list in enumerate(chunks(ALL_SCRAPING_DATA, len(ALL_SCRAPING_DATA)/DESIRABLE_PROCESS_NUM ) ):
+            #p = threading.Thread(target=search_flatten_threadc, args=(chunked_list,))
+            p_conn, c_conn = mp.Pipe()
+            p = mp.Process(target=search_flatten_threadc, args=(c_conn, chunked_list,))
             p.deamon = True
-            p.start()
-        ALL_SCRAPING_DATA.extend( to_increse_list )
+            threads_list.append( (p,p_conn) )
+        map(lambda x:x[0].start(), threads_list)
+        for x,p_conn in threads_list:
+            ALL_SCRAPING_DATA.extend( p_conn.recv() )
+        map(lambda x:x[0].join(), threads_list)
         ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
     
     finish_procedure()
