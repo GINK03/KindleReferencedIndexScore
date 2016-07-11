@@ -8,6 +8,10 @@ import os.path
 import anydbm
 import __future__
 import hashlib
+
+def fprint(x): print x
+
+
 # defined parameters
 KINDLE_URL = 'https://www.amazon.co.jp/%E3%83%89%E3%83%AA%E3%83%95%E3%82%BF%E3%83%BC%E3%82%BA%EF%BC%88%EF%BC%91%EF%BC%89-%E3%83%A4%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%B3%E3%82%B0%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%82%B9-%E5%B9%B3%E9%87%8E%E8%80%95%E5%A4%AA-ebook/dp/B00CBEUBX4/ref=pd_sim_351_47?ie=UTF8&dpID=51YqRdk-GIL&dpSrc=sims&preST=_AC_UL160_SR114%2C160_&psc=1&refRID=QNE135S3MRAR0TDJMP9A'
 
@@ -42,6 +46,7 @@ def initiate_data():
         ALL_SCRAPING_DATA.append( (loads.normalized_url , loads) )
         print loads.normalized_url, loads, map(lambda x:x.from_url, loads.evaluated)
     db.close()
+    sys.exit(0)
 # close db
 def finish_procedure():
     db = anydbm.open('objects.db', 'c')
@@ -133,7 +138,6 @@ def map_data_to_local_db_from_url(scraping_data):
             filter_len_in_tempory_param = len( filter(lambda x: _scraping_data.normalized_url == x[0], ret_list ) ) 
             is_already_exist = (lambda x: True if x > 0 else False )(filter_len + filter_len_in_tempory_param)
             if is_already_exist == True:
-                print '[*special*] evaluate ', _scraping_data.normalized_url
                 evaluatate_other_page(_scraping_data.normalized_url, ALL_SCRAPING_DATA, scraping_data.url)
                 continue
             _scraping_data.url = fixed_url
@@ -144,17 +148,20 @@ def map_data_to_local_db_from_url(scraping_data):
 
 def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
     split_url = normalized_url.split('?').pop(0) 
-    obj_in_list = filter(lambda x:x[0] == split_url, scraping_data_list)
+    obj_in_list = filter(lambda x:split_url in x[0], scraping_data_list)
+    # return
     if obj_in_list == []:
-        print 'evaluate will pass,', normalized_url
+        print 'evaluate will passed, will return', split_url, obj_in_list
         return
+    print '[*special*] evaluate ', split_url
     obj = obj_in_list.pop()[1]
-    referenced_objs = filter(lambda x:x.from_url == split_url, obj.evaluated)
-    if referenced_objs == []:
+    normalized_from_url = from_url.split('?').pop(0).split('=').pop(0)
+    #referenced_objs = filter(lambda x:x.from_url == normalized_from_url, obj.evaluated)
+    if not normalized_from_url in set(map(lambda x:x.from_url, obj.evaluated)) :
         referenced_obj = Referenced() 
-        referenced_obj.from_url = from_url.split('?').pop(0)
+        referenced_obj.from_url = normalized_from_url
         obj.evaluated.append( referenced_obj )
-    print obj, filter(lambda x:x[0] == normalized_url, scraping_data_list), obj.evaluated
+        print '[!!!!!!]a entity will be stocked', obj, filter(lambda x:x[0] == normalized_url, scraping_data_list), map(lambda x:x.from_url, obj.evaluated)
 
 def filter_is_asin(url):
     is_asin = (lambda x:x.pop() if x != [] else '?')( filter(lambda x:len(x) == 10, url.split('?').pop(0).split('/')) )
