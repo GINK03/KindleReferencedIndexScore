@@ -5,12 +5,10 @@ import urllib2
 import urllib
 import os.path
 import __future__
-import hashlib
 import argparse
 import multiprocessing as mp
 import threading
-from peewee import *
-from datetime import date
+import datetime
 from KindleReferencedIndexScoreClass import *
 from KindleReferencedIndexScoreDBs import *
 def fprint(x): print x
@@ -22,9 +20,7 @@ RETRY_NUM = 10
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
 SEED_EXIST = True
 SEED_NO_EXIST = False
-DESIRABLE_PROCESS_NUM = 7
-
-
+DESIRABLE_PROCESS_NUM = 4
 
 # set default state to scrape web pages in Amazon Kindle
 def initialize_parse_and_map_data_to_local_db():
@@ -91,7 +87,7 @@ def map_data_to_local_db_from_url(scraping_data):
             break
         # scraping_data.html = html
         # update html
-        # write_each(scraping_data)
+        write_each(scraping_data)
     else:
         # html = scraping_data.html
         pass
@@ -191,6 +187,22 @@ if __name__ == '__main__':
     depth = (lambda x:int(x) if x else 1)( args_obj.get('depth') )
     is_referenced_score = args_obj.get('referenced_score')
 
+    '''
+    query = Serialized.select().where(Serialized.keyurl == 'test')
+    if not query.exists():
+        Serialized.create(keyurl='test',
+                      date=datetime.utcnow(),
+                      serialized='dumped'
+                      )
+        print 'f'
+    else:
+        q = Serialized.update(keyurl='test',
+                      serialized='dumped!'
+                      )
+        q.execute()
+        print 'b'
+    sys.exit(0)
+    '''
     global ALL_SCRAPING_DATA
     ALL_SCRAPING_DATA = []
     
