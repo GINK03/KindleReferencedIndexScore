@@ -3,83 +3,28 @@ import bs4
 import sys
 import urllib2
 import urllib
-import cPickle as pickle
 import os.path
-import anydbm
 import __future__
 import hashlib
 import argparse
 import multiprocessing as mp
 import threading
-
+from peewee import *
+from datetime import date
+from KindleReferencedIndexScoreClass import *
+from KindleReferencedIndexScoreDBs import *
 def fprint(x): print x
 
 
 # defined parameters
-KINDLE_URL = 'https://www.amazon.co.jp/%E3%83%89%E3%83%AA%E3%83%95%E3%82%BF%E3%83%BC%E3%82%BA%EF%BC%88%EF%BC%91%EF%BC%89-%E3%83%A4%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%B3%E3%82%B0%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%82%B9-%E5%B9%B3%E9%87%8E%E8%80%95%E5%A4%AA-ebook/dp/B00CBEUBX4/ref=pd_sim_351_47?ie=UTF8&dpID=51YqRdk-GIL&dpSrc=sims&preST=_AC_UL160_SR114%2C160_&psc=1&refRID=QNE135S3MRAR0TDJMP9A'
+KINDLE_URL = 'https://www.amazon.co.jp/Kindle-%E3%82%AD%E3%83%B3%E3%83%89%E3%83%AB-%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/b?ie=UTF8&node=2250738051'
 RETRY_NUM = 10
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
 SEED_EXIST = True
 SEED_NO_EXIST = False
-DESIRABLE_PROCESS_NUM = 18
+DESIRABLE_PROCESS_NUM = 7
 
-class Reviews:
-    def __init__(self):
-        self.rate = 0
-        self.context = ''
-        self.good_num = 0
-class Referenced:
-    def __init__(self):
-        self.from_url = ''
-        self.evaluation_date = None
-class ScrapingData:
-    def __init__(self):
-        self.url = 'https://'
-        self.normalized_url = 'https://'
-        self.date = 0
-        self.title = ''
-        self.description = ''
-        self.html = None
-        self.html_context = ''
-        self.amazon_rating = 0
-        self.reviews = []
-        self.craw_revision = 0
-        self.evaluated = []
-        self.count = 0
 
-# open db
-def initiate_data():
-    res_mode = False
-    db = anydbm.open('objects.db', 'c')
-    for k, v in db.iteritems():
-        try:
-            loads = pickle.loads(v)
-        except:
-            continue
-        ALL_SCRAPING_DATA.append( (loads.normalized_url , loads) )
-        print loads.normalized_url, loads, map(lambda x:x.from_url, loads.evaluated)
-    if len(db.keys()) > 0 :
-        res_mode = SEED_EXIST
-    else:
-        res_mode = SEED_NO_EXIST
-    db.close()
-    return res_mode
-# close db
-def finish_procedure():
-    db = anydbm.open('objects.db', 'c')
-    for normalized_url, obj in ALL_SCRAPING_DATA:
-        dumps = pickle.dumps(obj)
-        sha = hashlib.sha224(dumps).hexdigest()
-        #print normalized_url, sha, obj
-        db[sha] = dumps
-    db.close()
-# write each 
-def write_each(scraping_data):
-    db = anydbm.open('objects.db', 'c')
-    dumps = pickle.dumps(scraping_data)
-    sha = hashlib.sha224(dumps).hexdigest()
-    db[sha] = dumps
-    db.close()
 
 # set default state to scrape web pages in Amazon Kindle
 def initialize_parse_and_map_data_to_local_db():
@@ -144,11 +89,12 @@ def map_data_to_local_db_from_url(scraping_data):
                 print 'cannot access try number is...', _, scraping_data.url
                 continue
             break
-        scraping_data.html = html
+        # scraping_data.html = html
         # update html
-        write_each(scraping_data)
+        # write_each(scraping_data)
     else:
-        html = scraping_data.html
+        # html = scraping_data.html
+        pass
 
     if html == None : return []
     
@@ -197,7 +143,7 @@ def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
 
 def filter_is_asin(url):
     is_asin = (lambda x:x.pop() if x != [] else '?')( filter(lambda x:len(x) == 10, url.split('?').pop(0).split('/')) )
-    if is_asin[0] in ['A', 'B', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
+    if is_asin[0] in ['A', 'B', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
         return True
     return False
 
@@ -229,28 +175,45 @@ def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i+n]
 
+def referenced_score(scraping_data_list):
+    source_list = filter(lambda x:len(x[1].evaluated) != 0, sorted(scraping_data_list, key=lambda x:len(x[1].evaluated)*-1) )
+    #source_list = sorted(scraping_data_list, key=lambda x:len(x[1].evaluated)*-1)
+    for (url, scraping_data) in source_list:
+        print scraping_data.url, scraping_data, map(lambda x:x.from_url, scraping_data.evaluated)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
     parser.add_argument('--URL', help='set default URL which to scrape at first')
     parser.add_argument('--depth', help='how number of url this program will scrape')
+    parser.add_argument('--referenced_score', help='evaluate kindle referenced indexed data from db')
     args_obj = vars(parser.parse_args())
+    
     depth = (lambda x:int(x) if x else 1)( args_obj.get('depth') )
+    is_referenced_score = args_obj.get('referenced_score')
 
     global ALL_SCRAPING_DATA
     ALL_SCRAPING_DATA = []
     
     # SEEDが存在しないならば初期化
-    if initiate_data() == SEED_NO_EXIST:
+    if initiate_data(ALL_SCRAPING_DATA) == SEED_NO_EXIST:
         initialize_parse_and_map_data_to_local_db()
         ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
-  
+ 
+    # referenced_scoreフラグが有効なら、評価して終了
+    if is_referenced_score:
+        referenced_score(ALL_SCRAPING_DATA)
+        sys.exit(0)
+
     # 深度を決めて幅優先探索
     for i in range(depth):
+        chunked_lists = [ [] ]
+        if len(ALL_SCRAPING_DATA) == 0 : 
+            chunked_lists = [ ALL_SCRAPING_DATA ]
+        else:
+            chunked_lists = chunks(ALL_SCRAPING_DATA, len(ALL_SCRAPING_DATA)/DESIRABLE_PROCESS_NUM)
         to_increse_list = []
         threads_list = []
-        #for i, (url, scraping_data) in enumerate(ALL_SCRAPING_DATA):
-        for i, chunked_list in enumerate(chunks(ALL_SCRAPING_DATA, len(ALL_SCRAPING_DATA)/DESIRABLE_PROCESS_NUM ) ):
-            #p = threading.Thread(target=search_flatten_threadc, args=(chunked_list,))
+        for i, chunked_list in enumerate(chunked_lists):
             p_conn, c_conn = mp.Pipe()
             p = mp.Process(target=search_flatten_threadc, args=(c_conn, chunked_list,))
             p.deamon = True
@@ -261,5 +224,5 @@ if __name__ == '__main__':
         map(lambda x:x[0].join(), threads_list)
         ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
     
-    finish_procedure()
+    finish_procedure(ALL_SCRAPING_DATA)
 
