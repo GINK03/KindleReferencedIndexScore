@@ -20,7 +20,7 @@ RETRY_NUM = 10
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
 SEED_EXIST = True
 SEED_NO_EXIST = False
-DESIRABLE_PROCESS_NUM = 4
+DESIRABLE_PROCESS_NUM = 1
 
 # set default state to scrape web pages in Amazon Kindle
 def initialize_parse_and_map_data_to_local_db():
@@ -65,7 +65,7 @@ def initialize_parse_and_map_data_to_local_db():
                 if not filter_is_asin(scraping_data.url):
                     print '[!!] pass, because of this url dont be seem ASIN code.', scraping_data.url
                     continue
-                # NOTE: soupの保存は深度エラーになって対応できない
+                """ NOTE: soupの保存はシリアライズ変換時に深度エラーになって対応できない """
                 _soup = None
                 scraping_data.title = (lambda x: unicode( _soup.title.string ) if x != None and x.title != None else 'Untitled')(_soup)
                 ALL_SCRAPING_DATA.append( (scraping_data.normalized_url, scraping_data) )
@@ -85,11 +85,11 @@ def map_data_to_local_db_from_url(scraping_data):
                 print 'cannot access try number is...', _, scraping_data.url
                 continue
             break
-        # scraping_data.html = html
-        # update html
+        scraping_data.html = html
+        """ update html """
         write_each(scraping_data)
     else:
-        # html = scraping_data.html
+        html = scraping_data.html
         pass
 
     if html == None : return []
@@ -98,16 +98,16 @@ def map_data_to_local_db_from_url(scraping_data):
     scraping_data.title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
     ret_list = []
     for i, a in enumerate(soup.find_all('a')):
-        # アマゾン外のドメインの場合、全部パス
+        """ アマゾン外のドメインの場合、全部パス """
         if a.has_attr('href') and len(a['href']) > 1 and not 'www.amazon.co.jp' in a['href']:
             continue
         if a.has_attr('href') and len(a['href']) != 0:
             _scraping_data = ScrapingData()
             fixed_url = (lambda x: 'https://www.amazon.co.jp' + x if '/' == x[0] else x)(a['href'])
-            # ASINコードっぽくない奴はパス
+            """ ASINコードっぽくない奴はパス"""
             if not filter_is_asin(fixed_url):
                 continue
-            # '\n'コードを削除 ' 'を削除
+            """ '\n'コードを削除 ' 'を削除 """
             fixed_url = fixed_url.replace('\n','').replace(' ','')
             _scraping_data.url = fixed_url
             _scraping_data.normalized_url = '/'.join( filter( lambda x: not '=' in x, fixed_url.split('?').pop(0).split('/') ) )
@@ -187,36 +187,20 @@ if __name__ == '__main__':
     depth = (lambda x:int(x) if x else 1)( args_obj.get('depth') )
     is_referenced_score = args_obj.get('referenced_score')
 
-    '''
-    query = Serialized.select().where(Serialized.keyurl == 'test')
-    if not query.exists():
-        Serialized.create(keyurl='test',
-                      date=datetime.utcnow(),
-                      serialized='dumped'
-                      )
-        print 'f'
-    else:
-        q = Serialized.update(keyurl='test',
-                      serialized='dumped!'
-                      )
-        q.execute()
-        print 'b'
-    sys.exit(0)
-    '''
     global ALL_SCRAPING_DATA
     ALL_SCRAPING_DATA = []
     
-    # SEEDが存在しないならば初期化
+    """ SEEDが存在しないならば初期化 """
     if initiate_data(ALL_SCRAPING_DATA) == SEED_NO_EXIST:
         initialize_parse_and_map_data_to_local_db()
         ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
  
-    # referenced_scoreフラグが有効なら、評価して終了
+    """ referenced_scoreフラグが有効なら、評価して終了 """
     if is_referenced_score:
         referenced_score(ALL_SCRAPING_DATA)
         sys.exit(0)
 
-    # 深度を決めて幅優先探索
+    """ 深度を決めて幅優先探索 """
     for i in range(depth):
         chunked_lists = [ [] ]
         if len(ALL_SCRAPING_DATA) == 0 : 

@@ -5,6 +5,9 @@ from peewee import *
 from datetime import datetime
 import sys
 import md5
+import warnings
+
+warnings.filterwarnings('ignore', 'Incorrect date value:*')
 
 mydb = MySQLDatabase(
        database='kindle',
@@ -23,7 +26,6 @@ class Serialized(Model):
 if not Serialized.table_exists():
     mydb.create_tables([Serialized], True)
 
-mydb.close()
 
 # open db
 def initiate_data(all_scraping_data):
@@ -40,8 +42,11 @@ def initiate_data(all_scraping_data):
     db.close()
     '''
     for serialized in Serialized.select():
-        print serialized.keyurl, serialized.date, serialized.serialized
-    #sys.exit(0)
+        print serialized.keyurl, serialized.date, pickle.loads(str(serialized.serialized))
+        loads = pickle.loads( str(serialized.serialized) )
+        all_scraping_data.append( (loads.normalized_url , loads) )
+    if len(all_scraping_data) > 0:
+        return True
     return res_mode
 
 # close db
@@ -54,6 +59,8 @@ def finish_procedure(all_scraping_data):
         db[sha] = dumps
     db.close()
     '''
+    for normalized_url, scraping_data in all_scraping_data:
+        write_each(scraping_data)
 # write each 
 def write_each(scraping_data):
     '''legacy
@@ -63,22 +70,31 @@ def write_each(scraping_data):
     db[sha] = dumps
     db.close()
     '''
+    '''
+    文字列のエンコーディングに失敗した場合、書き込みを行わず、パスする
+    '''
     dumps  = pickle.dumps(scraping_data)
-    keyurl = str( md5.new(scraping_data.url).hexdigest() )
-    print keyurl
+    try:
+        keyurl = str( hashlib.sha224(scraping_data.url).hexdigest() )
+    except:
+        return
     query = Serialized.select().where(Serialized.keyurl == keyurl)
-    if not query.exists():
-        Serialized.create(keyurl=keyurl,
+    '''
+    MySQLだから例外をよく吐く
+    '''
+    try:
+        if not query.exists():
+            Serialized.create(keyurl=keyurl,
                date=datetime.utcnow(),
                serialized=dumps
                )
-    else:
-        q = Serialized.update(keyurl=keyurl,
+        else:
+            q = Serialized.update(keyurl=keyurl,
                date=datetime.utcnow(),
                serialized=dumps
                )
         q.execute()
-        q.close()
-    query.close()
+    except:
+        return
 
     
