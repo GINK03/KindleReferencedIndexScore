@@ -15,11 +15,11 @@ def fprint(x): print x
 
 
 # defined parameters
-KINDLE_URL = 'https://www.amazon.co.jp/Kindle-%E3%82%AD%E3%83%B3%E3%83%89%E3%83%AB-%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/b?ie=UTF8&node=2250738051'
-RETRY_NUM = 10
-USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
-SEED_EXIST = True
-SEED_NO_EXIST = False
+KINDLE_URL          = 'https://www.amazon.co.jp/Kindle-%E3%82%AD%E3%83%B3%E3%83%89%E3%83%AB-%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/b?ie=UTF8&node=2250738051'
+RETRY_NUM           = 10
+USER_AGENT          = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
+SEED_EXIST          = True
+SEED_NO_EXIST       = False
 DESIRABLE_PROCESS_NUM = 1
 
 # set default state to scrape web pages in Amazon Kindle
@@ -73,55 +73,62 @@ def initialize_parse_and_map_data_to_local_db():
                 pass
             #write_each(scraping_data)
 
+def html_adhoc_fetcher(url):
+    """ 標準のアクセス回数はRETRY_NUMで定義されている """
+    for _ in range(RETRY_NUM):
+        try:
+            opener = urllib2.build_opener()
+            opener.addheaders = [('User-agent', USER_AGENT)]
+            html = opener.open(url, timeout = 1).read()
+        except:
+            print 'cannot access try number is...', _, url
+            continue
+        break
+    soup = bs4.BeautifulSoup(html)
+    title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
+    return (html, title, soup)
+
+
 def map_data_to_local_db_from_url(scraping_data):
-    html = None
+    html, soup = None, None
     if scraping_data.html == None:
-        for _ in range(RETRY_NUM):
-            try:
-                opener = urllib2.build_opener()
-                opener.addheaders = [('User-agent', USER_AGENT)]
-                html = opener.open(scraping_data.url, timeout = 1).read()
-            except:
-                print 'cannot access try number is...', _, scraping_data.url
-                continue
-            break
-        scraping_data.html = html
+        scraping_data.html, title, soup = html_adhoc_fetcher(scraping_data.url)
         """ update html """
         write_each(scraping_data)
     else:
-        html = scraping_data.html
+        html, soup = scraping_data.html, bs4.BeautifulSoup(scraping_data.html)
         pass
-
-    if html == None : return []
+    if html == None or html == '' : return []
     
-    soup = bs4.BeautifulSoup(html)
-    scraping_data.title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
-    ret_list = []
+    """ scraping_dataの子ノードをchild_soupsという変数名で返却, htmlはフェッチしていないので軽い """
+    child_scraping_data_list = []
     for i, a in enumerate(soup.find_all('a')):
         """ アマゾン外のドメインの場合、全部パス """
         if a.has_attr('href') and len(a['href']) > 1 and not 'www.amazon.co.jp' in a['href']:
             continue
         if a.has_attr('href') and len(a['href']) != 0:
-            _scraping_data = ScrapingData()
+            """ 子ノードの作成 """
+            child_scraping_data = ScrapingData()
             fixed_url = (lambda x: 'https://www.amazon.co.jp' + x if '/' == x[0] else x)(a['href'])
-            """ ASINコードっぽくない奴はパス"""
+            """ ASINコードに類似していないURLは解析しない"""
             if not filter_is_asin(fixed_url):
                 continue
             """ '\n'コードを削除 ' 'を削除 """
             fixed_url = fixed_url.replace('\n','').replace(' ','')
-            _scraping_data.url = fixed_url
-            _scraping_data.normalized_url = '/'.join( filter( lambda x: not '=' in x, fixed_url.split('?').pop(0).split('/') ) )
-            filter_len = len( filter(lambda x: _scraping_data.normalized_url == x[0], ALL_SCRAPING_DATA ) ) 
-            filter_len_in_tempory_param = len( filter(lambda x: _scraping_data.normalized_url == x[0], ret_list ) ) 
+            child_scraping_data.url = fixed_url
+            child_scraping_data.normalized_url = '/'.join( filter( lambda x: not '=' in x, fixed_url.split('?').pop(0).split('/') ) )
+            filter_len = len( filter(lambda x: child_scraping_data.normalized_url == x[0], ALL_SCRAPING_DATA ) ) 
+            filter_len_in_tempory_param = len( filter(lambda x: child_scraping_data.normalized_url == x[0], child_scraping_data_list ) ) 
             is_already_exist = (lambda x: True if x > 0 else False )(filter_len + filter_len_in_tempory_param)
             if is_already_exist == True:
-                evaluatate_other_page(_scraping_data.normalized_url, ALL_SCRAPING_DATA, scraping_data.url)
+                evaluatate_other_page(child_scraping_data.normalized_url, ALL_SCRAPING_DATA, scraping_data.url)
                 continue
-            _scraping_data.url = fixed_url
-            _scraping_data.title = 'Untitled'
-            ret_list.append( (_scraping_data.normalized_url, _scraping_data) )
-            #print 'in ', scraping_data.url, i, fixed_url, _scraping_data.normalized_url, is_already_exist
-    return ret_list
+            child_scraping_data.url = fixed_url
+            """ 子ノードのhtml, titleを取得 """
+            (child_scraping_data.html, child_scraping_data.title, soup ) = html_adhoc_fetcher(fixed_url)
+            child_scraping_data_list.append( (child_scraping_data.normalized_url, child_scraping_data) )
+            write_each(child_scraping_data)
+    return child_scraping_data_list
 
 def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
     split_url = normalized_url.split('?').pop(0) 
@@ -159,29 +166,24 @@ def search_flatten_threadc(conn, chunked_list):
         if scraping_data.count >= 1:
             print 'pass ',  scraping_data.url, scraping_data.count, _, '/', len(chunked_list)
             continue
-        to_increse_list.extend( map_data_to_local_db_from_url(scraping_data) )
+        child_soups = map_data_to_local_db_from_url(scraping_data)
+        for child_soup in child_soups:
+            write_each(child_soup)
         scraping_data.count += 1
         print 'eval ', scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', len(chunked_list), len(ALL_SCRAPING_DATA), mp.current_process() ]) )
-        #print 'data ', to_increse_list
-    conn.send(to_increse_list)
-    conn.close()
+    """ pipeによるデータ受け渡しはたまに失敗することがあり、何千件とトランザクションを捌いた後に発生すると取り返しがつかないので、使用しない """
+    #conn.send(to_increse_list)
+    #conn.close()
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
         yield l[i:i+n]
 
-def referenced_score(scraping_data_list):
-    source_list = filter(lambda x:len(x[1].evaluated) != 0, sorted(scraping_data_list, key=lambda x:len(x[1].evaluated)*-1) )
-    #source_list = sorted(scraping_data_list, key=lambda x:len(x[1].evaluated)*-1)
-    for (url, scraping_data) in source_list:
-        print scraping_data.url, scraping_data, map(lambda x:x.from_url, scraping_data.evaluated)
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
     parser.add_argument('--URL', help='set default URL which to scrape at first')
     parser.add_argument('--depth', help='how number of url this program will scrape')
-    parser.add_argument('--referenced_score', help='evaluate kindle referenced indexed data from db')
     args_obj = vars(parser.parse_args())
     
     depth = (lambda x:int(x) if x else 1)( args_obj.get('depth') )
@@ -215,10 +217,11 @@ if __name__ == '__main__':
             p.deamon = True
             threads_list.append( (p,p_conn) )
         map(lambda x:x[0].start(), threads_list)
-        for x,p_conn in threads_list:
-            ALL_SCRAPING_DATA.extend( p_conn.recv() )
+        """ pipeによるデータ受け渡しはたまに失敗することがあり、何千件とトランザクションを捌いた後に発生すると取り返しがつかないので、使用しない """
+        #for x,p_conn in threads_list:
+        #    ALL_SCRAPING_DATA.extend( p_conn.recv() )
         map(lambda x:x[0].join(), threads_list)
-        ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
+        #ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
     
-    finish_procedure(ALL_SCRAPING_DATA)
+    #finish_procedure(ALL_SCRAPING_DATA)
 

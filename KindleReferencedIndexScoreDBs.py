@@ -16,6 +16,9 @@ mydb = MySQLDatabase(
        host="127.0.0.1",
        port=3306)
 
+SEED_EXIST              = True
+SEED_NO_EXIST           = False
+
 class Serialized(Model):
     keyurl      = CharField(primary_key=True)
     date        = DateField(default=datetime.now() )
@@ -29,7 +32,6 @@ if not Serialized.table_exists():
 
 # open db
 def initiate_data(all_scraping_data):
-    res_mode = False
     '''legacy
     db = anydbm.open('objects.db', 'c')
     for k, v in db.iteritems():
@@ -46,8 +48,8 @@ def initiate_data(all_scraping_data):
         loads = pickle.loads( str(serialized.serialized) )
         all_scraping_data.append( (loads.normalized_url , loads) )
     if len(all_scraping_data) > 0:
-        return True
-    return res_mode
+        return SEED_EXIST
+    return SEED_NO_EXIST
 
 # close db
 def finish_procedure(all_scraping_data):
@@ -82,19 +84,16 @@ def write_each(scraping_data):
     '''
     MySQLだから例外をよく吐く
     '''
-    try:
-        if not query.exists():
-            Serialized.create(keyurl=keyurl,
-               date=datetime.utcnow(),
-               serialized=dumps
-               )
-        else:
-            q = Serialized.update(keyurl=keyurl,
-               date=datetime.utcnow(),
-               serialized=dumps
-               )
+    if not query.exists():
+        Serialized.create(keyurl=keyurl,
+           date=datetime.utcnow(),
+           serialized=dumps
+           )
+    else:
+        q = Serialized.update(
+           date=datetime.utcnow(),
+           serialized=dumps
+           ).where( Serialized.keyurl==keyurl )
         q.execute()
-    except:
-        return
 
     

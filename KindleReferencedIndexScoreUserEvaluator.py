@@ -12,10 +12,11 @@ from KindleReferencedIndexScoreClass import *
 from KindleReferencedIndexScoreDBs import *
 
 # defined parameters
-KINDLE_URL  = 'https://www.amazon.co.jp/Kindle-%E3%82%AD%E3%83%B3%E3%83%89%E3%83%AB-%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/b?ie=UTF8&node=2250738051'
-RETRY_NUM   = 10
-USER_AGENT  = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
-DESIRABLE_PROCESS_NUM   = 1
+NUMBER_PATTERN = r'[+-]?\d+(?:\.\d+)?' 
+NUMBER_REGEX = re.compile(r'[+-]?\d+(?:\.\d+)?')
+
+def ranking_logic():
+    a, b = 0.5, 0.5
 
 def validate_is_kindle(scraping_data):
     url     = scraping_data.url
@@ -52,17 +53,21 @@ if __name__ == '__main__':
         soup = bs4.BeautifulSoup(scraping_data.html)
         box_divs = soup.findAll('div', {'id': re.compile('rev-dpReviewsMostHelpfulAUI-*') } )
         if box_divs == [] or box_divs == None : continue
-        a_s = []
+        stars = []
         for box_div in box_divs:
-            a = box_div.find('a', {'class': 'a-link-normal'} )['title']
-            a_s.append(a)
+            star = re.findall(NUMBER_REGEX,box_div.find('a', {'class': 'a-link-normal'} )['title']).pop(0)
+            stars.append(star)
         cr_votes = [] 
         for box_div in box_divs:
-            cr_vote_text = box_div.find('span', {'id' : re.compile('cr-vote-*') } ).text.replace('\n', '')
+            cr_vote_text = (lambda x:x.pop(0) if x != [] else '0')(re.findall(NUMBER_REGEX, box_div.find('span', {'id' : re.compile('cr-vote-*') } ).text.replace('\n', '') ) )
             cr_votes.append( cr_vote_text )
+        contexts = []
         context_wrap_divs = soup.findAll('div', {'id': re.compile('revData-dpReviewsMostHelpfulAUI-*') } )
+        for context_wrap_div in context_wrap_divs:
+            context = context_wrap_div.findAll('div', {'class': 'a-section'} ).pop(0).text.replace('\n', '')
+            contexts.append(context) 
+
         print  scraping_data, url
-        for a, context_wrap_div, vote in zip(a_s, context_wrap_divs, cr_votes):
-            context_div = context_wrap_div.findAll('div', {'class': 'a-section'} ).pop(0)
-            print ' ' + a + ' ' + context_div.text + ' ' + vote
+        for star, context, vote in zip(stars, contexts, cr_votes):
+            print 'star rank ' + star + ' ' + context + 'votes ' + vote
 
