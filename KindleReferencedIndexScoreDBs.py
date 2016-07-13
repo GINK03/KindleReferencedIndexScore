@@ -6,6 +6,7 @@ from datetime import datetime
 import sys
 import md5
 import warnings
+import time
 
 warnings.filterwarnings('ignore', 'Incorrect date value:*')
 
@@ -18,6 +19,7 @@ mydb = MySQLDatabase(
 
 SEED_EXIST              = True
 SEED_NO_EXIST           = False
+RETRY_NUM               = 10
 
 class Serialized(Model):
     keyurl      = CharField(primary_key=True)
@@ -25,27 +27,27 @@ class Serialized(Model):
     serialized  = TextField()
     class Meta:
         database = mydb #
+
 # create table
 if not Serialized.table_exists():
+    mydb.connect()
     mydb.create_tables([Serialized], True)
-
+    mydb.close()
 
 # open db
 def initiate_data(all_scraping_data):
-    '''legacy
-    db = anydbm.open('objects.db', 'c')
-    for k, v in db.iteritems():
-        loads = pickle.loads(v)
-        all_scraping_data.append( (loads.normalized_url , loads) )
-    if len(db.keys()) > 0 :
-        res_mode = True
-    else:
-        res_mode = False
-    db.close()
-    '''
     for serialized in Serialized.select():
-        print serialized.keyurl, serialized.date, pickle.loads(str(serialized.serialized))
-        loads = pickle.loads( str(serialized.serialized) )
+        """
+        壊れたエントリは無視して読み込まない
+        TODO: 壊れたエントリを削除する
+        """
+        try:
+            print serialized.keyurl, serialized.date, pickle.loads(str(serialized.serialized))
+            loads = pickle.loads( str(serialized.serialized) )
+        except:
+            print '[SQL_DATA_BROKEN]'
+            serialized.delete()
+            continue
         all_scraping_data.append( (loads.normalized_url , loads) )
     if len(all_scraping_data) > 0:
         return SEED_EXIST
@@ -53,25 +55,24 @@ def initiate_data(all_scraping_data):
 
 # close db
 def finish_procedure(all_scraping_data):
-    '''legacy
-    db = anydbm.open('objects.db', 'c')
-    for normalized_url, obj in all_scraping_data:
-        dumps = pickle.dumps(obj)
-        sha = hashlib.sha224(dumps).hexdigest()
-        db[sha] = dumps
-    db.close()
-    '''
     for normalized_url, scraping_data in all_scraping_data:
         write_each(scraping_data)
 # write each 
 def write_each(scraping_data):
-    '''legacy
-    db = anydbm.open('objects.db', 'c')
-    dumps = pickle.dumps(scraping_data)
-    sha = hashlib.sha224(dumps).hexdigest()
-    db[sha] = dumps
-    db.close()
     '''
+    サブプロセスとして起動した後は、コネクションの使いまわしができなくなるので、コネクションを破棄し、作り直す
+    '''
+    try:
+        mydb.close()
+    except:
+        print '[warnings] mysql conn is already closed!'
+    _db = MySQLDatabase(
+       database='kindle',
+       user='root',
+       password="1234",
+       host="127.0.0.1",
+       port=3306)
+    _db.connect()
     '''
     文字列のエンコーディングに失敗した場合、書き込みを行わず、パスする
     '''
@@ -79,21 +80,50 @@ def write_each(scraping_data):
     try:
         keyurl = str( hashlib.sha224(scraping_data.url).hexdigest() )
     except:
+        _db.close()
         return
-    query = Serialized.select().where(Serialized.keyurl == keyurl)
+    is_query_exist = None
+    for _ in range(RETRY_NUM):
+        try:
+            query = Serialized.select().where(Serialized.keyurl == keyurl)
+            is_query_exist = query.exists()
+            break
+        except:
+            print '[1] unko'
+            time.sleep(1)
+            continue
+    '''
+    最初のクエリ発行に失敗したら、あきらめて、書き込みしない
+    '''
+    if is_query_exist == None:
+        _db.close()
+        return
     '''
     MySQLだから例外をよく吐く
     '''
-    if not query.exists():
-        Serialized.create(keyurl=keyurl,
-           date=datetime.utcnow(),
-           serialized=dumps
-           )
-    else:
-        q = Serialized.update(
-           date=datetime.utcnow(),
-           serialized=dumps
-           ).where( Serialized.keyurl==keyurl )
-        q.execute()
-
-    
+    for _ in range(RETRY_NUM):
+        if not is_query_exist:
+            try:
+                Serialized.create(keyurl=keyurl,
+                    date=datetime.utcnow(),
+                    serialized=dumps
+                )
+                break
+            except:
+                print '[]'
+                time.sleep(0.1)
+                continue
+        else:
+            try:
+                q = Serialized.update(
+                    date=datetime.utcnow(),
+                    serialized=dumps
+                ).where( Serialized.keyurl==keyurl )
+                q.execute()
+                break
+            except:
+                print '[]'
+                time.sleep(0.1)
+                continue
+    print '[debug] write to mysql', Serialized
+    _db.close()

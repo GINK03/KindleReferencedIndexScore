@@ -8,6 +8,7 @@ import __future__
 import argparse
 import datetime
 import re
+import hashlib
 from KindleReferencedIndexScoreClass import *
 from KindleReferencedIndexScoreDBs import *
 
@@ -68,6 +69,17 @@ if __name__ == '__main__':
             contexts.append(context) 
 
         print  scraping_data, url
+        '''
+        評価データを更新する
+        '''
         for star, context, vote in zip(stars, contexts, cr_votes):
-            print 'star rank ' + star + ' ' + context + 'votes ' + vote
+            review = Review()
+            hashes = str(hashlib.sha224(context.encode('utf-8')).hexdigest())            
+            (review.star, review.context, review.vote, review.hashes) = star, context, vote, hashes
+            is_exist = hashes in map(lambda x:x.hashes, scraping_data.reviews)
+            print 'star rank ' + review.star + ' ' + review.context + 'votes ' + review.vote + ' hashes ' + review.hashes + ' is_exist ' + str(is_exist) 
+            if is_exist: 
+                continue
+            scraping_data.reviews.append(review)
+            write_each(scraping_data)
 

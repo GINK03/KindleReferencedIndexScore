@@ -1,10 +1,11 @@
 from datetime import date
 
-class Reviews:
+class Review:
     def __init__(self):
-        self.rate = 0
-        self.context = ''
-        self.good_num = 0
+        self.star       = 0
+        self.context    = ''
+        self.vote       = 0
+        self.hashes     = None
 class Referenced:
     def __init__(self):
         self.from_url = ''

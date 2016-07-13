@@ -20,7 +20,7 @@ RETRY_NUM           = 10
 USER_AGENT          = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
 SEED_EXIST          = True
 SEED_NO_EXIST       = False
-DESIRABLE_PROCESS_NUM = 1
+DESIRABLE_PROCESS_NUM = 8
 
 # set default state to scrape web pages in Amazon Kindle
 def initialize_parse_and_map_data_to_local_db():
@@ -75,6 +75,7 @@ def initialize_parse_and_map_data_to_local_db():
 
 def html_adhoc_fetcher(url):
     """ 標準のアクセス回数はRETRY_NUMで定義されている """
+    html = None
     for _ in range(RETRY_NUM):
         try:
             opener = urllib2.build_opener()
@@ -84,6 +85,8 @@ def html_adhoc_fetcher(url):
             print 'cannot access try number is...', _, url
             continue
         break
+    if html == None:
+        return (None, None, None)
     soup = bs4.BeautifulSoup(html)
     title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
     return (html, title, soup)
@@ -126,6 +129,9 @@ def map_data_to_local_db_from_url(scraping_data):
             child_scraping_data.url = fixed_url
             """ 子ノードのhtml, titleを取得 """
             (child_scraping_data.html, child_scraping_data.title, soup ) = html_adhoc_fetcher(fixed_url)
+            """ データの取得に失敗していたらその行は抜かす """
+            if child_scraping_data.html == None or soup == None:
+                continue
             child_scraping_data_list.append( (child_scraping_data.normalized_url, child_scraping_data) )
             write_each(child_scraping_data)
     return child_scraping_data_list
