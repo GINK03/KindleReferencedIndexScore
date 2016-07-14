@@ -20,6 +20,7 @@ mydb = MySQLDatabase(
 SEED_EXIST              = True
 SEED_NO_EXIST           = False
 RETRY_NUM               = 10
+DELAY                   = 1.0
 
 class Serialized(Model):
     keyurl      = CharField(primary_key=True)
@@ -43,15 +44,25 @@ def initiate_data(all_scraping_data):
         """
         try:
             print serialized.keyurl, serialized.date, pickle.loads(str(serialized.serialized))
-            loads = pickle.loads( str(serialized.serialized) )
+            scraping_data = pickle.loads( str(serialized.serialized) )
         except:
             print '[SQL_DATA_BROKEN]'
             serialized.delete()
             continue
-        all_scraping_data.append( (loads.normalized_url , loads) )
+        all_scraping_data.append( (scraping_data.normalized_url , loads) )
     if len(all_scraping_data) > 0:
         return SEED_EXIST
     return SEED_NO_EXIST
+
+"""
+データを全取得してオンメモリに変換する必要がない場合や、参照IFを使いたくない場合に利用する
+"""
+def initiate_data_generator():
+    for serialized in Serialized.select():
+        key             = serialized.keyurl
+        scraping_data   = pickle.loads( str(serialized.serialized) )
+        yield (key, scraping_data)
+
 
 # close db
 def finish_procedure(all_scraping_data):
@@ -111,7 +122,7 @@ def write_each(scraping_data):
                 break
             except:
                 print '[]'
-                time.sleep(0.1)
+                time.sleep(DELAY)
                 continue
         else:
             try:
@@ -123,7 +134,7 @@ def write_each(scraping_data):
                 break
             except:
                 print '[]'
-                time.sleep(0.1)
+                time.sleep(DELAY)
                 continue
     print '[debug] write to mysql', Serialized
     _db.close()
