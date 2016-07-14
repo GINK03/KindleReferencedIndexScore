@@ -53,7 +53,7 @@ def initiate_data(all_scraping_data):
             print(serialized.keyurl, serialized.date, pickle.loads(str(serialized.serialized)))
             scraping_data = pickle.loads(str(serialized.serialized) )
         except:
-            print('[SQL_DATA_BROKEN]')
+            print('[WARN]SQL data is broken.')
             serialized.delete()
             continue
         all_scraping_data.append((scraping_data.normalized_url , scraping_data) )
@@ -89,19 +89,25 @@ def write_each(scraping_data):
         mydb.close()
     except:
         print('[WARN] Mysql conn is already closed!')
-    _db = MySQLDatabase(
-       database = 'kindle',
-       user     = 'root',
-       password = '1234',
-       host     = '127.0.0.1',
-       port     = 3306)
-    _db.connect()
+    try:
+        _db = MySQLDatabase(
+            database = 'kindle',
+            user     = 'root',
+            password = '1234',
+            host     = '127.0.0.1',
+            port     = 3306)
+        _db.connect()
+    except:
+        print('[CRIT] Cannot creal MySQL connector!')
+        return 
+
     """
     文字列のエンコーディングに失敗した場合、書き込みを行わず、パスする
     """
     dumps  = pickle.dumps(scraping_data)
     try:
-        keyurl = str( hashlib.sha224(scraping_data.url).hexdigest() )
+        keyurl = str(hashlib.sha224(scraping_data.url.encode('utf-8')).hexdigest() )
+        pass
     except:
         _db.close()
         return
@@ -153,5 +159,5 @@ def write_each(scraping_data):
                 print('[CRIT] cannot update entry! try 10 times...', _)
                 time.sleep(DELAY)
                 continue
-    print('[debug] write to mysql', Serialized)
+    print('[DEBUG] write to mysql', Serialized)
     _db.close()

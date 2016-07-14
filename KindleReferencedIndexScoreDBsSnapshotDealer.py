@@ -31,7 +31,7 @@ class SnapshotDeal():
         return (lambda x:x if x != [] else None)( SnapshotDeal.SCRAPING_DATA_POOL )
     
     """
-    無限ループすることで簡単なデーモンとして起動する
+    無限ループすることでデーモンとして起動する
     """
     @staticmethod
     def run_as_a_deamon():
