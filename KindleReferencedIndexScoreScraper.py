@@ -20,7 +20,7 @@ RETRY_NUM           = 10
 USER_AGENT          = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
 SEED_EXIST          = True
 SEED_NO_EXIST       = False
-DESIRABLE_PROCESS_NUM = 8
+DESIRABLE_PROCESS_NUM = 4 
 
 # set default state to scrape web pages in Amazon Kindle
 def initialize_parse_and_map_data_to_local_db():

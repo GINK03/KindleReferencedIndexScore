@@ -11,10 +11,11 @@ import re
 import hashlib
 from KindleReferencedIndexScoreClass import *
 from KindleReferencedIndexScoreDBs import *
+from KindleReferencedIndexScoreDBsSnapshotDealer import *
 
-# defined parameters
 NUMBER_PATTERN = r'[+-]?\d+(?:\.\d+)?' 
 NUMBER_REGEX = re.compile(r'[+-]?\d+(?:\.\d+)?')
+
 
 def ranking_logic():
     a, b = 0.5, 0.5
@@ -42,13 +43,9 @@ if __name__ == '__main__':
     
     is_referenced_score = args_obj.get('score')
 
-    all_scraping_data = []
-    if initiate_data(all_scraping_data) == SEED_NO_EXIST:
-        print 'You have to scrape amazon web site first.'
-        import sys
-        sys.exit(0)
+    all_scraping_data = SnapshotDeal.SCRAPING_DATA_POOL
 
-    for (url, scraping_data) in all_scraping_data:
+    for scraping_data in all_scraping_data:
         if not validate_is_kindle(scraping_data):
             continue
         soup = bs4.BeautifulSoup(scraping_data.html)
@@ -68,7 +65,7 @@ if __name__ == '__main__':
             context = context_wrap_div.findAll('div', {'class': 'a-section'} ).pop(0).text.replace('\n', '')
             contexts.append(context) 
 
-        print  scraping_data, url
+        print  scraping_data, scraping_data.url
         '''
         評価データを更新する
         '''
