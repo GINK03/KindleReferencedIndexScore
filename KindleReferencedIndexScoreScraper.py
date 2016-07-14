@@ -19,7 +19,7 @@ RETRY_NUM           = 10
 USER_AGENT          = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
 SEED_EXIST          = True
 SEED_NO_EXIST       = False
-DESIRABLE_PROCESS_NUM = 4 
+DESIRABLE_PROCESS_NUM = 1 
 
 # set default state to scrape web pages in Amazon Kindle
 def initialize_parse_and_map_data_to_local_db(all_scraping_data):
@@ -69,66 +69,109 @@ def initialize_parse_and_map_data_to_local_db(all_scraping_data):
 
 def html_adhoc_fetcher(url):
     """ 標準のアクセス回数はRETRY_NUMで定義されている """
+    print('adhocfetchr1', RETRY_NUM)
     html = None
     for _ in range(RETRY_NUM):
         try:
             opener = urllib2.build_opener()
-            opener.addheaders = [('User-agent', USER_AGENT)]
+            opener.addheaders.append( ('User-agent', USER_AGENT) )
+            opener.addheaders.append( ('Cookie', 'session-token="CKrTYrDiJ1VAMnqMdyCm9LsJi5E//BhrkqfTi+Qjrodcr2OZfmECLzQW7SAZ7qzmPjLSShZZFse8VXXCTkPaRjIrz85bfRxUmLpgkkG+kFZTmyBSQBc1xSBAKI5uhP3lrNzsmz8OCu2GahSgOT82MCmwePTU120pFnwHZyqab8aLBVsuTdX6YDXyqoHNkttpDOU/NsISdMkorM9Em5c+Tjy2f11VzkdVViiE7x5jHM4="') )
             html = opener.open(url, timeout = 1).read()
         except:
             print('[WARN] Cannot access try number is...', _, url)
             continue
         break
+    print('adhocfetchr2')
     if html == None:
         return (None, None, None)
     soup = bs4.BeautifulSoup(html)
+    print('HTML adhoc 1')
     title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
     return (html, title, soup)
 
 
 def map_data_to_local_db_from_url(scraping_data):
     html, soup = None, None
-    if scraping_data.html == None:
+    #print('D1', scraping_data.html)
+    if scraping_data.html == None or scraping_data.html == "":
+        print('UNCHO')
         scraping_data.html, title, soup = html_adhoc_fetcher(scraping_data.url)
-        """ add html to scraping_data.html """
-        write_each(scraping_data)
-
+        print('html len=', len(scraping_data.html))
+        print(title)
+        html                            = scraping_data.html
+        #""" add html to scraping_data.html """
+        #write_each(scraping_data)
     else:
         html, soup = scraping_data.html, bs4.BeautifulSoup(scraping_data.html)
         pass
+    print("UNCHO1.2")
     if html == None or html == '' : return []
-    
+    print('UNCHO2') 
     """ scraping_dataの子ノードをchild_soupsという変数名で返却, htmlはフェッチしていないので軽い """
     child_scraping_data_list = []
     for i, a in enumerate(soup.find_all('a')):
-        """ アマゾン外のドメインの場合、全部パス """
-        if a.has_attr('href') and len(a['href']) > 1 and not 'www.amazon.co.jp' in a['href']:
+        print('UNCHO3')
+        print(a)
+        #print(soup.find_all('a'))
+        """ 
+        アマゾン外のドメインの場合、全部パス 
+        """
+        if not (a.has_attr('href') and len(a['href']) > 1 and not 'www.amazon.co.jp' in a['href']):
             continue
-        if a.has_attr('href') and len(a['href']) != 0:
-            """ 子ノードの作成 """
-            child_scraping_data = ScrapingData()
-            fixed_url = (lambda x: 'https://www.amazon.co.jp' + x if '/' == x[0] else x)(a['href'])
-            """ ASINコードに類似していないURLは解析しない"""
-            if not filter_is_asin(fixed_url):
-                continue
-            """ '\n'コードを削除 ' 'を削除 """
-            fixed_url = fixed_url.replace('\n','').replace(' ','')
-            child_scraping_data.url = fixed_url
-            child_scraping_data.normalized_url = '/'.join( filter( lambda x: not '=' in x, fixed_url.split('?').pop(0).split('/') ) )
-            filter_len = len( filter(lambda x: child_scraping_data.normalized_url == x[0], all_scraping_data ) ) 
-            filter_len_in_tempory_param = len( filter(lambda x: child_scraping_data.normalized_url == x[0], child_scraping_data_list ) ) 
-            is_already_exist = (lambda x: True if x > 0 else False )(filter_len + filter_len_in_tempory_param)
-            if is_already_exist == True:
-                evaluatate_other_page(child_scraping_data.normalized_url, all_scraping_data, scraping_data.url)
-                continue
-            child_scraping_data.url = fixed_url
-            """ 子ノードのhtml, titleを取得 """
-            (child_scraping_data.html, child_scraping_data.title, soup ) = html_adhoc_fetcher(fixed_url)
-            """ データの取得に失敗していたらその行は抜かす """
-            if child_scraping_data.html == None or soup == None:
-                continue
-            child_scraping_data_list.append( (child_scraping_data.normalized_url, child_scraping_data) )
-            write_each(child_scraping_data)
+        print(a)
+        """ 
+        子ノードの作成 
+        """
+        child_scraping_data = ScrapingData()
+        
+        fixed_url = (lambda x: 'https://www.amazon.co.jp' + x if '/' == x[0] else x)(a['href'])
+        
+        """ 
+        ASINコードに類似していないURLは解析しない
+        """
+        asin = get_asin(fixed_url)
+        if not asin:
+            continue
+        print(asin)
+        child_scraping_data.asin     = asin
+        child_scraping_data.title    = (lambda x:x if x else 'Untitled')(a.get('title') )
+        """ 
+        '\n'コードを削除 ' 'を削除 
+        """
+        fixed_url                   = fixed_url.replace('\n','').replace(' ','')
+        
+        child_scraping_data.url     = fixed_url
+        
+        child_scraping_data.normalized_url = '/'.join( filter( lambda x: not '=' in x, fixed_url.split('?').pop(0).split('/') ) )
+                   
+        filter_len                  = len( filter(lambda x: child_scraping_data.normalized_url == x[0], all_scraping_data ) ) 
+        
+        filter_len_in_tempory_param = len( filter(lambda x: child_scraping_data.normalized_url == x[0], child_scraping_data_list ) ) 
+        
+        is_already_exist            = (lambda x: True if x > 0 else False )(filter_len + filter_len_in_tempory_param)
+        
+        """
+        すでに全データの中にscrape済みであるインスタンスがあれば、処理を行わない
+        """
+        if is_already_exist == True:
+            continue
+        
+        child_scraping_data.url = fixed_url
+        
+        """ 
+        子ノードのhtml, titleを取得 
+        """
+        (child_scraping_data.html, child_scraping_data.title, soup ) = html_adhoc_fetcher(fixed_url)
+        
+        """ 
+        データの取得かHTML解析に失敗していたらその行は抜かす 
+        """
+        if child_scraping_data.html == None or soup == None:
+            continue
+        
+        child_scraping_data_list.append((child_scraping_data.normalized_url, child_scraping_data) )
+        
+        write_each(child_scraping_data)
     return child_scraping_data_list
 
 def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
@@ -144,11 +187,11 @@ def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
         referenced_obj.from_url = normalized_from_url
         obj.evaluated.append( referenced_obj )
 
-def filter_is_asin(url):
-    is_asin = (lambda x:x.pop() if x != [] else '?')( filter(lambda x:len(x) == 10, url.split('?').pop(0).split('/')) )
-    if is_asin[0] in ['A', 'B', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
-        return True
-    return False
+def get_asin(url):
+    asin = (lambda x:x.pop() if x != [] else '?')( filter(lambda x:len(x) == 10, url.split('?').pop(0).split('/')) )
+    if asin[0] in ['A', 'B', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
+        return asin
+    return None
 
 def validate_is_asin(scraping_data_list):
     #print scraping_data_list
@@ -167,10 +210,13 @@ def search_flatten_multiprocess(conn, chunked_list, all_scraping_data):
             print('pass ',  scraping_data.url, scraping_data.count, _, '/', len(chunked_list) )
             continue
         child_soups = map_data_to_local_db_from_url(scraping_data)
-        for child_soup in child_soups:
+        for (url, child_soup) in child_soups:
             write_each(child_soup)
+            print(child_soup.asin)
         scraping_data.count += 1
-        print('eval ', scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', len(chunked_list), len(all_scraping_data), mp.current_process() ]) ) )
+        print('UNKCHI')
+        print(child_soups)
+        print('[DEBUG] eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', len(chunked_list), len(all_scraping_data), mp.current_process() ]) ) )
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""

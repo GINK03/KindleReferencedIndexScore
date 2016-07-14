@@ -12,16 +12,17 @@ class Referenced:
         self.evaluation_date = None
 class ScrapingData:
     def __init__(self):
-        self.url = 'https://'
+        self.url            = 'https://'
         self.normalized_url = 'https://'
-        self.date = 0
-        self.title = ''
-        self.description = ''
-        self.html = None
-        self.html_context = ''
-        self.amazon_rating = 0
-        self.reviews = []
+        self.asin           = 'B'
+        self.date           = 0
+        self.title          = ''
+        self.description    = ''
+        self.html           = None
+        self.html_context   = ''
+        self.amazon_rating  = 0
+        self.reviews        = []
         self.reviews_datetime = datetime.fromtimestamp(0) 
-        self.craw_revision = 0
-        self.evaluated = []
-        self.count = 0
+        self.craw_revision  = 0
+        self.evaluated      = []
+        self.count          = 0

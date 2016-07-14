@@ -117,9 +117,13 @@ def write_each(scraping_data):
     reviews_datetime        = scraping_data.reviews_datetime
     """
     文字列のエンコーディングに失敗した場合、書き込みを行わず、パスする
+    #keyurlはURLパラメータのあるなしで無限に増殖しうるから必ずnormalized_urlを用いる
+    2016.7 ASINをkeyurlに設定するように仕様を変更
     """
+    # keyurl = str(hashlib.sha224(scraping_data.normalized_url.encode('utf-8') ).hexdigest() )
+    keyurl                  = scraping_data.asin 
+
     try:
-        keyurl = str(hashlib.sha224(scraping_data.url.encode('utf-8') ).hexdigest() )
         pass
     except:
         _db.close()
@@ -172,5 +176,5 @@ def write_each(scraping_data):
                 print('[CRIT] cannot update entry! try 10 times...', _)
                 time.sleep(DELAY)
                 continue
-    print('[DEBUG] write to mysql', Serialized)
+    print('[DEBUG] write to mysql', scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
     _db.close()
