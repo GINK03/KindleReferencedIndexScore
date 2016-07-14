@@ -23,7 +23,7 @@ def ranking_logic():
 def validate_is_kindle(scraping_data):
     url     = scraping_data.url
     asin    = (lambda x:x.pop() if x != [] else '?')( filter(lambda x:len(x) == 10, url.split('?').pop(0).split('/')) )
-    """ ASIN$B$N:G=i$NJ8;z$,!"(BB$B$J$iB?J,(BKindle$B$G$"$m$&$H$$$&?dDj(B """
+    """ ASINの最初の文字が、Bなら多分Kindleであろうという推定 """
     if asin[0] in ['B']:
         #print 'http://www.amazon.co.jp/dp/' + asin, url, scraping_data
         return True
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
         print  scraping_data, scraping_data.url
         '''
-        $BI>2A%G!<%?$r99?7$9$k(B
+        評価データを更新する
         '''
         for star, context, vote in zip(stars, contexts, cr_votes):
             review = Review()
