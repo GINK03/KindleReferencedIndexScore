@@ -23,6 +23,7 @@ SEED_EXIST              = True
 SEED_NO_EXIST           = False
 RETRY_NUM               = 10
 DELAY                   = 1.0
+CTL_DELIM               = ''
 
 class Serialized(Model):
     keyurl              = CharField(primary_key=True)
@@ -68,7 +69,17 @@ def initiate_data_generator():
     for serialized in Serialized.select().iterator():
         key             = serialized.keyurl
         scraping_data   = pickle.loads( str(serialized.serialized) )
-        yield (key, scraping_data, serialized.serialized.replace('\n', '') )
+        yield (key, scraping_data, serialized.serialized.replace('\n', CTL_DELIM) )
+
+"""
+limit付きgenerator
+多すぎる情報を制限する
+"""
+def initiate_data_limit_generator(num):
+    for serialized in Serialized.select().limit(num).iterator():
+        key             = serialized.keyurl
+        scraping_data   = pickle.loads( str(serialized.serialized) )
+        yield (key, scraping_data, serialized.serialized.replace('\n', CTL_DELIM) )
 
 """
 scraping_dataインスタンスが未登録の際、一括登録する
@@ -101,12 +112,14 @@ def write_each(scraping_data):
         print('[CRIT] Cannot creal MySQL connector!')
         return 
 
+    dumps                   = pickle.dumps(scraping_data)
+    serialized_reviews      = pickle.dumps(scraping_data.reviews)
+    reviews_datetime        = scraping_data.reviews_datetime
     """
     文字列のエンコーディングに失敗した場合、書き込みを行わず、パスする
     """
-    dumps  = pickle.dumps(scraping_data)
     try:
-        keyurl = str(hashlib.sha224(scraping_data.url.encode('utf-8')).hexdigest() )
+        keyurl = str(hashlib.sha224(scraping_data.url.encode('utf-8') ).hexdigest() )
         pass
     except:
         _db.close()
@@ -137,8 +150,8 @@ def write_each(scraping_data):
                     keyurl              = keyurl,
                     date                = datetime.utcnow(),
                     serialized          = dumps,
-                    datetime_reviews    = datetime.fromtimestamp(0),
-                    serialized_reviews  = ""
+                    datetime_reviews    = reviews_datetime,
+                    serialized_reviews  = serialized_reviews
                 )
                 break
             except :
@@ -150,8 +163,8 @@ def write_each(scraping_data):
                 q = Serialized.update(
                     date                = datetime.utcnow(),
                     serialized          = dumps,
-                    datetime_reviews    = datetime.fromtimestamp(0),
-                    serialized_reviews  = ""
+                    datetime_reviews    = reviews_datetime,
+                    serialized_reviews  = serialized_reviews
                 ).where( Serialized.keyurl==keyurl )
                 q.execute()
                 break

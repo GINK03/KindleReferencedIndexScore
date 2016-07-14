@@ -1,4 +1,5 @@
 # coding: utf-8
+from __future__ import print_function
 import bs4
 import sys
 import urllib2
@@ -6,7 +7,7 @@ import urllib
 import os.path
 import __future__
 import argparse
-import datetime
+from datetime import datetime
 import re
 import hashlib
 from KindleReferencedIndexScoreClass import *
@@ -25,7 +26,6 @@ def validate_is_kindle(scraping_data):
     asin    = (lambda x:x.pop() if x != [] else '?')( filter(lambda x:len(x) == 10, url.split('?').pop(0).split('/')) )
     """ ASINの最初の文字が、Bなら多分Kindleであろうという推定 """
     if asin[0] in ['B']:
-        #print 'http://www.amazon.co.jp/dp/' + asin, url, scraping_data
         return True
     else:
         return False
@@ -34,7 +34,7 @@ def referenced_score(scraping_data_list):
     source_list = filter(lambda x:len(x[1].evaluated) != 0, sorted(scraping_data_list, key=lambda x:len(x[1].evaluated)*-1) )
     #source_list = sorted(scraping_data_list, key=lambda x:len(x[1].evaluated)*-1)
     for (url, scraping_data) in source_list:
-        print scraping_data.url, scraping_data, map(lambda x:x.from_url, scraping_data.evaluated)
+        print(scraping_data.url, scraping_data, map(lambda x:x.from_url, scraping_data.evaluated) )
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     for scraping_data in all_scraping_data:
         if not validate_is_kindle(scraping_data):
             continue
-        soup = bs4.BeautifulSoup(scraping_data.html)
+        soup = bs4.BeautifulSoup(str(scraping_data.html))
         box_divs = soup.findAll('div', {'id': re.compile('rev-dpReviewsMostHelpfulAUI-*') } )
         if box_divs == [] or box_divs == None : continue
         stars = []
@@ -65,7 +65,7 @@ if __name__ == '__main__':
             context = context_wrap_div.findAll('div', {'class': 'a-section'} ).pop(0).text.replace('\n', '')
             contexts.append(context) 
 
-        print  scraping_data, scraping_data.url
+        print(scraping_data, scraping_data.url )
         '''
         評価データを更新する
         '''
@@ -74,9 +74,15 @@ if __name__ == '__main__':
             hashes = str(hashlib.sha224(context.encode('utf-8')).hexdigest())            
             (review.star, review.context, review.vote, review.hashes) = star, context, vote, hashes
             is_exist = hashes in map(lambda x:x.hashes, scraping_data.reviews)
-            print 'star rank ' + review.star + ' ' + review.context + 'votes ' + review.vote + ' hashes ' + review.hashes + ' is_exist ' + str(is_exist) 
+            print('star rank ' + review.star + ' ' + review.context + 'votes ' + review.vote + ' hashes ' + review.hashes + ' is_exist ' + str(is_exist)  )
             if is_exist: 
                 continue
             scraping_data.reviews.append(review)
-            write_each(scraping_data)
+        """
+        scraping_data.reviewが空リストかNoneの場合、処理を終了
+        """
+        if scraping_data.reviews == [] or scraping_data.reviews == None:
+            continue
+
+        write_each(scraping_data)
 

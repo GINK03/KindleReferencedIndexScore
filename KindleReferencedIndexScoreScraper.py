@@ -46,29 +46,26 @@ def initialize_parse_and_map_data_to_local_db(all_scraping_data):
             raw_url         = (lambda x:'https://www.amazon.co.jp' + x if x[0] =='/' else x)(a['href'])
             description     = a.string
             scraping_data   = ScrapingData()
-            scraping_data.normalized_url = ''
-            if '=' in raw_url:
-                scraping_data.normalized_url = '/'.join( filter(lambda x:not '=' in x, raw_url.split('?').pop(0).split('/') ) )
-            else:
-                scraping_data.normalized_url = raw_url
+                
+            scraping_data.normalized_url = '/'.join( raw_url.split('?').pop(0).split('/') )
             if not 'www.amazon.co.jp' in scraping_data.normalized_url:
                 continue
+            
+            """
+            scraping_dataのnormalized_urlと同一のURLを持つオブジェクトがあれば処理を中断
+            ないならば、all_scraping_dataに追加して処理を再開
+            """
             if filter(lambda x:scraping_data.normalized_url == x[0], all_scraping_data ) != []:
                 fetch_obj = filter(lambda x:scraping_data.normalized_url == x[0], all_scraping_data ).pop()
                 continue
             else:
                 scraping_data.url = raw_url
-                if not filter_is_asin(scraping_data.url):
-                    print('[!!] pass, because of this url dont be seem ASIN code.', scraping_data.url )
-                    continue
-                """ 
-                NOTE: soupの保存はシリアライズ変換時に再帰回数が多すぎて対応できない
-                NOTE: そのため、raw htmlを保存している
-                """
-                _soup = None
-                scraping_data.title = (lambda x: unicode( _soup.title.string ) if x != None and x.title != None else 'Untitled')(_soup)
+                
+                scraping_data.title = 'This is Seed'
+
+                write_each(scraping_data)
+
                 all_scraping_data.append( (scraping_data.normalized_url, scraping_data) )
-                pass
 
 def html_adhoc_fetcher(url):
     """ 標準のアクセス回数はRETRY_NUMで定義されている """
@@ -93,8 +90,9 @@ def map_data_to_local_db_from_url(scraping_data):
     html, soup = None, None
     if scraping_data.html == None:
         scraping_data.html, title, soup = html_adhoc_fetcher(scraping_data.url)
-        """ update html """
+        """ add html to scraping_data.html """
         write_each(scraping_data)
+
     else:
         html, soup = scraping_data.html, bs4.BeautifulSoup(scraping_data.html)
         pass
@@ -145,7 +143,6 @@ def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
         referenced_obj = Referenced() 
         referenced_obj.from_url = normalized_from_url
         obj.evaluated.append( referenced_obj )
-        #print('[!!!!!!]a entity will be stocked', obj, filter(lambda x:x[0] == normalized_url, scraping_data_list), map(lambda x:x.from_url, obj.evaluated) )
 
 def filter_is_asin(url):
     is_asin = (lambda x:x.pop() if x != [] else '?')( filter(lambda x:len(x) == 10, url.split('?').pop(0).split('/')) )
@@ -188,7 +185,6 @@ if __name__ == '__main__':
     
     depth = (lambda x:int(x) if x else 1)( args_obj.get('depth') )
 
-    all_scraping_data = []
     
     #""" SEEDが存在しないならば初期化 """
     #if initiate_data(ALL_SCRAPING_DATA) == SEED_NO_EXIST:
@@ -198,9 +194,16 @@ if __name__ == '__main__':
     """
     SnapshotDealデーモンが出力するデータをもとにスクレイピングを行う
     NOTE: SQLの全アクセスは非常に動作コストが高く、推奨されない
+    NOTE: Snapshotが何もない場合、initialize_parse_and_map_data_to_local_dbを呼び出して初期化を行う
     """
-    all_scraping_data = map(lambda x:(x.url, x), SnapshotDeal.get_all() )
- 
+    all_scraping_data = []
+    
+    _ = SnapshotDeal.get_all() 
+    if _ == [] or _ == None:
+        initialize_parse_and_map_data_to_local_db(all_scraping_data)
+    else:
+        all_scraping_data = map(lambda x:(x.url, x), SnapshotDeal.get_all() )
+
     """
     深さを決めて幅優先探索 
     """

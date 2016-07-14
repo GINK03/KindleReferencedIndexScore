@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 class Review:
     def __init__(self):
@@ -21,6 +21,7 @@ class ScrapingData:
         self.html_context = ''
         self.amazon_rating = 0
         self.reviews = []
+        self.reviews_datetime = datetime.fromtimestamp(0) 
         self.craw_revision = 0
         self.evaluated = []
         self.count = 0

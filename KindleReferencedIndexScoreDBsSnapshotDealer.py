@@ -34,7 +34,7 @@ class SnapshotDeal():
     無限ループすることでデーモンとして起動する
     """
     @staticmethod
-    def run_as_a_deamon():
+    def run_as_a_deamon(limit):
         while True:
             """
             メモリ上のインスタンスを展開
@@ -45,8 +45,14 @@ class SnapshotDeal():
             古いデータを削除して強制的に上書きする
             """
             f = open(SnapshotDeal.SRC_FILE_NAME, 'w')
-            for (key, scraping_data, serialized) in initiate_data_generator():
-                f.write(serialized + '\n')
+            if limit == None:
+                print('moge')
+                for (key, scraping_data, serialized) in initiate_data_generator():
+                    f.write(serialized + '\n')
+            else:
+                print('hoge')
+                for (key, scraping_data, serialized) in initiate_data_limit_generator(limit):
+                    f.write(serialized + '\n')
             f.close()
             
             """
@@ -67,6 +73,13 @@ class SnapshotDeal():
         シリアライズ化されたデータよりもオブジェクトのインスタンスのほうがメモリは消費しない
         """
         scraping_data_list = []
+        
+        """
+        ファイルが存在しない場合、処理を行わずreturnする
+        """
+        if not os.path.exists(SnapshotDeal.DIST_FILE_NAME):
+            return
+
         for line in open(SnapshotDeal.DIST_FILE_NAME, 'r'):
             try:
                 scraping_data_list.append(pickle.loads(line.replace('', '\n')))
@@ -91,9 +104,13 @@ main文として実行されたら、以下の命令が実行される
 """
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
-    parser.add_argument('--refresh_rate',   help='set refresh rate')
-    args_obj = vars(parser.parse_args())
-    
-    SnapshotDeal.REFRESH_RATE = (lambda x:x if x else SnapshotDeal.REFRESH_RATE)( args_obj.get('refresh_rate') )
+    parser.add_argument('--limit',   help='set limit num')
+    parser.add_argument('--refresh_rate',   help='set limit num')
 
-    SnapshotDeal.run_as_a_deamon()
+    args_obj    = vars(parser.parse_args())
+   
+    limit       = (lambda x:int(x) if x else None)(args_obj.get('limit') )
+
+    SnapshotDeal.REFRESH_RATE = (lambda x:x if x else SnapshotDeal.REFRESH_RATE)(args_obj.get('refresh_rate') )
+
+    SnapshotDeal.run_as_a_deamon(limit)
