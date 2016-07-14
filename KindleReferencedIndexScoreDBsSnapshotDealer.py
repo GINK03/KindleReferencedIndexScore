@@ -24,25 +24,25 @@ class SnapshotDeal():
     SCRAPING_DATA_POOL      = []
    
     """
-    $B%9%?%F%#%C%/%a%=%C%I$K2?$i$+$N%G!<%?$,$J$$$J$i$P!"(BNone$B$rJV$9(B
+    スタティックメソッドに何らかのデータがないならば、Noneを返す
     """
     @staticmethod
     def get_all():
         return (lambda x:x if x != [] else None)( SnapshotDeal.SCRAPING_DATA_POOL )
     
     """
-    $BL58B%k!<%W$9$k$3$H$G%G!<%b%s$H$7$F5/F0$9$k(B
+    無限ループすることでデーモンとして起動する
     """
     @staticmethod
     def run_as_a_deamon():
         while True:
             """
-            $B%a%b%j>e$N%$%s%9%?%s%9$rE83+(B
+            メモリ上のインスタンスを展開
             """
             SnapshotDeal.charge_memory()
             
             """
-            $B8E$$%G!<%?$r:o=|$7$F6/@)E*$K>e=q$-$9$k(B
+            古いデータを削除して強制的に上書きする
             """
             f = open(SnapshotDeal.SRC_FILE_NAME, 'w')
             for (key, scraping_data, serialized) in initiate_data_generator():
@@ -50,21 +50,21 @@ class SnapshotDeal():
             f.close()
             
             """
-            $B0l;~%G!<%?$r915WE*%G!<%?$N%U%!%$%kL>$KJQ99(B
+            一時データを恒久的データのファイル名に変更
             """
             os.rename(SnapshotDeal.SRC_FILE_NAME, SnapshotDeal.DIST_FILE_NAME)
             
             print(SnapshotDeal.LOOP_MESSAGE) 
             
             """
-            $B$"$^$jIQEY$N9b$$%j%U%l%C%7%e$O%7%9%F%`$KIi2Y$r$b$?$i$9$N$G!"%9%j!<%W$9$k(B
+            あまり頻度の高いリフレッシュはシステムに負荷をもたらすので、スリープする
             """
             time.sleep(SnapshotDeal.REFRESH_RATE)
     
     @staticmethod
     def charge_memory():
         """
-        $B%7%j%"%i%$%:2=$5$l$?%G!<%?$h$j$b%*%V%8%'%/%H$N%$%s%9%?%s%9$N$[$&$,%a%b%j$O>CHq$7$J$$(B
+        シリアライズ化されたデータよりもオブジェクトのインスタンスのほうがメモリは消費しない
         """
         scraping_data_list = []
         for line in open(SnapshotDeal.DIST_FILE_NAME, 'r'):
@@ -78,8 +78,8 @@ class SnapshotDeal():
                 pass
         SnapshotDeal.SCRAPING_DATA_POOL = scraping_data_list
 """
-import$B$5$l$?$i%0%m!<%P%k6u4V$K%$%s%9%?%s%9$NE83+$r$9$k(B
-NOTE: import$B$5$l$?$H$-$N%U%!%$%kL>$,(B__name__$BJQ?t$KF~$k$N$G!"<B9T;~$H%b%8%e!<%k%m!<%I;~$NF0:n$,$o$1$k$3$H$,$G$-$k(B
+importされたらグローバル空間にインスタンスの展開をする
+NOTE: importされたときのファイル名が__name__変数に入るので、実行時とモジュールロード時の動作がわけることができる
 """
 if 'KindleReferencedIndexScoreDBsSnapshotDealer' == __name__:
     print('module loaded')
@@ -87,7 +87,7 @@ if 'KindleReferencedIndexScoreDBsSnapshotDealer' == __name__:
 
 
 """
-main$BJ8$H$7$F<B9T$5$l$?$i!"0J2<$NL?Na$,<B9T$5$l$k(B
+main文として実行されたら、以下の命令が実行される
 """
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
