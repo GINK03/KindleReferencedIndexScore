@@ -56,12 +56,13 @@ def initiate_data(all_scraping_data):
 
 """
 データを全取得してオンメモリに変換する必要がない場合や、参照IFを使いたくない場合に利用する
+
 """
 def initiate_data_generator():
-    for serialized in Serialized.select():
+    for serialized in Serialized.select().iterator():
         key             = serialized.keyurl
         scraping_data   = pickle.loads( str(serialized.serialized) )
-        yield (key, scraping_data)
+        yield (key, scraping_data, serialized.serialized.replace('\n', '') )
 
 
 # close db
