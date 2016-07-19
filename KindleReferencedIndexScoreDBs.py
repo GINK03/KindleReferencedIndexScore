@@ -31,6 +31,7 @@ class Serialized(Model):
     serialized          = TextField()
     datetime_reviews    = DateTimeField(default=None )
     serialized_reviews  = TextField()
+    serialized_asins    = TextField()
     class Meta:
         database = mydb 
 
@@ -68,7 +69,7 @@ def initiate_data(all_scraping_data):
 def initiate_data_generator():
     for serialized in Serialized.select().iterator():
         key             = serialized.keyurl
-        scraping_data   = pickle.loads( str(serialized.serialized) )
+        scraping_data   = pickle.loads(str(serialized.serialized) )
         yield (key, scraping_data, serialized.serialized.replace('\n', CTL_DELIM) )
 
 """
@@ -109,12 +110,13 @@ def write_each(scraping_data):
             port     = 3306)
         _db.connect()
     except:
-        print('[CRIT] Cannot creal MySQL connector!')
+        print('[CRIT] Cannot creal MySQL connector!',write_each.__name__)
         return 
 
     dumps                   = pickle.dumps(scraping_data)
     serialized_reviews      = pickle.dumps(scraping_data.reviews)
     reviews_datetime        = scraping_data.reviews_datetime
+    serialized_asins        = pickle.dumps(scraping_data.asins)
     """
     文字列のエンコーディングに失敗した場合、書き込みを行わず、パスする
     #keyurlはURLパラメータのあるなしで無限に増殖しうるから必ずnormalized_urlを用いる
@@ -135,7 +137,7 @@ def write_each(scraping_data):
             is_query_exist = query.exists()
             break
         except:
-            print('[CRIT] cannot print query to MySQL or excute SQL query')
+            print('[CRIT] cannot print query to MySQL or excute SQL query', write_each.__name__)
             time.sleep(1)
     """
     最初のクエリ発行に失敗したら、あきらめて、書き込みしない
@@ -155,11 +157,13 @@ def write_each(scraping_data):
                     date                = datetime.utcnow(),
                     serialized          = dumps,
                     datetime_reviews    = reviews_datetime,
-                    serialized_reviews  = serialized_reviews
+                    serialized_reviews  = serialized_reviews,
+                    serialized_asins    = serialized_asins
                 )
+                print('[DEBUG] crete a record to mysql',write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
                 break
             except :
-                print('[CRIT] cannot create new entry! try 10 times...', _)
+                print('[CRIT] cannot create new entry! try 10 times...',write_each.__name__, _)
                 time.sleep(DELAY)
                 continue
         else:
@@ -168,13 +172,14 @@ def write_each(scraping_data):
                     date                = datetime.utcnow(),
                     serialized          = dumps,
                     datetime_reviews    = reviews_datetime,
-                    serialized_reviews  = serialized_reviews
+                    serialized_reviews  = serialized_reviews,
+                    serialized_asins    = serialized_asins
                 ).where( Serialized.keyurl==keyurl )
                 q.execute()
+                print('[DEBUG] update a record to mysql',write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
                 break
             except:
-                print('[CRIT] cannot update entry! try 10 times...', _)
+                print('[CRIT] cannot update entry! try 10 times...', write_each.__name__, _)
                 time.sleep(DELAY)
                 continue
-    print('[DEBUG] write to mysql', scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
     _db.close()

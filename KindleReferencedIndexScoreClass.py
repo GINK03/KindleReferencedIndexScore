@@ -26,3 +26,4 @@ class ScrapingData:
         self.craw_revision  = 0
         self.evaluated      = []
         self.count          = 0
+        self.asins          = []

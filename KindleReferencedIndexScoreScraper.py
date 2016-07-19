@@ -4,6 +4,8 @@ import bs4
 import sys
 import urllib2
 import urllib
+from requests.exceptions import HTTPError
+import ssl
 import os.path
 import argparse
 import multiprocessing as mp
@@ -20,7 +22,7 @@ USER_AGENT          = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, l
 SEED_EXIST          = True
 SEED_NO_EXIST       = False
 DESIRABLE_PROCESS_NUM = 1 
-
+SESSION_TOKEN       = '"ZN8mMEOqdcMl6ZsubV6h/95CPYeabI8vDHR7ef3qR/rxOqRWscUZG1DdUESiqODAxy7AjSQ4hMbl2VJW0BovH3236ZZAVHmpTj/y7cqXykNjxgYxCxqvdKaKYQ0sz6A3pxFgawd+g9POEzQ+Jd/MiWhRA45tJVVElx+MIeBHglU3i7RNm9EvIsMD50+6fKJnJkZMuTo/58vq62ThtF2ebOQNWltmWPP/Cs/0EzSOYRXlNXYcw/gJGokBipdFYA32US+3Ut/jb7bzNJ+ACDLYQA=="'
 # set default state to scrape web pages in Amazon Kindle
 def initialize_parse_and_map_data_to_local_db(all_scraping_data):
     while(True):
@@ -68,57 +70,77 @@ def initialize_parse_and_map_data_to_local_db(all_scraping_data):
                 all_scraping_data.append( (scraping_data.normalized_url, scraping_data) )
 
 def html_adhoc_fetcher(url):
-    """ 標準のアクセス回数はRETRY_NUMで定義されている """
-    print('adhocfetchr1', RETRY_NUM)
+    """ 
+    標準のアクセス回数はRETRY_NUMで定義されている 
+    """
     html = None
     for _ in range(RETRY_NUM):
+        opener = urllib2.build_opener()
+        opener.addheaders.append( ('User-agent', USER_AGENT) )
+        opener.addheaders.append( ('Cookie', SESSION_TOKEN) )
         try:
-            opener = urllib2.build_opener()
-            opener.addheaders.append( ('User-agent', USER_AGENT) )
-            opener.addheaders.append( ('Cookie', 'session-token="CKrTYrDiJ1VAMnqMdyCm9LsJi5E//BhrkqfTi+Qjrodcr2OZfmECLzQW7SAZ7qzmPjLSShZZFse8VXXCTkPaRjIrz85bfRxUmLpgkkG+kFZTmyBSQBc1xSBAKI5uhP3lrNzsmz8OCu2GahSgOT82MCmwePTU120pFnwHZyqab8aLBVsuTdX6YDXyqoHNkttpDOU/NsISdMkorM9Em5c+Tjy2f11VzkdVViiE7x5jHM4="') )
-            html = opener.open(url, timeout = 1).read()
-        except:
-            print('[WARN] Cannot access try number is...', _, url)
+            html = opener.open(str(url), timeout = 2).read()
+        except urllib2.URLError, e:
+            print('[WARN] Cannot access url with URLError, try number is...', e, _, url)
             continue
+        except urllib2.HTTPError, e:
+            print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url)
+            continue
+        except HTTPError, e:
+            print('[WARN] Cannot access url with httperror, try number is...', e, _, url)
+            continue
+        except ssl.SSLError, e:
+            print('[WARN] Cannot access url with ssl error, try number is...', e, _, url)
+            continue
+        except UnicodeEncodeError, e:
+            """
+            NOTE: アマゾンのサービスでは、URLに本のタイトルが日本語で記入される場合がある。これはアメリカ本国の仕様に従ったものだと思われるが、
+                  ChromeやIEでは暗黙のURI変換があるためか、URLエンコードされていない。そのため、日本語が記されることが多い４番目のURLパラメータを
+                  手動でURLエンコードを行って接続を確立する
+            TODO: アドホック感を取り除く
+            """
+            urlentities     = url.split('/')
+            urlentities[3]  = urllib.quote(urlentities[3].encode('utf-8'))
+            rebuildurl      = '/'.join(urlentities)
+            try:
+                html = opener.open(rebuildurl, timeout = 2).read()
+                print('[DEBUG] Access was finished correctly!', _, rebuildurl )
+                break
+            except:
+                continue
+        except:
+            print('[WARN] Cannot access, retry... ', _, url)
+            break
         break
-    print('adhocfetchr2')
     if html == None:
         return (None, None, None)
     soup = bs4.BeautifulSoup(html)
-    print('HTML adhoc 1')
     title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
     return (html, title, soup)
 
 
 def map_data_to_local_db_from_url(scraping_data):
     html, soup = None, None
-    #print('D1', scraping_data.html)
     if scraping_data.html == None or scraping_data.html == "":
-        print('UNCHO')
         scraping_data.html, title, soup = html_adhoc_fetcher(scraping_data.url)
-        print('html len=', len(scraping_data.html))
-        print(title)
         html                            = scraping_data.html
         #""" add html to scraping_data.html """
         #write_each(scraping_data)
     else:
         html, soup = scraping_data.html, bs4.BeautifulSoup(scraping_data.html)
         pass
-    print("UNCHO1.2")
     if html == None or html == '' : return []
-    print('UNCHO2') 
-    """ scraping_dataの子ノードをchild_soupsという変数名で返却, htmlはフェッチしていないので軽い """
+    """ 
+    scraping_dataの子ノードをchild_soupsという変数名で返却, htmlはフェッチしていないので軽い 
+    """
     child_scraping_data_list = []
     for i, a in enumerate(soup.find_all('a')):
-        print('UNCHO3')
-        print(a)
         #print(soup.find_all('a'))
         """ 
         アマゾン外のドメインの場合、全部パス 
         """
         if not (a.has_attr('href') and len(a['href']) > 1 and not 'www.amazon.co.jp' in a['href']):
             continue
-        print(a)
         """ 
         子ノードの作成 
         """
@@ -132,7 +154,6 @@ def map_data_to_local_db_from_url(scraping_data):
         asin = get_asin(fixed_url)
         if not asin:
             continue
-        print(asin)
         child_scraping_data.asin     = asin
         child_scraping_data.title    = (lambda x:x if x else 'Untitled')(a.get('title') )
         """ 
@@ -157,7 +178,12 @@ def map_data_to_local_db_from_url(scraping_data):
             continue
         
         child_scraping_data.url = fixed_url
-        
+
+        """
+        scraping_dataインスタンスが持つ、html情報を元に参照しているasinのコードをアップデート
+        """
+        scraping_data.asins.append(asin)
+
         """ 
         子ノードのhtml, titleを取得 
         """
@@ -172,6 +198,8 @@ def map_data_to_local_db_from_url(scraping_data):
         child_scraping_data_list.append((child_scraping_data.normalized_url, child_scraping_data) )
         
         write_each(child_scraping_data)
+    print('[DEBUG] Finish one loop, ', scraping_data.url, scraping_data.asins)
+    write_each(scraping_data)
     return child_scraping_data_list
 
 def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
@@ -200,22 +228,18 @@ def validate_is_asin(scraping_data_list):
         is_asin = (lambda x:x.pop() if x != [] else '?')( filter(lambda x:len(x) == 10, url.split('?').pop(0).split('/')) )
         if is_asin[0] in ['A', 'B', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
             ret_list.append( (url, scraping_data) )
-            print('http://www.amazon.co.jp/dp/' + is_asin, url, scraping_data)
     return ret_list
 
 def search_flatten_multiprocess(conn, chunked_list, all_scraping_data):
     to_increse_list = []
     for _, (url, scraping_data) in enumerate(chunked_list):
         if scraping_data.count >= 1:
-            print('pass ',  scraping_data.url, scraping_data.count, _, '/', len(chunked_list) )
             continue
         child_soups = map_data_to_local_db_from_url(scraping_data)
         for (url, child_soup) in child_soups:
             write_each(child_soup)
             print(child_soup.asin)
         scraping_data.count += 1
-        print('UNKCHI')
-        print(child_soups)
         print('[DEBUG] eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', len(chunked_list), len(all_scraping_data), mp.current_process() ]) ) )
 
 def chunks(l, n):
@@ -231,7 +255,6 @@ if __name__ == '__main__':
     
     depth = (lambda x:int(x) if x else 1)( args_obj.get('depth') )
 
-    
     #""" SEEDが存在しないならば初期化 """
     #if initiate_data(ALL_SCRAPING_DATA) == SEED_NO_EXIST:
     #    initialize_parse_and_map_data_to_local_db()
