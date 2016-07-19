@@ -17,7 +17,6 @@ from KindleReferencedIndexScoreDBsSnapshotDealer import *
 NUMBER_PATTERN = r'[+-]?\d+(?:\.\d+)?' 
 NUMBER_REGEX = re.compile(r'[+-]?\d+(?:\.\d+)?')
 
-
 def ranking_logic():
     a, b = 0.5, 0.5
 
@@ -36,6 +35,74 @@ def referenced_score(scraping_data_list):
     for (url, scraping_data) in source_list:
         print(scraping_data.url, scraping_data, map(lambda x:x.from_url, scraping_data.evaluated) )
 
+def calculate_harmonic_mean(reviews):
+    size        = len(reviews)
+    hsource     = map(lambda x:(float(x.star),float(x.vote)), reviews)
+    print(hsource)
+    sigma       = sum( map(lambda x:x[1], hsource) )
+    inverted    = sum( map(lambda x:x[1]/x[0], hsource) )
+    score       = sigma/inverted
+    print(score)
+
+def parse_eval_and_update(scraping_data):
+
+    if not validate_is_kindle(scraping_data):
+        return
+    soup = bs4.BeautifulSoup(str(scraping_data.html))
+    box_divs = soup.findAll('div', {'id': re.compile('rev-dpReviewsMostHelpfulAUI-*') } )
+    
+    if box_divs == [] or box_divs == None : 
+        return
+    
+    stars = []
+    for box_div in box_divs:
+        starl = re.findall(NUMBER_REGEX, box_div.find('a', {'class': 'a-link-normal'} )['title'])
+        #print(starl)
+        star = starl.pop()
+        stars.append(star)
+    
+    cr_votes = [] 
+    for box_div in box_divs:
+        cr_vote_text = (lambda x:x.pop(0) if x != [] else '0')(re.findall(NUMBER_REGEX, box_div.find('span', {'id' : re.compile('cr-vote-*') } ).text.replace('\n', '') ) )
+        cr_votes.append( cr_vote_text )
+    
+    contexts = []
+    context_wrap_divs = soup.findAll('div', {'id': re.compile('revData-dpReviewsMostHelpfulAUI-*') } )
+    for context_wrap_div in context_wrap_divs:
+        context = context_wrap_div.findAll('div', {'class': 'a-section'} ).pop(0).text.replace('\n', '')
+        contexts.append(context) 
+
+    print(scraping_data, scraping_data.url )
+    """
+    評価データを更新する
+    """
+    for star, context, vote in zip(stars, contexts, cr_votes):
+        review = Review()
+        hashes = str(hashlib.sha224(context.encode('utf-8')).hexdigest())            
+        (review.star, review.context, review.vote, review.hashes) = star, context, vote, hashes
+        is_exist = hashes in map(lambda x:x.hashes, scraping_data.reviews)
+        print('star rank ' + review.star + ' ' + review.context + 'votes ' + review.vote + ' hashes ' + review.hashes + ' is_exist ' + str(is_exist)  )
+        if is_exist: 
+            continue
+        scraping_data.reviews.append(review)
+
+    """
+    scraping_data.reviewが空リストかNoneの場合、処理を終了
+    """
+    if scraping_data.reviews == [] or scraping_data.reviews == None:
+        return
+
+    """
+    調和平均を計算する
+    """
+    calculate_harmonic_mean(scraping_data.reviews)
+
+    """
+    TODO: 本当にデータをアップデートしていいのか、Validadeする必要がある
+    """
+    write_each(scraping_data)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
     parser.add_argument('--score',   help='evaluate kindle referenced indexed data from db')
@@ -46,43 +113,4 @@ if __name__ == '__main__':
     all_scraping_data = SnapshotDeal.SCRAPING_DATA_POOL
 
     for scraping_data in all_scraping_data:
-        if not validate_is_kindle(scraping_data):
-            continue
-        soup = bs4.BeautifulSoup(str(scraping_data.html))
-        box_divs = soup.findAll('div', {'id': re.compile('rev-dpReviewsMostHelpfulAUI-*') } )
-        if box_divs == [] or box_divs == None : continue
-        stars = []
-        for box_div in box_divs:
-            star = re.findall(NUMBER_REGEX,box_div.find('a', {'class': 'a-link-normal'} )['title']).pop(0)
-            stars.append(star)
-        cr_votes = [] 
-        for box_div in box_divs:
-            cr_vote_text = (lambda x:x.pop(0) if x != [] else '0')(re.findall(NUMBER_REGEX, box_div.find('span', {'id' : re.compile('cr-vote-*') } ).text.replace('\n', '') ) )
-            cr_votes.append( cr_vote_text )
-        contexts = []
-        context_wrap_divs = soup.findAll('div', {'id': re.compile('revData-dpReviewsMostHelpfulAUI-*') } )
-        for context_wrap_div in context_wrap_divs:
-            context = context_wrap_div.findAll('div', {'class': 'a-section'} ).pop(0).text.replace('\n', '')
-            contexts.append(context) 
-
-        print(scraping_data, scraping_data.url )
-        '''
-        評価データを更新する
-        '''
-        for star, context, vote in zip(stars, contexts, cr_votes):
-            review = Review()
-            hashes = str(hashlib.sha224(context.encode('utf-8')).hexdigest())            
-            (review.star, review.context, review.vote, review.hashes) = star, context, vote, hashes
-            is_exist = hashes in map(lambda x:x.hashes, scraping_data.reviews)
-            print('star rank ' + review.star + ' ' + review.context + 'votes ' + review.vote + ' hashes ' + review.hashes + ' is_exist ' + str(is_exist)  )
-            if is_exist: 
-                continue
-            scraping_data.reviews.append(review)
-        """
-        scraping_data.reviewが空リストかNoneの場合、処理を終了
-        """
-        if scraping_data.reviews == [] or scraping_data.reviews == None:
-            continue
-
-        write_each(scraping_data)
-
+        parse_eval_and_update(scraping_data )
