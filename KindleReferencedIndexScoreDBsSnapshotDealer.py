@@ -35,6 +35,7 @@ class SnapshotDeal():
     """
     @staticmethod
     def run_as_a_deamon(limit):
+        count = 0
         while True:
             """
             メモリ上のインスタンスを展開
@@ -45,14 +46,18 @@ class SnapshotDeal():
             古いデータを削除して強制的に上書きする
             """
             f = open(SnapshotDeal.SRC_FILE_NAME, 'w')
+            for (key, scraping_data, serialized) in initiate_data_generator():
+                f.write(serialized + '\n')
+            
+            """
+            機能的に今は何も定義されていない
+            """
             if limit == None:
-                print('moge')
-                for (key, scraping_data, serialized) in initiate_data_generator():
-                    f.write(serialized + '\n')
+                pass
             else:
-                print('hoge')
-                for (key, scraping_data, serialized) in initiate_data_limit_generator(limit):
-                    f.write(serialized + '\n')
+                #for (key, scraping_data, serialized) in initiate_data_limit_generator(limit):
+                #    f.write(serialized + '\n')
+                pass
             f.close()
             
             """
@@ -62,6 +67,12 @@ class SnapshotDeal():
             
             print(SnapshotDeal.LOOP_MESSAGE) 
             
+            """
+            countをインクリメントして、limitと等しいか超えていたならば終了
+            """
+            count += 1
+            if limit <= count:
+                sys.exit(0)
             """
             あまり頻度の高いリフレッシュはシステムに負荷をもたらすので、スリープする
             """

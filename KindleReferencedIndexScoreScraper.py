@@ -14,15 +14,10 @@ import datetime
 from KindleReferencedIndexScoreClass import *
 from KindleReferencedIndexScoreDBs import *
 from KindleReferencedIndexScoreDBsSnapshotDealer import *
+from KindleReferencedIndexScoreConfigMapper import *
 
-# defined parameters
-KINDLE_URL          = 'https://www.amazon.co.jp/Kindle-%E3%82%AD%E3%83%B3%E3%83%89%E3%83%AB-%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/b?ie=UTF8&node=2250738051'
-RETRY_NUM           = 10
-USER_AGENT          = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
 SEED_EXIST          = True
 SEED_NO_EXIST       = False
-DESIRABLE_PROCESS_NUM = 1 
-SESSION_TOKEN       = '"ZN8mMEOqdcMl6ZsubV6h/95CPYeabI8vDHR7ef3qR/rxOqRWscUZG1DdUESiqODAxy7AjSQ4hMbl2VJW0BovH3236ZZAVHmpTj/y7cqXykNjxgYxCxqvdKaKYQ0sz6A3pxFgawd+g9POEzQ+Jd/MiWhRA45tJVVElx+MIeBHglU3i7RNm9EvIsMD50+6fKJnJkZMuTo/58vq62ThtF2ebOQNWltmWPP/Cs/0EzSOYRXlNXYcw/gJGokBipdFYA32US+3Ut/jb7bzNJ+ACDLYQA=="'
 # set default state to scrape web pages in Amazon Kindle
 def initialize_parse_and_map_data_to_local_db(all_scraping_data):
     while(True):
@@ -30,7 +25,7 @@ def initialize_parse_and_map_data_to_local_db(all_scraping_data):
             print('[WARN] Try connecting to amazon server...' )
             opener = urllib2.build_opener()
             opener.addheaders = [('User-agent', USER_AGENT)]
-            html = opener.open(KINDLE_URL, timeout = 1).read()
+            html = opener.open(CM.KINDLE_URL, timeout = 1).read()
             soup = bs4.BeautifulSoup(html)
             print('[WARN] Connected to amazon server.' )
             break
@@ -76,8 +71,8 @@ def html_adhoc_fetcher(url):
     html = None
     for _ in range(RETRY_NUM):
         opener = urllib2.build_opener()
-        opener.addheaders.append( ('User-agent', USER_AGENT) )
-        opener.addheaders.append( ('Cookie', SESSION_TOKEN) )
+        opener.addheaders.append( ('User-agent', CM.USER_AGENT) )
+        opener.addheaders.append( ('Cookie', CM.SESSION_TOKEN) )
         try:
             html = opener.open(str(url), timeout = 2).read()
         except urllib2.URLError, e:
@@ -281,7 +276,7 @@ if __name__ == '__main__':
         if len(all_scraping_data) == 0 : 
             chunked_lists = [ all_scraping_data ]
         else:
-            chunked_lists = chunks(all_scraping_data, len(all_scraping_data)/DESIRABLE_PROCESS_NUM)
+            chunked_lists = chunks(all_scraping_data, len(all_scraping_data)/CM.DESIRABLE_PROCESS_NUM)
         to_increse_list = []
         threads_list = []
         for i, chunked_list in enumerate(chunked_lists):
