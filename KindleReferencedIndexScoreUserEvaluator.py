@@ -10,6 +10,9 @@ import argparse
 from datetime import datetime
 import re
 import hashlib
+import MeCab
+from collections import Counter
+
 from KindleReferencedIndexScoreClass import *
 from KindleReferencedIndexScoreDBs import *
 from KindleReferencedIndexScoreDBsSnapshotDealer import *
@@ -41,9 +44,17 @@ def calculate_harmonic_mean(reviews):
     print(hsource)
     sigma       = sum( map(lambda x:x[1], hsource) )
     inverted    = sum( map(lambda x:x[1]/x[0], hsource) )
-    score       = sigma/inverted
+    score       = sigma/( (lambda x:x if x != 0. else float('inf'))(inverted) )
     print(score)
 
+def tokenize_reviews(reviews):
+    csource     = '.'.join(map(lambda x:x.context, reviews)).encode('utf-8')
+    MT= MeCab.Tagger('mecabrc')
+    res = MT.parse(csource)
+    items = map(lambda x:x.split('\t').pop(0), str(res).split('\n'))
+    counter = Counter(items)
+    print(sorted([(term, val) for term, val in counter.items()], key=lambda x:x[1] ) )
+        #print( term, val) 
 def parse_eval_and_update(scraping_data):
 
     if not validate_is_kindle(scraping_data):
@@ -98,7 +109,12 @@ def parse_eval_and_update(scraping_data):
     calculate_harmonic_mean(scraping_data.reviews)
 
     """
-    TODO: 本当にデータをアップデートしていいのか、Validadeする必要がある
+    contextのトークナイズを行う
+    """
+    tokenize_reviews(scraping_data.reviews)
+
+    """
+    validatorをつけたのでたぶん大丈夫であるが。。。
     """
     write_each(scraping_data)
 

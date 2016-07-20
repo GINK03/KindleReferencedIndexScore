@@ -36,7 +36,7 @@ class Serialized(Model):
         database = mydb 
 
 """
-テーブルが存在しなければ新規作成
+serializedテーブルが存在しなければ新規作成
 """
 if not Serialized.table_exists():
     mydb.connect()
@@ -55,7 +55,7 @@ def initiate_data(all_scraping_data):
             print(serialized.keyurl, serialized.date, pickle.loads(str(serialized.serialized)))
             scraping_data = pickle.loads(str(serialized.serialized) )
         except:
-            print('[WARN]SQL data is broken.')
+            print('[WARN] SQL data is broken.')
             serialized.delete()
             continue
         all_scraping_data.append((scraping_data.normalized_url , scraping_data) )
@@ -110,7 +110,7 @@ def write_each(scraping_data):
             port     = 3306)
         _db.connect()
     except:
-        print('[CRIT] Cannot creal MySQL connector!',write_each.__name__)
+        print('[CRIT] Cannot creal MySQL connector!', write_each.__name__)
         return 
 
     dumps                   = pickle.dumps(scraping_data)
@@ -160,20 +160,34 @@ def write_each(scraping_data):
                     serialized_reviews  = serialized_reviews,
                     serialized_asins    = serialized_asins
                 )
-                print('[DEBUG] crete a record to mysql',write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
+                print('[DEBUG] crete a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
                 break
             except :
                 print('[CRIT] cannot create new entry! try 10 times...',write_each.__name__, _)
                 time.sleep(DELAY)
                 continue
         else:
+            """
+            updateする際には、データ量が上回っている場合には保存せずに、古いデータを使いまわす
+            NOTE: len(scraping_data.html)  > len(scraping_data.html)ならばアップデート
+            NOTE: len(asins)            > len(old_asins)ならばアップデート
+            NOTE: len(reviews)          > len(old_reviews)ならばアップデート
+            """
+            old_instance        = Serialized.get( Serialized.keyurl==keyurl )
+            old_scraping_data   = pickle.loads( str(old_instance.serialized) )
+            
+            scraping_data.html              = (lambda x:x.html if len(x.html) > len(old_scraping_data.html) else old_scraping_data.html )(scraping_data)
+            scraping_data.asins             = (lambda x:x.asins if len(x.asins) > len(old_scraping_data.asins) else old_scraping_data.asins )(scraping_data)
+            scraping_data.reviews           = (lambda x:x.reviews if len(x.reviews) > len(old_scraping_data.reviews) else old_scraping_data.reviews )(scraping_data)
+            scraping_data.reviews_datetime  = (lambda x:x.reviews_datetime if x.reviews_datetime > old_scraping_data.reviews_datetime else old_scraping_data.reviews_datetime )(scraping_data)
+
             try:
                 q = Serialized.update(
                     date                = datetime.utcnow(),
-                    serialized          = dumps,
-                    datetime_reviews    = reviews_datetime,
-                    serialized_reviews  = serialized_reviews,
-                    serialized_asins    = serialized_asins
+                    serialized          = pickle.dumps(scraping_data),
+                    datetime_reviews    = scraping_data.reviews_datetime,
+                    serialized_reviews  = pickle.dumps(scraping_data.reviews),
+                    serialized_asins    = pickle.dumps(scraping_data.asins)
                 ).where( Serialized.keyurl==keyurl )
                 q.execute()
                 print('[DEBUG] update a record to mysql',write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
