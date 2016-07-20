@@ -172,6 +172,8 @@ def write_each(scraping_data):
             NOTE: len(scraping_data.html)  > len(scraping_data.html)ならばアップデート
             NOTE: len(asins)            > len(old_asins)ならばアップデート
             NOTE: len(reviews)          > len(old_reviews)ならばアップデート
+            NOTE: 新しいアトリビュートの増加は、要素の評価先オブジェクトに新しいものを使うという原則を守れば、
+                　アトリビュート自体が消去されるということはない
             """
             old_instance        = Serialized.get( Serialized.keyurl==keyurl )
             old_scraping_data   = pickle.loads( str(old_instance.serialized) )
@@ -181,6 +183,8 @@ def write_each(scraping_data):
             scraping_data.reviews           = (lambda x:x.reviews if len(x.reviews) > len(old_scraping_data.reviews) else old_scraping_data.reviews )(scraping_data)
             scraping_data.reviews_datetime  = (lambda x:x.reviews_datetime if x.reviews_datetime > old_scraping_data.reviews_datetime else old_scraping_data.reviews_datetime )(scraping_data)
 
+            print('[DEBUG] update a record to mysql',write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
+            break
             try:
                 q = Serialized.update(
                     date                = datetime.utcnow(),
@@ -190,10 +194,10 @@ def write_each(scraping_data):
                     serialized_asins    = pickle.dumps(scraping_data.asins)
                 ).where( Serialized.keyurl==keyurl )
                 q.execute()
-                print('[DEBUG] update a record to mysql',write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
+                print('[DEBUG] update a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
                 break
-            except:
-                print('[CRIT] cannot update entry! try 10 times...', write_each.__name__, _)
+            except UnicodeDecodeError, e:
+                print('[CRIT] cannot update entry! try 10 times...', e, write_each.__name__, _)
                 time.sleep(DELAY)
                 continue
     _db.close()

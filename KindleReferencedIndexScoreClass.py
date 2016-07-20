@@ -27,3 +27,7 @@ class ScrapingData:
         self.evaluated      = []
         self.count          = 0
         self.asins          = []
+        self.harmonic_mean  = None
+        self.review_tf      = []
+        self.product_info   = ''
+        self.product_info_tf = []
