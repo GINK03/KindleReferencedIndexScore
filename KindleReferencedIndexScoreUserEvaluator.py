@@ -23,6 +23,11 @@ from KindleReferencedIndexScoreDBsSnapshotDealer import *
 NUMBER_PATTERN = r'[+-]?\d+(?:\.\d+)?' 
 NUMBER_REGEX = re.compile(r'[+-]?\d+(?:\.\d+)?')
 
+
+STOPWORDS = map(lambda x:x, 'abcdejghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.?:')
+STOPWORDS.extend(['。', '、', 'を', 'の', 'に', 'お', 'で', 'し', 'が', 'て', 'は', 'です', 'ます'])
+STOPLOGIC = (lambda x:len(x[0]) > 3 )
+
 def ranking_logic():
     a, b = 0.5, 0.5
 
@@ -45,30 +50,37 @@ def referenced_score(scraping_data_list):
         print(scraping_data.url, scraping_data, map(lambda x:x.from_url, scraping_data.evaluated) )
 
 """
-調和平均の計算
+レビューの調和平均の計算
 """
 def calculate_harmonic_mean(reviews):
     size        = len(reviews)
     hsource     = map(lambda x:(float(x.star),float(x.vote)), reviews)
-    print(hsource)
     sigma       = sum( map(lambda x:x[1], hsource) )
     inverted    = sum( map(lambda x:x[1]/x[0], hsource) )
     score       = sigma/( (lambda x:x if x != 0. else float('inf'))(inverted) )
-    print(score)
     return score
 
 """
-形態素解析を行い、tfを取得する
+レビューの形態素解析を行い、tfを取得する
 """
 def tokenize_reviews(reviews):
     csource     = '.'.join(map(lambda x:x.context, reviews)).encode('utf-8')
     MT= MeCab.Tagger('mecabrc')
     res = MT.parse(csource)
-    items = map(lambda x:x.split('\t').pop(0), str(res).split('\n'))
-    counter = Counter(items)
-    return sorted([(term, val) for term, val in counter.items()], key=lambda x:x[1]*(-1) )
-        #print( term, val) 
+    items       = map(lambda x:x.split('\t').pop(0), str(res).split('\n'))
+    counter     = Counter(items)
+    tf          = filter(lambda x:not x[0] in STOPWORDS, sorted([(term, float(val)) for term, val in counter.items()], key=lambda x:x[1]*(-1) ) )
+    tf          = filter(STOPLOGIC, tf )
+    """
+    ウェイトのノーマライズを行う
+    """
+    allwight= sum(map(lambda x:x[1], tf))
+    tf          = map(lambda x:(x[0], x[1]/allwight), tf)
+    return tf
 
+"""
+商品情報の取得と、形態素の取得
+"""
 def parse_productinfo(soup):
     box_divs = soup.findAll('div', {'id': re.compile('.*?feature_div*') } )
     productinfo = ' '.join( filter(lambda x:x!='', map(lambda div:div.text.replace('\n', '').replace(' ', ''), box_divs) ) )
@@ -77,7 +89,13 @@ def parse_productinfo(soup):
     res = MT.parse(productinfo.encode('utf-8') )
     items = map(lambda x:x.split('\t').pop(0), str(res).split('\n'))
     counter = Counter(items)
-    tf      = sorted([(term, val) for term, val in counter.items()], key=lambda x:x[1]*(-1) ) 
+    tf      = filter(lambda x:not x[0] in STOPWORDS, sorted([(term, float(val)) for term, val in counter.items()], key=lambda x:x[1]*(-1) )  )
+    tf      = filter(STOPLOGIC, tf )
+    """
+    ウェイトのノーマライズを行う
+    """
+    allwight= sum(map(lambda x:x[1], tf))
+    tf      = map(lambda x:(x[0], x[1]/allwight), tf)
     return (productinfo.encode('utf-8'), tf)
     #print( productinfo )
     #for term, val in sorted([(term, val) for term, val in counter.items()], key=lambda x:x[1]*(-1) ) :
@@ -125,6 +143,19 @@ def parse_star_review_vote(soup):
             continue
         reviews.append(review)
     return reviews
+
+"""
+relevancyの計算
+"""
+def calc_relevancy(sourcetf, targettf):
+    relevancy = 0.
+    count = 0
+    for tf in sourcetf:
+        res = (lambda x:x.pop() if x != [] else None)( filter(lambda x:tf[0] == x[0], targettf) )
+        if res == [] or res == None: continue
+        relevancy += res[1] * tf[1]
+        count += 1
+    return (relevancy, count )
 
 def parse_eval_and_update(scraping_data):
 
@@ -181,6 +212,15 @@ def parse_eval_and_update(scraping_data):
     else:
         setattr(scraping_data, 'review_tf', review_tf)
 
+    """
+    relevancyの計算
+    """
+    (rel, cnt ) = calc_relevancy(review_tf, tf)
+    if hasattr(scraping_data, 'relevancy'):
+        scraping_data.relevancy = rel
+    else:
+        setattr(scraping_data, 'relevancy', rel)
+    #print('[DEBUG] Calulated mean and relvancy...', harmonic_mean, rel, cnt )
     """
     validatorをつけたのでたぶん大丈夫であるが。。。
     """

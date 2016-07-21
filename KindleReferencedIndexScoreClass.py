@@ -28,6 +28,8 @@ class ScrapingData:
         self.count          = 0
         self.asins          = []
         self.harmonic_mean  = None
+        self.relevancy      = 0.
         self.review_tf      = []
         self.product_info   = ''
         self.product_info_tf = []
+        self.co-occurrence  = 0.
