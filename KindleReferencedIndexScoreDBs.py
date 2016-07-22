@@ -151,19 +151,19 @@ def write_each(scraping_data):
     """
     for _ in range(RETRY_NUM):
         if not is_query_exist:
-            Serialized.create(
-                keyurl              = keyurl,
-                date                = datetime.utcnow(),
-                serialized          = dumps,
-                datetime_reviews    = reviews_datetime,
-                serialized_reviews  = serialized_reviews,
-                serialized_asins    = serialized_asins
-            )
             try:
-                print('[DEBUG] crete a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
+                Serialized.create(
+                    keyurl              = keyurl,
+                    date                = datetime.utcnow(),
+                    serialized          = dumps,
+                    datetime_reviews    = reviews_datetime,
+                    serialized_reviews  = serialized_reviews,
+                    serialized_asins    = serialized_asins
+                )
+                print(','.join(map(lambda x:str(x).replace(',', ''), ['[DEBUG] Created a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean, Serialized]) ) )
                 break
-            except :
-                print('[CRIT] cannot create new entry! try 10 times...',write_each.__name__, _)
+            except UnicodeDecodeError, e:
+                print('[CRIT] Cannot create new entry! try 10 times...', write_each.__name__, _, e)
                 time.sleep(DELAY)
                 continue
         else:
