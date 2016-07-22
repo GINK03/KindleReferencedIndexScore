@@ -220,7 +220,7 @@ def parse_eval_and_update(scraping_data):
     """
     normal_mean = calculate_normal_mean(scraping_data.reviews)
     if hasattr(scraping_data, 'normal_mean'):
-        scraping_data.harmonic_mean = normal_mean
+        scraping_data.normal_mean = normal_mean
     else:
         setattr(scraping_data, 'normal_mean', normal_mean)
 
@@ -246,7 +246,7 @@ def parse_eval_and_update(scraping_data):
     cooccurrenceの代入
     """
     if hasattr(scraping_data, 'cooccurrence'):
-        scraping_data.relevancy = cnt
+        scraping_data.cooccurrence = cnt
     else:
         setattr(scraping_data, 'cooccurrence', cnt)
 

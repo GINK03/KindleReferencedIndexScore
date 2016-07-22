@@ -70,10 +70,13 @@ def html_adhoc_fetcher(url):
         opener = urllib2.build_opener()
         opener.addheaders.append( ('User-agent', CM.USER_AGENT) )
         opener.addheaders.append( ('Cookie', CM.SESSION_TOKEN) )
+        _TIME_OUT = 5
         try:
-            html = opener.open(str(url), timeout = 5).read()
+            html = opener.open(str(url), timeout = _TIME_OUT).read()
         except urllib2.URLError, e:
-            print('[WARN] Cannot access url with URLError, try number is...', e, _, url, mp.current_process() )
+            if _ == 9:
+                print('[WARN] Cannot access url with URLError, try number is...', e, _, url, mp.current_process() )
+            time.sleep(1.)
             continue
         except urllib2.HTTPError, e:
             print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url, mp.current_process() )
@@ -95,14 +98,15 @@ def html_adhoc_fetcher(url):
             urlentities[3]  = urllib.quote(urlentities[3].encode('utf-8'))
             rebuildurl      = '/'.join(urlentities)
             try:
-                html = opener.open(rebuildurl, timeout = 2).read()
-                print('[DEBUG] Access was finished correctly!', _, rebuildurl )
+                html = opener.open(str(rebuildurl), timeout = _TIME_OUT).read()
+                print('[DEBUG] Access was finished correctly in exceptional URL!', _, str(rebuildurl) )
                 break
             except:
                 continue
         except:
             print('[WARN] Cannot access, retry... ', _, url)
             break
+        print('[DEBUG] Fetch HTML is closed correctly.')
         break
     if html == None:
         return (None, None, None)

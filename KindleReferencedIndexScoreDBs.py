@@ -168,24 +168,37 @@ def write_each(scraping_data):
                 continue
         else:
             """
-            updateする際には、データ量が上回っている場合には保存せずに、古いデータを使いまわす
+            1. updateする際には、データ量が上回っている場合には保存せずに、古いデータを使いまわす
             NOTE: len(scraping_data.html)  > len(scraping_data.html)ならばアップデート
             NOTE: len(asins)            > len(old_asins)ならばアップデート
             NOTE: len(reviews)          > len(old_reviews)ならばアップデート
             NOTE: 新しいアトリビュートの増加は、要素の評価先オブジェクトに新しいものを使うという原則を守れば、
                 　アトリビュート自体が消去されるということはない
+            2. Evaluatorが実行済みの場合、アップデートしない
+            3. htmlが存在しない場合、html情報量が多いほうを残す
             """
             old_instance        = Serialized.get( Serialized.keyurl==keyurl )
             old_scraping_data   = pickle.loads( str(old_instance.serialized) )
-            
-            if old_scraping_data.html == None:
-                old_scraping_data.html = scraping_data.html
-            if scraping_data.html != None: 
-                scraping_data.html              = (lambda x:x.html if len(x.html) > len(old_scraping_data.html) else old_scraping_data.html )(scraping_data)
+            """ 1 """ 
             scraping_data.asins             = (lambda x:x.asins if len(x.asins) > len(old_scraping_data.asins) else old_scraping_data.asins )(scraping_data)
             scraping_data.reviews           = (lambda x:x.reviews if len(x.reviews) > len(old_scraping_data.reviews) else old_scraping_data.reviews )(scraping_data)
             scraping_data.reviews_datetime  = (lambda x:x.reviews_datetime if x.reviews_datetime > old_scraping_data.reviews_datetime else old_scraping_data.reviews_datetime )(scraping_data)
             scraping_data.cooccurrence      = (lambda x:x.cooccurrence if x.cooccurrence > 0 else old_scraping_data.cooccurrence )(scraping_data)
+
+            """ 2. """
+            if hasattr(old_instance, 'harmonic_mean') and hasattr(old_instance, 'normal_mean') and \
+                (old_instance.harmonic_mean != 0. or old_instance.normal_mean != 0 or \
+                old_instance.product_info != '' or \
+                old_instance.product_tf != [] or \
+                old_instance.reviews    != [] or \
+                old_instance.reviews_tf != [] ) :
+                    break
+
+            """ 3. """
+            if old_scraping_data.html == None:
+                old_scraping_data.html = ''
+            if scraping_data.html != None: 
+                scraping_data.html              = (lambda x:x.html if len(x.html) > len(old_scraping_data.html) else old_scraping_data.html )(scraping_data)
 
             pickle.dumps(scraping_data)
             pickle.dumps(scraping_data.reviews)
