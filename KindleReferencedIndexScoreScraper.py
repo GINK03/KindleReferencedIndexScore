@@ -71,18 +71,18 @@ def html_adhoc_fetcher(url):
         opener.addheaders.append( ('User-agent', CM.USER_AGENT) )
         opener.addheaders.append( ('Cookie', CM.SESSION_TOKEN) )
         try:
-            html = opener.open(str(url), timeout = 2).read()
+            html = opener.open(str(url), timeout = 5).read()
         except urllib2.URLError, e:
-            print('[WARN] Cannot access url with URLError, try number is...', e, _, url)
+            print('[WARN] Cannot access url with URLError, try number is...', e, _, url, mp.current_process() )
             continue
         except urllib2.HTTPError, e:
-            print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url)
+            print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url, mp.current_process() )
             continue
         except HTTPError, e:
-            print('[WARN] Cannot access url with httperror, try number is...', e, _, url)
+            print('[WARN] Cannot access url with httperror, try number is...', e, _, url, mp.current_process() )
             continue
         except ssl.SSLError, e:
-            print('[WARN] Cannot access url with ssl error, try number is...', e, _, url)
+            print('[WARN] Cannot access url with ssl error, try number is...', e, _, url, mp.current_process() )
             continue
         except UnicodeEncodeError, e:
             """
