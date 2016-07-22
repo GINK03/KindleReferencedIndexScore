@@ -151,15 +151,15 @@ def write_each(scraping_data):
     """
     for _ in range(RETRY_NUM):
         if not is_query_exist:
+            Serialized.create(
+                keyurl              = keyurl,
+                date                = datetime.utcnow(),
+                serialized          = dumps,
+                datetime_reviews    = reviews_datetime,
+                serialized_reviews  = serialized_reviews,
+                serialized_asins    = serialized_asins
+            )
             try:
-                Serialized.create(
-                    keyurl              = keyurl,
-                    date                = datetime.utcnow(),
-                    serialized          = dumps,
-                    datetime_reviews    = reviews_datetime,
-                    serialized_reviews  = serialized_reviews,
-                    serialized_asins    = serialized_asins
-                )
                 print('[DEBUG] crete a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, Serialized)
                 break
             except :
@@ -178,10 +178,18 @@ def write_each(scraping_data):
             old_instance        = Serialized.get( Serialized.keyurl==keyurl )
             old_scraping_data   = pickle.loads( str(old_instance.serialized) )
             
-            scraping_data.html              = (lambda x:x.html if len(x.html) > len(old_scraping_data.html) else old_scraping_data.html )(scraping_data)
+            if old_scraping_data.html == None:
+                old_scraping_data.html = scraping_data.html
+            if scraping_data.html != None: 
+                scraping_data.html              = (lambda x:x.html if len(x.html) > len(old_scraping_data.html) else old_scraping_data.html )(scraping_data)
             scraping_data.asins             = (lambda x:x.asins if len(x.asins) > len(old_scraping_data.asins) else old_scraping_data.asins )(scraping_data)
             scraping_data.reviews           = (lambda x:x.reviews if len(x.reviews) > len(old_scraping_data.reviews) else old_scraping_data.reviews )(scraping_data)
             scraping_data.reviews_datetime  = (lambda x:x.reviews_datetime if x.reviews_datetime > old_scraping_data.reviews_datetime else old_scraping_data.reviews_datetime )(scraping_data)
+            scraping_data.cooccurrence      = (lambda x:x.cooccurrence if x.cooccurrence > 0 else old_scraping_data.cooccurrence )(scraping_data)
+
+            pickle.dumps(scraping_data)
+            pickle.dumps(scraping_data.reviews)
+            pickle.dumps(scraping_data.asins)
             try:
                 q = Serialized.update(
                     date                = datetime.utcnow(),
@@ -191,7 +199,7 @@ def write_each(scraping_data):
                     serialized_asins    = pickle.dumps(scraping_data.asins)
                 ).where( Serialized.keyurl==keyurl )
                 q.execute()
-                print('[DEBUG] update a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title, scraping_data.url, scraping_data.harmonic_mean, scraping_data.relevancy, Serialized)
+                print(','.join(map(lambda x:str(x).replace(',', ''), ['[DEBUG] update a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean, Serialized]) ) )
                 break
             except UnicodeDecodeError, e:
                 print('[CRIT] cannot update entry! try 10 times...', e, write_each.__name__, _)

@@ -20,18 +20,7 @@ SEED_EXIST          = True
 SEED_NO_EXIST       = False
 # set default state to scrape web pages in Amazon Kindle
 def initialize_parse_and_map_data_to_local_db(all_scraping_data):
-    while(True):
-        try:
-            print('[WARN] Try connecting to amazon server...' )
-            opener = urllib2.build_opener()
-            opener.addheaders = [('User-agent', USER_AGENT)]
-            html = opener.open(CM.KINDLE_URL, timeout = 1).read()
-            soup = bs4.BeautifulSoup(html)
-            print('[WARN] Connected to amazon server.' )
-            break
-        except:
-            print('[WARN] Cannot connect to amazon server!' )
-            continue
+    html, title, soup = html_adhoc_fetcher(CM.KINDLE_URL)
     for i, a in enumerate(soup.find_all('a')):
         if a.has_attr('href'):
             print('[WARN] Try analyising...', i, '/', len(soup.find_all('a')) )
@@ -46,7 +35,15 @@ def initialize_parse_and_map_data_to_local_db(all_scraping_data):
                 
             scraping_data.normalized_url = '/'.join( raw_url.split('?').pop(0).split('/') )
             if not 'www.amazon.co.jp' in scraping_data.normalized_url:
+                continue 
+
+            """ 
+            ASINコードに類似していないURLは解析しない
+            """
+            asin = get_asin(scraping_data.normalized_url)
+            if not asin:
                 continue
+            scraping_data.asin     = asin
             
             """
             scraping_dataのnormalized_urlと同一のURLを持つオブジェクトがあれば処理を中断
@@ -142,6 +139,10 @@ def map_data_to_local_db_from_url(scraping_data):
         child_scraping_data = ScrapingData()
         
         fixed_url = (lambda x: 'https://www.amazon.co.jp' + x if '/' == x[0] else x)(a['href'])
+        """ 
+        '\n'コードを削除 ' 'を削除 
+        """
+        fixed_url = fixed_url.replace('\n','').replace(' ','')
         
         """ 
         ASINコードに類似していないURLは解析しない
@@ -151,10 +152,6 @@ def map_data_to_local_db_from_url(scraping_data):
             continue
         child_scraping_data.asin     = asin
         child_scraping_data.title    = (lambda x:x if x else 'Untitled')(a.get('title') )
-        """ 
-        '\n'コードを削除 ' 'を削除 
-        """
-        fixed_url                   = fixed_url.replace('\n','').replace(' ','')
         
         child_scraping_data.url     = fixed_url
         

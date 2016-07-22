@@ -61,6 +61,17 @@ def calculate_harmonic_mean(reviews):
     return score
 
 """
+レビューの単純平均の計算
+"""
+def calculate_normal_mean(reviews):
+    size        = len(reviews)
+    hsource     = map(lambda x:float(x.star), reviews)
+    sigma       = sum( map(lambda x:x, hsource) )
+    inverted    = len( hsource )
+    score       = sigma/( (lambda x:x if x != 0. else float('inf'))(inverted) )
+    return score
+
+"""
 レビューの形態素解析を行い、tfを取得する
 """
 def tokenize_reviews(reviews):
@@ -147,7 +158,7 @@ def parse_star_review_vote(soup):
 """
 relevancyの計算
 """
-def calc_relevancy(sourcetf, targettf):
+def calc_relevancy(sourcetf, targettf, top=None):
     relevancy = 0.
     count = 0
     for tf in sourcetf:
@@ -155,6 +166,7 @@ def calc_relevancy(sourcetf, targettf):
         if res == [] or res == None: continue
         relevancy += res[1] * tf[1]
         count += 1
+        #if top and top < cnt : break
     return (relevancy, count )
 
 def parse_eval_and_update(scraping_data):
@@ -202,6 +214,15 @@ def parse_eval_and_update(scraping_data):
         scraping_data.harmonic_mean = harmonic_mean
     else:
         setattr(scraping_data, 'harmonic_mean', harmonic_mean)
+    
+    """
+    単純平均を計算する
+    """
+    normal_mean = calculate_normal_mean(scraping_data.reviews)
+    if hasattr(scraping_data, 'normal_mean'):
+        scraping_data.harmonic_mean = normal_mean
+    else:
+        setattr(scraping_data, 'normal_mean', normal_mean)
 
     """
     contextのトークナイズを行う
@@ -220,18 +241,43 @@ def parse_eval_and_update(scraping_data):
         scraping_data.relevancy = rel
     else:
         setattr(scraping_data, 'relevancy', rel)
-    #print('[DEBUG] Calulated mean and relvancy...', harmonic_mean, rel, cnt )
+
+    """
+    cooccurrenceの代入
+    """
+    if hasattr(scraping_data, 'cooccurrence'):
+        scraping_data.relevancy = cnt
+    else:
+        setattr(scraping_data, 'cooccurrence', cnt)
+
     """
     validatorをつけたのでたぶん大丈夫であるが。。。
     """
     write_each(scraping_data)
+
+import signal
+def exit_gracefully(signum, frame):
+    # restore the original signal handler as otherwise evil things will happen
+    # in raw_input when CTRL+C is pressed, and our signal handler is not re-entrant
+    signal.signal(signal.SIGINT, original_sigint)
+    try:
+        if raw_input("\nReally quit? (y/n)> ").lower().startswith('y'):
+            sys.exit(1)
+    except KeyboardInterrupt:
+        print("Ok ok, quitting")
+        sys.exit(1)
+    signal.signal(signal.SIGINT, exit_gracefully)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
     parser.add_argument('--score',   help='evaluate kindle referenced indexed data from db')
     args_obj = vars(parser.parse_args())
-    
+
+    # store the original SIGINT handler
+    original_sigint = signal.getsignal(signal.SIGINT)
+    signal.signal(signal.SIGINT, exit_gracefully)
+
     is_referenced_score = args_obj.get('score')
 
     all_scraping_data = SnapshotDeal.SCRAPING_DATA_POOL
