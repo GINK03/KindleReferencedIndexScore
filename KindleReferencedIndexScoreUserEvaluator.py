@@ -268,7 +268,6 @@ def exit_gracefully(signum, frame):
         sys.exit(1)
     signal.signal(signal.SIGINT, exit_gracefully)
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
     parser.add_argument('--score',   help='evaluate kindle referenced indexed data from db')

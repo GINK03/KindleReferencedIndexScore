@@ -70,7 +70,7 @@ def html_adhoc_fetcher(url):
         opener = urllib2.build_opener()
         opener.addheaders.append( ('User-agent', CM.USER_AGENT) )
         opener.addheaders.append( ('Cookie', CM.SESSION_TOKEN) )
-        _TIME_OUT = 5
+        _TIME_OUT = CM.HTTP_WAIT_SEC
         try:
             html = opener.open(str(url), timeout = _TIME_OUT).read()
         except urllib2.URLError, e:
@@ -103,10 +103,6 @@ def html_adhoc_fetcher(url):
                 break
             except:
                 continue
-        except:
-            print('[WARN] Cannot access, retry... ', _, url)
-            break
-        print('[DEBUG] Fetch HTML is closed correctly.')
         break
     if html == None:
         return (None, None, None)
@@ -236,19 +232,36 @@ def search_flatten_multiprocess(conn, chunked_list, all_scraping_data):
             write_each(child_soup)
             print(child_soup.asin)
         scraping_data.count += 1
-        print('[DEBUG] eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', len(chunked_list), len(all_scraping_data), mp.current_process() ]) ) )
+        print('[DEBUG] Eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', len(chunked_list), len(all_scraping_data), mp.current_process() ]) ) )
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
         yield l[i:i+n]
+import signal
+def exit_gracefully(signum, frame):
+    # restore the original signal handler as otherwise evil things will happen
+    # in raw_input when CTRL+C is pressed, and our signal handler is not re-entrant
+    signal.signal(signal.SIGINT, original_sigint)
+    try:
+        if raw_input("\nReally quit? (y/n)> ").lower().startswith('y'):
+            sys.exit(1)
+    except KeyboardInterrupt:
+        print("Ok ok, quitting")
+        sys.exit(1)
+    signal.signal(signal.SIGINT, exit_gracefully)
 
 if __name__ == '__main__':
+    # store the original SIGINT handler
+    original_sigint = signal.getsignal(signal.SIGINT)
+    signal.signal(signal.SIGINT, exit_gracefully)
+
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
     parser.add_argument('--URL', help='set default URL which to scrape at first')
     parser.add_argument('--depth', help='how number of url this program will scrape')
+
     args_obj = vars(parser.parse_args())
-    
+  
     depth = (lambda x:int(x) if x else 1)( args_obj.get('depth') )
 
     #""" SEEDが存在しないならば初期化 """
