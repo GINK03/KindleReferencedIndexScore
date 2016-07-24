@@ -1,0 +1,67 @@
+diff -ur mecab-0.996/src/dictionary.cpp mecab-0.996_new/src/dictionary.cpp
+--- mecab-0.996/src/dictionary.cpp	2013-02-16 11:50:46.000000000 +0900
++++ mecab-0.996_new/src/dictionary.cpp	2015-07-24 21:27:47.671159100 +0900
+@@ -5,6 +5,7 @@
+ //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
+ #include <fstream>
+ #include <climits>
++#include <vector>
+ #include "connector.h"
+ #include "context_id.h"
+ #include "char_property.h"
+diff -ur mecab-0.996/src/feature_index.cpp mecab-0.996_new/src/feature_index.cpp
+--- mecab-0.996/src/feature_index.cpp	2012-11-25 14:35:33.000000000 +0900
++++ mecab-0.996_new/src/feature_index.cpp	2015-07-24 21:28:32.020428600 +0900
+@@ -7,6 +7,7 @@
+ #include <cstring>
+ #include <fstream>
+ #include <string>
++#include <vector>
+ #include "common.h"
+ #include "feature_index.h"
+ #include "param.h"
+diff -ur mecab-0.996/src/tagger.cpp mecab-0.996_new/src/tagger.cpp
+--- mecab-0.996/src/tagger.cpp	2013-02-18 01:55:30.000000000 +0900
++++ mecab-0.996_new/src/tagger.cpp	2015-07-24 21:25:32.112288000 +0900
+@@ -6,6 +6,7 @@
+ #include <cstring>
+ #include <iostream>
+ #include <iterator>
++#include <vector>
+ #include "common.h"
+ #include "connector.h"
+ #include "mecab.h"
+diff -ur mecab-0.996/src/tokenizer.cpp mecab-0.996_new/src/tokenizer.cpp
+--- mecab-0.996/src/tokenizer.cpp	2013-01-23 23:58:03.000000000 +0900
++++ mecab-0.996_new/src/tokenizer.cpp	2015-07-24 21:27:12.790503000 +0900
+@@ -3,6 +3,7 @@
+ //
+ //  Copyright(C) 2001-2011 Taku Kudo <taku@chasen.org>
+ //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
++#include <vector>
+ #include "common.h"
+ #include "connector.h"
+ #include "darts.h"
+diff -ur mecab-0.996/src/viterbi.cpp mecab-0.996_new/src/viterbi.cpp
+--- mecab-0.996/src/viterbi.cpp	2013-02-18 01:00:26.000000000 +0900
++++ mecab-0.996_new/src/viterbi.cpp	2015-07-24 21:24:20.645948500 +0900
+@@ -7,6 +7,7 @@
+ #include <iterator>
+ #include <cmath>
+ #include <cstring>
++#include <vector>
+ #include "common.h"
+ #include "connector.h"
+ #include "mecab.h"
+diff -ur mecab-0.996/src/winmain.h mecab-0.996_new/src/winmain.h
+--- mecab-0.996/src/winmain.h	2012-10-28 13:07:01.000000000 +0900
++++ mecab-0.996_new/src/winmain.h	2015-07-24 23:19:06.803341500 +0900
+@@ -2,7 +2,7 @@
+ //
+ //  Copyright(C) 2001-2011 Taku Kudo <taku@chasen.org>
+ //  Copyright(C) 2004-2006 Nippon Telegraph and Telephone Corporation
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32) && !defined(__CYGWIN__)
+ 
+ #include <windows.h>
+ #include <string>
