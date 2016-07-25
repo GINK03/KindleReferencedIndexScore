@@ -90,6 +90,42 @@ def finish_procedure(all_scraping_data):
         write_each(scraping_data)
 
 """
+is_already_query_exist?
+retval: True, already query exists
+        False, query not exists
+"""
+def is_already_query_exist(scraping_data):
+    """
+    サブプロセスとして起動した後は、コネクションの使いまわしができなくなるので、コネクションを破棄し、作り直す
+    """
+    try:
+        mydb.close()
+    except:
+        print('[WARN] Mysql conn is already closed!')
+    try:
+        _db = MySQLDatabase(
+            database = 'kindle',
+            user     = 'root',
+            password = '1234',
+            host     = '127.0.0.1',
+            port     = 3306)
+        _db.connect()
+    except:
+        print('[CRIT] Cannot creal MySQL connector!', is_already_query_exist.__name__)
+        return False
+    
+    keyurl                  = scraping_data.asin 
+    try:
+        query = Serialized.select().where(Serialized.keyurl == keyurl)
+        if query.exists():
+            return True
+        else:
+            return False
+    except OperationalError, e:
+        print('[CRIT] cannot print query to MySQL or excute SQL query', e, is_already_query_exist.__name__)
+        return False
+
+"""
 scraping_dataインスタンスを逐次登録する
 multi processアクセスの際でも動くようにsqlコネクションインスタンスを作りなしている
 """
@@ -138,7 +174,7 @@ def write_each(scraping_data):
             break
         except:
             print('[CRIT] cannot print query to MySQL or excute SQL query', write_each.__name__)
-            time.sleep(1)
+            #time.sleep(1)
     """
     最初のクエリ発行に失敗したら、あきらめて、書き込みしない
     """
@@ -155,16 +191,15 @@ def write_each(scraping_data):
                 Serialized.create(
                     keyurl              = keyurl,
                     date                = datetime.utcnow(),
-                    serialized          = dumps,
+                    serialized          = str(dumps),
                     datetime_reviews    = reviews_datetime,
-                    serialized_reviews  = serialized_reviews,
-                    serialized_asins    = serialized_asins
+                    serialized_reviews  = str(serialized_reviews),
+                    serialized_asins    = str(serialized_asins)
                 )
                 print(','.join(map(lambda x:str(x).replace(',', ''), ['[DEBUG] Created a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean, Serialized]) ) )
                 break
             except UnicodeDecodeError, e:
                 print('[CRIT] Cannot create new entry! try 10 times...', write_each.__name__, _, e)
-                time.sleep(DELAY)
                 continue
         else:
             """
@@ -216,6 +251,6 @@ def write_each(scraping_data):
                 break
             except UnicodeDecodeError, e:
                 print('[CRIT] cannot update entry! try 10 times...', e, write_each.__name__, _)
-                time.sleep(DELAY)
+                #time.sleep(DELAY)
                 continue
     _db.close()

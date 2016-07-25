@@ -66,7 +66,7 @@ def html_adhoc_fetcher(url):
     標準のアクセス回数はRETRY_NUMで定義されている 
     """
     html = None
-    for _ in range(RETRY_NUM):
+    for _ in range(21):
         opener = urllib2.build_opener()
         opener.addheaders.append( ('User-agent', CM.USER_AGENT) )
         opener.addheaders.append( ('Cookie', CM.SESSION_TOKEN) )
@@ -74,9 +74,11 @@ def html_adhoc_fetcher(url):
         try:
             html = opener.open(str(url), timeout = _TIME_OUT).read()
         except urllib2.URLError, e:
-            if _ == 9:
+            if _ % 10 == 0 and _ > 10:
                 print('[WARN] Cannot access url with URLError, try number is...', e, _, url, mp.current_process() )
-            time.sleep(1.)
+            import random
+            _TIME_OUT = random.random()
+            #time.sleep(random.random()/10.0)
             continue
         except urllib2.HTTPError, e:
             print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url, mp.current_process() )
@@ -168,7 +170,13 @@ def map_data_to_local_db_from_url(scraping_data):
         """
         if is_already_exist == True:
             continue
-        
+
+       	"""
+	SQLサーバにすでにqueryが存在しているのならば、処理を行わない
+	"""
+	if is_already_query_exist(child_scraping_data) == True:
+	   continue
+ 
         child_scraping_data.url = fixed_url
 
         """
@@ -229,8 +237,10 @@ def search_flatten_multiprocess(conn, chunked_list, all_scraping_data):
             continue
         child_soups = map_data_to_local_db_from_url(scraping_data)
         for (url, child_soup) in child_soups:
-            write_each(child_soup)
-            print(child_soup.asin)
+            if is_already_query_exist(child_soup) == False:
+                write_each(child_soup)
+                print(child_soup.asin)
+        
         scraping_data.count += 1
         print('[DEBUG] Eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', len(chunked_list), len(all_scraping_data), mp.current_process() ]) ) )
 
