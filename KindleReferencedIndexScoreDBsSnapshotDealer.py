@@ -95,19 +95,39 @@ class SnapshotDeal():
             try:
                 scraping_data_list.append(pickle.loads(line.replace('', '\n')))
             except pickle.UnpicklingError, e:
-                print('[EXCEPT!] data may be broken! cannot restore instance from cache!', e)
+                print('[CRIT] [EXCEPT!] data may be broken! cannot restore instance from cache!', e)
                 pass
             except UnicodeDecodeError, e:
-                print('[EXCEPT!] cannot decode unicode error !')
+                print('[CRIT] [EXCEPT!] cannot decode unicode error !')
                 pass
         SnapshotDeal.SCRAPING_DATA_POOL = scraping_data_list
+    
+    @staticmethod
+    def iter_all():
+        """
+        ファイルが存在しない場合、処理を行わずreturnする
+        """
+        if not os.path.exists(SnapshotDeal.DIST_FILE_NAME):
+            yield None
+        for line in open(SnapshotDeal.DIST_FILE_NAME, 'r'):
+            try:
+                yield  pickle.loads(line.replace('', '\n'))
+            except pickle.UnpicklingError, e:
+                print('[CRIT] [EXCEPT!] data may be broken! cannot restore instance from cache!', e)
+                yield None
+            except UnicodeDecodeError, e:
+                print('[CRIT] [EXCEPT!] cannot decode unicode error !')
+                yield None
 """
 importされたらグローバル空間にインスタンスの展開をする
+NOTE: あまりにもメモリをバカ食いするので、オンメモリは止めました
 NOTE: importされたときのファイル名が__name__変数に入るので、実行時とモジュールロード時の動作がわけることができる
 """
 if 'KindleReferencedIndexScoreDBsSnapshotDealer' == __name__:
-    print('module loaded')
-    SnapshotDeal.charge_memory()
+    print('KindleReferencedIndexScoreDBsSnapshotDealer will be loaded')
+    print('If you want to get all data as on-memory data, run charge_memory() at first.')
+
+    #SnapshotDeal.charge_memory()
 
 
 """

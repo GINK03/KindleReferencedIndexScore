@@ -68,9 +68,13 @@ def initiate_data(all_scraping_data):
 """
 def initiate_data_generator():
     for serialized in Serialized.select().iterator():
-        key             = serialized.keyurl
-        scraping_data   = pickle.loads(str(serialized.serialized) )
-        yield (key, scraping_data, serialized.serialized.replace('\n', CTL_DELIM) )
+        try:
+            key             = serialized.keyurl
+            scraping_data   = pickle.loads(str(serialized.serialized) )
+            yield (key, scraping_data, serialized.serialized.replace('\n', CTL_DELIM) )
+        except UnicodeEncodeError, e:
+            print('[CRIT] Cannot decode as ASCII', e)
+            continue
 
 """
 limit付きgenerator
@@ -123,6 +127,18 @@ def is_already_query_exist(scraping_data):
             return False
     except OperationalError, e:
         print('[CRIT] cannot print query to MySQL or excute SQL query', e, is_already_query_exist.__name__)
+        return False
+"""
+is_already_analyzed?
+NOTE: queryを発行して、ScrapingDataインスタンスのrelevancyが0. cooccurrence = 0. normal_mean = None でなければ、評価済みということでTrueを返す
+NOTE: 上記以外はFalseを返す
+"""
+def is_already_analyzed(scraping_data):
+    keyurl      = scraping_data.asin
+    instance    = pickle.loads(str(Serialized.get(Serialized.keyurl == keyurl).serialized) )
+    if instance.relevancy != 0 and instance.cooccurrence != 0 and instance.normal_mean != 0:
+        return True
+    else :
         return False
 
 """

@@ -31,17 +31,6 @@ STOPLOGIC = (lambda x:len(x[0]) > 3 )
 def ranking_logic():
     a, b = 0.5, 0.5
 
-"""
-ASINコードがキンドルのものであるかどうかを確認
-"""
-def validate_is_kindle(scraping_data):
-    url     = scraping_data.url
-    asin    = (lambda x:x.pop() if x != [] else '?')( filter(lambda x:len(x) == 10, url.split('?').pop(0).split('/')) )
-    """ ASINの最初の文字が、Bなら多分Kindleであろうという推定 """
-    if asin[0] in ['B']:
-        return True
-    else:
-        return False
 
 def referenced_score(scraping_data_list):
     source_list = filter(lambda x:len(x[1].evaluated) != 0, sorted(scraping_data_list, key=lambda x:len(x[1].evaluated)*-1) )
@@ -170,9 +159,13 @@ def calc_relevancy(sourcetf, targettf, top=None):
     return (relevancy, count )
 
 def parse_eval_and_update(scraping_data):
-
-    if not validate_is_kindle(scraping_data):
+    """
+    すでに評価済みなら、処理しない
+    """
+    if is_already_analyzed(scraping_data) == True:
+        print('[DEBUG] Already analyzed', scraping_data.asin)
         return
+
     soup = bs4.BeautifulSoup(str(scraping_data.html))
 
     """
@@ -278,8 +271,12 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, exit_gracefully)
 
     is_referenced_score = args_obj.get('score')
+    
+    """
+    メモリ効率が悪いのでこの取得法は廃止にしたい
+    """
+    #SnapshotDeal.charge_memory()
+    #all_scraping_data = SnapshotDeal.SCRAPING_DATA_POOL
 
-    all_scraping_data = SnapshotDeal.SCRAPING_DATA_POOL
-
-    for scraping_data in all_scraping_data:
+    for scraping_data in SnapshotDeal.iter_all():
         parse_eval_and_update(scraping_data )
