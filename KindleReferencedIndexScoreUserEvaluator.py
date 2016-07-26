@@ -263,20 +263,29 @@ def exit_gracefully(signum, frame):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
-    parser.add_argument('--score',   help='evaluate kindle referenced indexed data from db')
+    parser.add_argument('--score',   help='Evaluate kindle referenced indexed data from db')
+    parser.add_argument('--dump',   help='You can dump all calculated data from MySQL.')
     args_obj = vars(parser.parse_args())
 
     # store the original SIGINT handler
     original_sigint = signal.getsignal(signal.SIGINT)
     signal.signal(signal.SIGINT, exit_gracefully)
 
-    is_referenced_score = args_obj.get('score')
+    is_referenced_score     = args_obj.get('score')
+    is_dump                 = args_obj.get('dump')
     
     """
-    メモリ効率が悪いのでこの取得法は廃止にしたい
+    メモリ効率が悪いのでこの取得法は徐々に廃止にしていく
     """
     #SnapshotDeal.charge_memory()
     #all_scraping_data = SnapshotDeal.SCRAPING_DATA_POOL
+    if is_dump == None or is_dump == '':
+        for scraping_data in SnapshotDeal.iter_all():
+            parse_eval_and_update(scraping_data )
 
-    for scraping_data in SnapshotDeal.iter_all():
-        parse_eval_and_update(scraping_data )
+    """
+    dumpモードならMySQLからすべてのデータをiterateにて処理する
+    """
+    if is_dump:
+        for keyurl, scraping_data in get_all_data_iter():
+            print(','.join(map(lambda x:str(x).replace(',', ''), ['[INFO] Dump a record to mysql', __name__, scraping_data.asin, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean]) ) )

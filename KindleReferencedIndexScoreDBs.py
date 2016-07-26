@@ -76,6 +76,23 @@ def initiate_data_generator():
             print('[CRIT] Cannot decode as ASCII', e)
             continue
 
+import MySQLdb.cursors
+def get_all_data_iter():
+    connection = MySQLdb.connect(
+        host   = "127.0.0.1",
+	user   = "root",
+        passwd = "1234",
+	db     = "kindle",
+        cursorclass = MySQLdb.cursors.SSCursor)
+
+    cursor = connection.cursor()
+    cursor.execute('SELECT keyurl, serialized FROM serialized')
+    result = cursor.fetchone()
+    while result != None:
+    	keyurl, scraping_data = result[0], pickle.loads(result[1])
+	yield (keyurl, scraping_data)
+	result = cursor.fetchone()
+
 """
 limit付きgenerator
 多すぎる情報を制限する
@@ -85,6 +102,7 @@ def initiate_data_limit_generator(num):
         key             = serialized.keyurl
         scraping_data   = pickle.loads( str(serialized.serialized) )
         yield (key, scraping_data, serialized.serialized.replace('\n', CTL_DELIM) )
+
 
 """
 scraping_dataインスタンスが未登録の際、一括登録する
