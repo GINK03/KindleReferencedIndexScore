@@ -148,13 +148,17 @@ def is_already_query_exist(scraping_data):
         return False
 """
 is_already_analyzed?
-NOTE: queryを発行して、ScrapingDataインスタンスのrelevancyが0. cooccurrence = 0. normal_mean = None でなければ、評価済みということでTrueを返す
+NOTE: queryを発行して、ScrapingDataインスタンスのall_tf != [] でなければ、評価済みということでTrueを返す
 NOTE: 上記以外はFalseを返す
 """
 def is_already_analyzed(scraping_data):
     keyurl      = scraping_data.asin
-    instance    = pickle.loads(str(Serialized.get(Serialized.keyurl == keyurl).serialized) )
-    if instance.relevancy != 0 and instance.cooccurrence != 0 and instance.normal_mean != 0:
+    try:
+        instance    = pickle.loads(str(Serialized.get(Serialized.keyurl == keyurl).serialized) )
+    except UnicodeEncodeError, e:
+        print('[CRIT] Cannot Encode pickle... give up data', e)
+        return False
+    if hasattr(instance, 'all_tf') and instance.all_tf != []:
         return True
     else :
         return False
@@ -247,7 +251,12 @@ def write_each(scraping_data):
             3. htmlが存在しない場合、html情報量が多いほうを残す
             """
             old_instance        = Serialized.get( Serialized.keyurl==keyurl )
-            old_scraping_data   = pickle.loads( str(old_instance.serialized) )
+            try:
+                old_scraping_data   = pickle.loads( str(old_instance.serialized) )
+            except UnicodeEncodeError, e:
+                print('[CRIT] Cannot load pickled data', e, old_instance.keyurl)
+                break
+
             """ 1 """ 
             scraping_data.asins             = (lambda x:x.asins if len(x.asins) > len(old_scraping_data.asins) else old_scraping_data.asins )(scraping_data)
             scraping_data.reviews           = (lambda x:x.reviews if len(x.reviews) > len(old_scraping_data.reviews) else old_scraping_data.reviews )(scraping_data)

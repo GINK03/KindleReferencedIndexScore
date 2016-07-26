@@ -61,6 +61,27 @@ def calculate_normal_mean(reviews):
     return score
 
 """
+全要素の形態素解析
+textデータの抜出と、余計な情報の削除
+"""
+def tokenize_all(soup):
+    texts = soup.findAll(text=True)
+
+    visible_texts = filter(lambda t:t != '' and t != None, texts)
+    build_text    = ','.join(visible_texts).replace('\n', '')
+    
+    MT= MeCab.Tagger('mecabrc')
+    res = MT.parse(build_text.encode('utf-8') )
+    items = map(lambda x:x.split('\t').pop(0), str(res).split('\n'))
+    counter = Counter(items)
+    tf      = filter(lambda x:not x[0] in STOPWORDS, sorted([(term, float(val)) for term, val in counter.items()], key=lambda x:x[1]*(-1) )  )
+    tf      = filter(STOPLOGIC, tf )
+    for t, f in tf:
+        #print(t,f)
+        pass
+    return tf
+
+"""
 レビューの形態素解析を行い、tfを取得する
 """
 def tokenize_reviews(reviews):
@@ -73,9 +94,10 @@ def tokenize_reviews(reviews):
     tf          = filter(STOPLOGIC, tf )
     """
     ウェイトのノーマライズを行う
+    TODO: IDFの採用のため、allweight = 1.で固定
     """
-    allwight= sum(map(lambda x:x[1], tf))
-    tf          = map(lambda x:(x[0], x[1]/allwight), tf)
+    allweight   = 1. #sum(map(lambda x:x[1], tf))
+    tf          = map(lambda x:(x[0], x[1]/allweight), tf)
     return tf
 
 """
@@ -92,14 +114,18 @@ def parse_productinfo(soup):
     tf      = filter(lambda x:not x[0] in STOPWORDS, sorted([(term, float(val)) for term, val in counter.items()], key=lambda x:x[1]*(-1) )  )
     tf      = filter(STOPLOGIC, tf )
     """
-    ウェイトのノーマライズを行う
+    ウェイトのノーマライズを行う 
+    NOTE: IDFでは、ノーマライズは不要では？
+    TODO: IDFを採用したいので、allweightはなしの方向で
     """
-    allwight= sum(map(lambda x:x[1], tf))
-    tf      = map(lambda x:(x[0], x[1]/allwight), tf)
+    allweight= 1. #sum(map(lambda x:x[1], tf))
+    tf      = map(lambda x:(x[0], x[1]/allweight), tf)
+    #for term, val in sorted([(term, val) for term, val in tf], key=lambda x:x[1]*(-1) ) :
+    #    print(term,val)
+    #    pass
+    #print(tf)
     return (productinfo.encode('utf-8'), tf)
     #print( productinfo )
-    #for term, val in sorted([(term, val) for term, val in counter.items()], key=lambda x:x[1]*(-1) ) :
-    #    print(term,val)
 
 """
 星・レビューコンテキスト・vote数を取得し
@@ -173,7 +199,6 @@ def parse_eval_and_update(scraping_data):
     """
     for script in soup(["script", "style"]):
         script.extract()    # rip it out
-
     """
     星・レビューコンテキスト・vote数を取得し
     x.reviewsのアトリビュートを更新
@@ -181,11 +206,23 @@ def parse_eval_and_update(scraping_data):
     reviews = parse_star_review_vote(soup)
     scraping_data.reviews = reviews 
     """
-    scraping_data.reviewが空リストかNoneの場合、処理を終了
+    scraping_data.reviewが空リストかNoneの場合でも処理を続行: 
+    NOTE: 古いIFではNoneの場合、処理を終了していた
     """
+    print('[DEBUG] A1')
     if scraping_data.reviews == [] or scraping_data.reviews == None:
-        return
+        scraping_data.reviews = []
+    print('[DEBUG] A2')
+    """
+    全テキスト情報をトークナイズ
+    """
+    all_tf = tokenize_all(soup)
+    if hasattr(scraping_data, 'all_tf'):
+        scraping_data.all_tf = all_tf
+    else:
+        setattr(scraping_data, 'all_tf', all_tf)
     
+ 
     """
     商品説明情報を取得する
     """
@@ -195,7 +232,7 @@ def parse_eval_and_update(scraping_data):
     else:
         setattr(scraping_data, 'product_info', productinfo)
     if hasattr(scraping_data, 'product_info_tf'):
-        scraping_data.product_info = tf
+        scraping_data.product_info_tf = tf
     else:
         setattr(scraping_data, 'product_info_tf', tf)
 
@@ -265,6 +302,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
     parser.add_argument('--score',   help='Evaluate kindle referenced indexed data from db')
     parser.add_argument('--dump',   help='You can dump all calculated data from MySQL.')
+    parser.add_argument('--mode',   help='You can specify DB, which local or SQL.')
     args_obj = vars(parser.parse_args())
 
     # store the original SIGINT handler
@@ -273,19 +311,35 @@ if __name__ == '__main__':
 
     is_referenced_score     = args_obj.get('score')
     is_dump                 = args_obj.get('dump')
+    mode                    = args_obj.get('mode')
     
     """
     メモリ効率が悪いのでこの取得法は徐々に廃止にしていく
+    NOTE: MySQLの逐次読み出しができるようになってきたので、mode=sql, mode=localを追加して、sqlでiterateする方法も採用する
     """
     #SnapshotDeal.charge_memory()
     #all_scraping_data = SnapshotDeal.SCRAPING_DATA_POOL
-    if is_dump == None or is_dump == '':
+    if (is_dump == None or is_dump == '') and mode and mode == 'local':
         for scraping_data in SnapshotDeal.iter_all():
             parse_eval_and_update(scraping_data )
+            print(scraping_data.product_info_tf)
+            print(scraping_data.review_tf)
+    if (is_dump == None or is_dump == '') and mode and mode == 'sql':
+        for keyurl, scraping_data in get_all_data_iter():
+            parse_eval_and_update(scraping_data)
+            print(scraping_data.all_tf)
+            print(scraping_data.product_info_tf)
+            print(scraping_data.review_tf)
 
     """
     dumpモードならMySQLからすべてのデータをiterateにて処理する
     """
     if is_dump:
         for keyurl, scraping_data in get_all_data_iter():
-            print(','.join(map(lambda x:str(x).replace(',', ''), ['[INFO] Dump a record to mysql', __name__, scraping_data.asin, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean]) ) )
+            print(','.join(map(lambda x:str(x).replace(',', ''), \
+                ['[INFO] Dump a record to mysql', __name__, scraping_data.asin, \
+                scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), \
+                scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, \
+                scraping_data.normal_mean, ':'.join(map(lambda x: str(x[0]) + '|' + str(x[1]), scraping_data.product_info_tf) )  ]) ) )
+            print(scraping_data.product_info_tf)
+            print(scraping_data.review_tf)
