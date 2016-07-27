@@ -15,9 +15,9 @@ class IDFHolder:
                 except ValueError, e:
                     continue
                 idf = math.log(float(D)/float(dnum) ) 
-                IDFHolder.IDFs.update({t: [idf, dnum] } )
+                IDFHolder.IDFs.update({t: idf } )
         
-        for t,pair in sorted(IDFHolder.IDFs.items(), key=lambda x:x[1][0]):
+        for t,pair in sorted(IDFHolder.IDFs.items(), key=lambda x:x[1]):
             #print(t,pair[0], pair[1])
             pass
 

@@ -19,6 +19,9 @@ from collections import Counter
 from KindleReferencedIndexScoreClass import *
 from KindleReferencedIndexScoreDBs import *
 from KindleReferencedIndexScoreDBsSnapshotDealer import *
+from KindleReferencedIndexScoreTFIDFUtils import *
+
+
 
 NUMBER_PATTERN = r'[+-]?\d+(?:\.\d+)?' 
 NUMBER_REGEX = re.compile(r'[+-]?\d+(?:\.\d+)?')
@@ -177,17 +180,21 @@ def parse_star_review_vote(soup):
 
 """
 relevancyの計算
+NOTE: tfidfに更新
 """
 def calc_relevancy(sourcetf, targettf, top=None):
     relevancy = 0.
     count = 0
+    relevancy_term = []
     for tf in sourcetf:
         res = (lambda x:x.pop() if x != [] else None)( filter(lambda x:tf[0] == x[0], targettf) )
         if res == [] or res == None: continue
-        relevancy += res[1] * tf[1]
+        #relevancy += res[1] * tf[1] * (lambda x:x**2 if x else 1. )( IDFHolder.IDFs.get(tf[1]) )
+        relevancy += IDFHolder.IDFs.get(tf[0]) * tf[1]
+        relevancy_term.append(res[0] )
         count += 1
         #if top and top < cnt : break
-    return (relevancy, count )
+    return (relevancy, count, relevancy_term )
 
 def parse_eval_and_update(scraping_data):
     """
@@ -279,11 +286,15 @@ def parse_eval_and_update(scraping_data):
     """
     relevancyの計算
     """
-    (rel, cnt ) = calc_relevancy(review_tf, tf)
+    (rel, cnt, relevancy_term) = calc_relevancy(review_tf, tf)
     if hasattr(scraping_data, 'relevancy'):
         scraping_data.relevancy = rel
     else:
         setattr(scraping_data, 'relevancy', rel)
+    if hasattr(scraping_data, 'relevancy_term'):
+        scraping_data.relevancy_term = relevancy_term
+    else:
+        setattr(scraping_data, 'relevancy_term', relevancy_term)
 
     """
     cooccurrenceの代入
@@ -362,7 +373,7 @@ if __name__ == '__main__':
     if (is_dump == None or is_dump == '') and mode and mode == 'sqllimit':
         for keyurl, scraping_data in initiate_data_limit_generator(1000):
             parse_eval_and_update(scraping_data)
-            if scraping_data.review_contexts == '': continue
+            if scraping_data.review_contexts == '' or scraping_data.relevancy == 0.: continue
             print('[INFO] all_tf', ' '.join(map(lambda x:x[0], scraping_data.all_tf) ) )
             #print('review_contexts', scraping_data.review_contexts  )
             print('[INFO] review_tf, ', ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )

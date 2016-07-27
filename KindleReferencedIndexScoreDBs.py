@@ -293,7 +293,7 @@ def write_each(scraping_data):
                     serialized_asins    = pickle.dumps(scraping_data.asins)
                 ).where( Serialized.keyurl==keyurl )
                 q.execute()
-                print(','.join(map(lambda x:str(x).replace(',', ''), ['[DEBUG] update a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean, Serialized]) ) )
+                print(','.join(map(lambda x:str(x).replace(',', ''), ['[DEBUG] update a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean, ' '.join(scraping_data.relevancy_term), Serialized]) ) )
                 break
             except UnicodeDecodeError, e:
                 print('[CRIT] cannot update entry! try 10 times...', e, write_each.__name__, _)
