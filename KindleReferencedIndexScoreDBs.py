@@ -100,8 +100,11 @@ limit付きgenerator
 def initiate_data_limit_generator(num):
     for serialized in Serialized.select().limit(num).iterator():
         key             = serialized.keyurl
-        scraping_data   = pickle.loads( str(serialized.serialized) )
-        yield (key, scraping_data, serialized.serialized.replace('\n', CTL_DELIM) )
+        try:
+            scraping_data   = pickle.loads( str(serialized.serialized) )
+            yield (key, scraping_data )
+        except:
+            continue
 
 
 """
@@ -194,7 +197,7 @@ def write_each(scraping_data):
     """
     文字列のエンコーディングに失敗した場合、書き込みを行わず、パスする
     #keyurlはURLパラメータのあるなしで無限に増殖しうるから必ずnormalized_urlを用いる
-    2016.7 ASINをkeyurlに設定するように仕様を変更
+    ASINをkeyurlに設定するように仕様を変更
     """
     # keyurl = str(hashlib.sha224(scraping_data.normalized_url.encode('utf-8') ).hexdigest() )
     keyurl                  = scraping_data.asin 

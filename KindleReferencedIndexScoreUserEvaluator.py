@@ -44,8 +44,11 @@ def referenced_score(scraping_data_list):
 def calculate_harmonic_mean(reviews):
     size        = len(reviews)
     hsource     = map(lambda x:(float(x.star),float(x.vote)), reviews)
+    #print('hsource', hsource)
     sigma       = sum( map(lambda x:x[1], hsource) )
+    #print('sigma', sigma)
     inverted    = sum( map(lambda x:x[1]/x[0], hsource) )
+    #print('inverted', inverted)
     score       = sigma/( (lambda x:x if x != 0. else float('inf'))(inverted) )
     return score
 
@@ -68,7 +71,7 @@ def tokenize_all(soup):
     texts = soup.findAll(text=True)
 
     visible_texts = filter(lambda t:t != '' and t != None, texts)
-    build_text    = ','.join(visible_texts).replace('\n', '')
+    build_text    = ' '.join(visible_texts).replace('\n', '')
     
     MT= MeCab.Tagger('mecabrc')
     res = MT.parse(build_text.encode('utf-8') )
@@ -84,12 +87,15 @@ def tokenize_all(soup):
 """
 レビューの形態素解析を行い、tfを取得する
 """
-def tokenize_reviews(reviews):
-    csource     = '.'.join(map(lambda x:x.context, reviews)).encode('utf-8')
+def tokenize_reviews(reviews_context):
+    csource     = reviews_context
+    #print('csource ', csource)
     MT= MeCab.Tagger('mecabrc')
-    res = MT.parse(csource)
+    res = MT.parse(csource.encode('utf-8'))
     items       = map(lambda x:x.split('\t').pop(0), str(res).split('\n'))
     counter     = Counter(items)
+    #print('res ', res)
+    #print('counter', counter)
     tf          = filter(lambda x:not x[0] in STOPWORDS, sorted([(term, float(val)) for term, val in counter.items()], key=lambda x:x[1]*(-1) ) )
     tf          = filter(STOPLOGIC, tf )
     """
@@ -135,7 +141,7 @@ def parse_star_review_vote(soup):
     box_divs = soup.findAll('div', {'id': re.compile('rev-dpReviewsMostHelpfulAUI-*') } )
     
     if box_divs == [] or box_divs == None : 
-        return []
+        return [], ''
     
     stars = []
     for box_div in box_divs:
@@ -160,15 +166,14 @@ def parse_star_review_vote(soup):
     """
     reviews = []
     for star, context, vote in zip(stars, contexts, cr_votes):
+        #print(star, context, vote)
         review = Review()
         hashes = str(hashlib.sha224(context.encode('utf-8')).hexdigest())            
         (review.star, review.context, review.vote, review.hashes) = star, context, vote, hashes
-        is_exist = hashes in map(lambda x:x.hashes, scraping_data.reviews)
-        #print('star rank ' + review.star + ' ' + review.context + 'votes ' + review.vote + ' hashes ' + review.hashes + ' is_exist ' + str(is_exist)  )
-        if is_exist: 
-            continue
         reviews.append(review)
-    return reviews
+    #print('review in inner', reviews)
+    #print('review stars in inner', map(lambda x:x.star, reviews))
+    return reviews, ' '.join(contexts)
 
 """
 relevancyの計算
@@ -190,7 +195,7 @@ def parse_eval_and_update(scraping_data):
     """
     if is_already_analyzed(scraping_data) == True:
         print('[DEBUG] Already analyzed', scraping_data.asin)
-        return
+        #return
 
     soup = bs4.BeautifulSoup(str(scraping_data.html))
 
@@ -203,16 +208,23 @@ def parse_eval_and_update(scraping_data):
     星・レビューコンテキスト・vote数を取得し
     x.reviewsのアトリビュートを更新
     """
-    reviews = parse_star_review_vote(soup)
+    reviews, review_contexts = parse_star_review_vote(soup)
     scraping_data.reviews = reviews 
+    #print('star items', map(lambda x:x.star, reviews) )
+    if hasattr(scraping_data, 'review_contexts'):
+        scraping_data.review_contexts = review_contexts
+    else:
+        setattr(scraping_data, 'review_contexts', review_contexts)
+
     """
     scraping_data.reviewが空リストかNoneの場合でも処理を続行: 
     NOTE: 古いIFではNoneの場合、処理を終了していた
     """
-    print('[DEBUG] A1')
+    #print('[DEBUG] A1')
     if scraping_data.reviews == [] or scraping_data.reviews == None:
-        scraping_data.reviews = []
-    print('[DEBUG] A2')
+        #return
+        pass
+    #print('[DEBUG] A2')
     """
     全テキスト情報をトークナイズ
     """
@@ -257,7 +269,8 @@ def parse_eval_and_update(scraping_data):
     """
     contextのトークナイズを行う
     """
-    review_tf    = tokenize_reviews(scraping_data.reviews)
+    review_tf    = tokenize_reviews(scraping_data.review_contexts)
+    #print('review_tf ', review_tf)
     if hasattr(scraping_data, 'review_tf'):
         scraping_data.review_tf = review_tf
     else:
@@ -324,12 +337,39 @@ if __name__ == '__main__':
             parse_eval_and_update(scraping_data )
             print(scraping_data.product_info_tf)
             print(scraping_data.review_tf)
+    """
+    MySQLのCラッパでSeverSideでクエリを発行する
+    NOTE: Ctrl+Cを発行したとしてもハングアップする
+    """
     if (is_dump == None or is_dump == '') and mode and mode == 'sql':
         for keyurl, scraping_data in get_all_data_iter():
             parse_eval_and_update(scraping_data)
-            print(scraping_data.all_tf)
-            print(scraping_data.product_info_tf)
-            print(scraping_data.review_tf)
+            #if scraping_data.review_contexts == '': 
+            #    continue
+            print('[INFO] all_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.all_tf) ) )
+            #print('review_contexts', scraping_data.review_contexts  )
+            print('[INFO] review_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
+            print('[INFO] product_info_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.product_info_tf) ) )
+            print('[INFO] relevancy, ', scraping_data.asin, scraping_data.relevancy )
+            print('[INFO] normal_mean, ', scraping_data.asin, scraping_data.normal_mean )
+            print('[INFO] harmonic_mean, ', scraping_data.asin, scraping_data.harmonic_mean )
+
+    """
+    PurePythonでクエリを発行する
+    ClientSideで発行するので、オンメモリでクエリを保持する
+    NOTE: メモリの関係でlimitが標準でついている
+    """
+    if (is_dump == None or is_dump == '') and mode and mode == 'sqllimit':
+        for keyurl, scraping_data in initiate_data_limit_generator(1000):
+            parse_eval_and_update(scraping_data)
+            if scraping_data.review_contexts == '': continue
+            print('[INFO] all_tf', ' '.join(map(lambda x:x[0], scraping_data.all_tf) ) )
+            #print('review_contexts', scraping_data.review_contexts  )
+            print('[INFO] review_tf, ', ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
+            print('[INFO] product_info_tf, ', ' '.join(map(lambda x:x[0], scraping_data.product_info_tf) ) )
+            print('[INFO] relevancy, ', scraping_data.relevancy )
+            print('[INFO] normal_mean, ', scraping_data.normal_mean )
+            print('[INFO] harmonic_mean, ', scraping_data.harmonic_mean )
 
     """
     dumpモードならMySQLからすべてのデータをiterateにて処理する
