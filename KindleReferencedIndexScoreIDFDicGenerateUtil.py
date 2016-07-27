@@ -22,5 +22,5 @@ if __name__ == '__main__':
         for dic in dics:
             if w in dic:
                 c += 1
-        print(w, D, c, i, len(all_words) )
-
+        if D < c:
+            print(w, D, c, i, len(all_words) )
