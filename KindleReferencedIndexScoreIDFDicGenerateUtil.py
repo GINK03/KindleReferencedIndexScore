@@ -1,6 +1,9 @@
 # coding: utf-8
 from __future__ import print_function
 import sys
+"""
+形態そ解析された標準入力に対して、一行一コンテンツとして仮定して、IDF辞書を作成する
+"""
 if __name__ == '__main__':
     all_words = set()
     dics      = []
@@ -14,7 +17,7 @@ if __name__ == '__main__':
         dics.append(dic)
 
 
-    # $BE>CV$5$;$F(Bidf$B$,$I$N$h$&$K$J$C$F$$$k$+3NG'$9$k(B
+    # 転置させてidfがどのようになっているか確認する
     D = len(dics)
     results = []
     for i, w in enumerate(all_words):

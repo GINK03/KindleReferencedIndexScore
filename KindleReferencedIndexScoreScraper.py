@@ -4,7 +4,6 @@ import bs4
 import sys
 import urllib2
 import urllib
-from requests.exceptions import HTTPError
 import ssl
 import os.path
 import argparse
@@ -82,9 +81,6 @@ def html_adhoc_fetcher(url):
             continue
         except urllib2.HTTPError, e:
             print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url, mp.current_process() )
-            continue
-        except HTTPError, e:
-            print('[WARN] Cannot access url with httperror, try number is...', e, _, url, mp.current_process() )
             continue
         except ssl.SSLError, e:
             print('[WARN] Cannot access url with ssl error, try number is...', e, _, url, mp.current_process() )
