@@ -358,8 +358,12 @@ if __name__ == '__main__':
     if (is_dump == None or is_dump == '') and mode and mode == 'local':
         for scraping_data in SnapshotDeal.iter_all():
             parse_eval_and_update(scraping_data )
-            print(scraping_data.product_info_tf)
-            print(scraping_data.review_tf)
+            print('[info] all_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0] + '|' + str(x[1]), scraping_data.all_tf) ) )
+            print('[info] review_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
+            print('[info] product_info_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.product_info_tf) ) )
+            print('[info] relevancy, ', scraping_data.asin, scraping_data.relevancy )
+            print('[info] normal_mean, ', scraping_data.asin, scraping_data.normal_mean )
+            print('[info] harmonic_mean, ', scraping_data.asin, scraping_data.harmonic_mean )
     """
     MySQLのCラッパでSeverSideでクエリを発行する
     NOTE: Ctrl+Cを発行したとしてもハングアップする
@@ -367,15 +371,12 @@ if __name__ == '__main__':
     if (is_dump == None or is_dump == '') and mode and mode == 'sql':
         for keyurl, scraping_data in get_all_data_iter():
             parse_eval_and_update(scraping_data)
-            #if scraping_data.review_contexts == '': 
-            #    continue
-            print('[INFO] all_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.all_tf) ) )
-            #print('review_contexts', scraping_data.review_contexts  )
-            print('[INFO] review_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
-            print('[INFO] product_info_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.product_info_tf) ) )
-            print('[INFO] relevancy, ', scraping_data.asin, scraping_data.relevancy )
-            print('[INFO] normal_mean, ', scraping_data.asin, scraping_data.normal_mean )
-            print('[INFO] harmonic_mean, ', scraping_data.asin, scraping_data.harmonic_mean )
+            print('[info] all_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0] + '|' + str(x[1]), scraping_data.all_tf) ) )
+            print('[info] review_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
+            print('[info] product_info_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.product_info_tf) ) )
+            print('[info] relevancy, ', scraping_data.asin, scraping_data.relevancy )
+            print('[info] normal_mean, ', scraping_data.asin, scraping_data.normal_mean )
+            print('[info] harmonic_mean, ', scraping_data.asin, scraping_data.harmonic_mean )
 
     """
     PurePythonでクエリを発行する
@@ -385,14 +386,13 @@ if __name__ == '__main__':
     if (is_dump == None or is_dump == '') and mode and mode == 'sqllimit':
         for keyurl, scraping_data in initiate_data_limit_generator(1000):
             parse_eval_and_update(scraping_data)
-            if scraping_data.review_contexts == '' or scraping_data.relevancy == 0.: continue
-            print('[INFO] all_tf', ' '.join(map(lambda x:x[0], scraping_data.all_tf) ) )
-            #print('review_contexts', scraping_data.review_contexts  )
-            print('[INFO] review_tf, ', ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
-            print('[INFO] product_info_tf, ', ' '.join(map(lambda x:x[0], scraping_data.product_info_tf) ) )
-            print('[INFO] relevancy, ', scraping_data.relevancy )
-            print('[INFO] normal_mean, ', scraping_data.normal_mean )
-            print('[INFO] harmonic_mean, ', scraping_data.harmonic_mean )
+            print('[info] all_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0] + '|' + str(x[1]), scraping_data.all_tf) ) )
+            print('[info] review_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
+            print('[info] product_info_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.product_info_tf) ) )
+            print('[info] relevancy, ', scraping_data.asin, scraping_data.relevancy )
+            print('[info] normal_mean, ', scraping_data.asin, scraping_data.normal_mean )
+            print('[info] harmonic_mean, ', scraping_data.asin, scraping_data.harmonic_mean )
+
 
     """
     dumpモードならMySQLからすべてのデータをiterateにて処理する

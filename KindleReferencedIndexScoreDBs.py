@@ -298,7 +298,7 @@ def write_each(scraping_data):
             except UnicodeDecodeError, e:
                 print('[CRIT] cannot update entry! try 10 times...', e, write_each.__name__, _)
                 continue
-            except peewee.OperationalError, e:
+            except OperationalError, e:
                 print('[CRIT] cannot update entry! peewee OperationalError occurred...', e, write_each.__name__, _)
                 break
 
