@@ -386,7 +386,7 @@ if __name__ == '__main__':
     if (is_dump == None or is_dump == '') and mode and mode == 'sqllimit':
         for keyurl, scraping_data in initiate_data_limit_generator(1000):
             parse_eval_and_update(scraping_data)
-            print('[info] all_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0] + '|' + str(x[1]), scraping_data.all_tf) ) )
+            print('[info] all_tf, ', 'asin=',scraping_data.asin, ' '.join(map(lambda x:x[0] + '|' + str(x[1]), scraping_data.all_tf) ) )
             print('[info] review_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
             print('[info] product_info_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.product_info_tf) ) )
             print('[info] relevancy, ', scraping_data.asin, scraping_data.relevancy )

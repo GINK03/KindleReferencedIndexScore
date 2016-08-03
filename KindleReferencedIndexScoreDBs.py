@@ -161,6 +161,9 @@ def is_already_analyzed(scraping_data):
     except UnicodeEncodeError, e:
         print('[CRIT] Cannot Encode pickle... give up data', e)
         return False
+    except OperationalError, e:
+        print('[CRIT] Peewee cannot operate MySQL... give up data', e)
+        return False
     if hasattr(instance, 'all_tf') and instance.all_tf != []:
         return True
     else :
