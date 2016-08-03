@@ -168,10 +168,10 @@ def map_data_to_local_db_from_url(scraping_data):
             continue
 
        	"""
-	SQLサーバにすでにqueryが存在しているのならば、処理を行わない
-	"""
-	if is_already_query_exist(child_scraping_data) == True:
-	   continue
+	      SQLサーバにすでにqueryが存在しているのならば、処理を行わない
+	      """
+        if is_already_query_exist(child_scraping_data) == True:
+          continue
  
         child_scraping_data.url = fixed_url
 
