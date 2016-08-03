@@ -282,6 +282,7 @@ if __name__ == '__main__':
     """
     all_scraping_data = []
     
+    SnapshotDeal.charge_memory()
     _ = SnapshotDeal.get_all() 
     if _ == [] or _ == None:
         initialize_parse_and_map_data_to_local_db(all_scraping_data)

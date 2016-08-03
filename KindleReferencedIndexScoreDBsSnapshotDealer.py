@@ -127,7 +127,7 @@ if 'KindleReferencedIndexScoreDBsSnapshotDealer' == __name__:
     print('KindleReferencedIndexScoreDBsSnapshotDealer will be loaded')
     print('If you want to get all data as on-memory data, run charge_memory() at first.')
 
-    #SnapshotDeal.charge_memory()
+    SnapshotDeal.charge_memory()
 
 
 """
