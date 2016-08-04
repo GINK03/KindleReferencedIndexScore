@@ -108,7 +108,13 @@ def get_all_data_iter_box(box_size = CM.DESIRABLE_PROCESS_NUM):
     result = cursor.fetchone()
     while result != None:
       keyurl, scraping_data = result[0], pickle.loads(result[1])
-      results = [ cursor.fetchone() for _ in range(box_size)]
+      try:
+        results = [ cursor.fetchone() for _ in range(box_size)]
+      except OperationalError, e:
+        """
+        例外が発生した場合はyieldを終了
+        """
+        break
       res_results = map(lambda x: (x[0], pickle.loads(x[1]) ), results) 
       if all(map(lambda x:x[0], res_results) ) == False:
         break
