@@ -252,8 +252,12 @@ def search_flatten_multiprocess_with_leveldb(conn):
       map_data_to_local_db_from_url(scraping_data)
       print('[DEBUG] Eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', mp.current_process() ]) ) )
 
-def search_flatten_multiprocess_with_sql(conn, uniq_hash):
-    for keyurl, scraping_data in get_all_data_iter():
+def search_flatten_multiprocess_with_sql(conn, uniq_hash, index):
+    for results in get_all_data_iter_box():
+      """
+      自分のプロセスナンバーだけ、取り出す
+      """
+      keyurl, scraping_data = results[index]
       if hasattr(scraping_data, 'uniq_hash') and scraping_data.uniq_hash != uniq_hash:
         scraping_data.uniq_hash = uniq_hash
         map_data_to_local_db_from_url(scraping_data, uniq_hash)
@@ -356,9 +360,9 @@ if __name__ == '__main__':
       for i in range(depth):
         uniq_hash =  str(hashlib.sha224(str(random.random()) ).hexdigest())
         process_list = []
-        for _ in range(4):
+        for _ in range(CM.DESIRABLE_PROCESS_NUM):
           p_conn, c_conn = mp.Pipe()
-          p = mp.Process(target=search_flatten_multiprocess_with_sql, args=(c_conn, uniq_hash ) )
+          p = mp.Process(target=search_flatten_multiprocess_with_sql, args=(c_conn, uniq_hash, _ ) )
           p.deamon = True
           process_list.append( (p,p_conn) )
         map(lambda x:x[0].start(), process_list)

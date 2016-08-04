@@ -9,7 +9,7 @@ import sys
 import md5
 import warnings
 import time
-
+from KindleReferencedIndexScoreConfigMapper import *
 warnings.filterwarnings('ignore', 'Incorrect date value:*')
 
 mydb = MySQLDatabase(
@@ -75,7 +75,9 @@ def initiate_data_generator():
         except UnicodeEncodeError, e:
             print('[CRIT] Cannot decode as ASCII', e)
             continue
-
+"""
+サーバサイドイテレータなので、メモリの消費量を抑えることが可能
+"""
 import MySQLdb.cursors
 def get_all_data_iter():
     connection = MySQLdb.connect(
@@ -89,10 +91,28 @@ def get_all_data_iter():
     cursor.execute('SELECT keyurl, serialized FROM serialized')
     result = cursor.fetchone()
     while result != None:
-    	keyurl, scraping_data = result[0], pickle.loads(result[1])
-	yield (keyurl, scraping_data)
-	result = cursor.fetchone()
+      keyurl, scraping_data = result[0], pickle.loads(result[1])
+      yield (keyurl, scraping_data)
+      result = cursor.fetchone()
 
+
+def get_all_data_iter_box(box_size = CM.DESIRABLE_PROCESS_NUM):
+    connection = MySQLdb.connect(
+        host   = "127.0.0.1",
+        user   = "root",
+        passwd = "1234",
+        db     = "kindle",
+        cursorclass = MySQLdb.cursors.SSCursor)
+    cursor = connection.cursor()
+    cursor.execute('SELECT keyurl, serialized FROM serialized')
+    result = cursor.fetchone()
+    while result != None:
+      keyurl, scraping_data = result[0], pickle.loads(result[1])
+      results = [ cursor.fetchone() for _ in range(box_size)]
+      res_results = map(lambda x: (x[0], pickle.loads(x[1]) ), results) 
+      if all(map(lambda x:x[0], res_results) ) == False:
+        break
+      yield res_results
 """
 limit付きgenerator
 多すぎる情報を制限する
