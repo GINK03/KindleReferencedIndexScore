@@ -42,12 +42,14 @@ class SnapshotDeal():
             """
             SnapshotDeal.charge_memory()
             
+            print(SnapshotDeal.LOOP_MESSAGE) 
             """
             古いデータを削除して強制的に上書きする
             """
             f = open(SnapshotDeal.SRC_FILE_NAME, 'w')
-            for (key, scraping_data, serialized) in initiate_data_generator():
-                f.write(serialized + '\n')
+            #for (key, scraping_data, serialized) in initiate_data_generator():
+            for (key, scraping_data) in get_all_data_iter():
+                f.write(pickle.dumps(scraping_data).replace('\n', '') + '\n')
             
             """
             機能的に今は何も定義されていない
@@ -65,7 +67,6 @@ class SnapshotDeal():
             """
             os.rename(SnapshotDeal.SRC_FILE_NAME, SnapshotDeal.DIST_FILE_NAME)
             
-            print(SnapshotDeal.LOOP_MESSAGE) 
             
             """
             countをインクリメントして、limitと等しいか超えていたならば終了

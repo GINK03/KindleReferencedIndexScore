@@ -80,9 +80,9 @@ import MySQLdb.cursors
 def get_all_data_iter():
     connection = MySQLdb.connect(
         host   = "127.0.0.1",
-	user   = "root",
+        user   = "root",
         passwd = "1234",
-	db     = "kindle",
+        db     = "kindle",
         cursorclass = MySQLdb.cursors.SSCursor)
 
     cursor = connection.cursor()
