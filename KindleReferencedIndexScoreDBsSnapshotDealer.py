@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import print_function
 import bs4
+import plyvel
 import sys
 import urllib2
 import urllib
@@ -21,6 +22,8 @@ class SnapshotDeal():
     LOOP_MESSAGE            = 'runnning as a deamon... you can exit with ctrl + c.'
     DIST_FILE_NAME          = 'snapshot.tmp'
     SRC_FILE_NAME           = 'src_snapshot.tmp'
+    DIST_LDB_NAME           = 'snapshot.ldb'
+    SRC_LDB_NAME            = 'src_snapshot.ldb'
     SCRAPING_DATA_POOL      = []
    
     """
@@ -67,6 +70,31 @@ class SnapshotDeal():
             """
             os.rename(SnapshotDeal.SRC_FILE_NAME, SnapshotDeal.DIST_FILE_NAME)
             
+            
+            """
+            countをインクリメントして、limitと等しいか超えていたならば終了
+            """
+            count += 1
+            if limit <= count:
+                sys.exit(0)
+            """
+            あまり頻度の高いリフレッシュはシステムに負荷をもたらすので、スリープする
+            """
+            time.sleep(SnapshotDeal.REFRESH_RATE)
+    
+    """
+    通常のファイルシステムを利用せず、leveldbに書き出す。
+    """
+    @staticmethod
+    def run_as_a_ldb_deamon(limit):
+        count = 0
+        while True:
+            print(SnapshotDeal.LOOP_MESSAGE) 
+            db = plyvel.DB('./' + SnapshotDeal.DIST_LDB_NAME, create_if_missing=True)
+            for (key, scraping_data) in get_all_data_iter():
+                if db.get(key) == None:
+                  db.put(key, pickle.dumps(scraping_data).replace('\n', '') + '\n')
+            db.close()
             
             """
             countをインクリメントして、limitと等しいか超えていたならば終了
@@ -137,12 +165,17 @@ main文として実行されたら、以下の命令が実行される
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
     parser.add_argument('--limit',   help='set limit num')
+    parser.add_argument('--mode',     help='set mode')
     parser.add_argument('--refresh_rate',   help='set limit num')
 
     args_obj    = vars(parser.parse_args())
    
     limit       = (lambda x:int(x) if x else None)(args_obj.get('limit') )
+    mode        = (lambda x:x if x else None)(args_obj.get('mode') )
 
     SnapshotDeal.REFRESH_RATE = (lambda x:x if x else SnapshotDeal.REFRESH_RATE)(args_obj.get('refresh_rate') )
-
-    SnapshotDeal.run_as_a_deamon(limit)
+    
+    if mode == 'tmp':
+      SnapshotDeal.run_as_a_deamon(limit)
+    elif mode == 'leveldb' or mode == 'level':
+      SnapshotDeal.run_as_a_ldb_deamon(limit)

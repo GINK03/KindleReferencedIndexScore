@@ -146,8 +146,8 @@ def is_already_query_exist(scraping_data):
             return True
         else:
             return False
-    except OperationalError, e:
-        print('[CRIT] cannot print query to MySQL or excute SQL query', e, is_already_query_exist.__name__)
+    except:
+        print('[CRIT] cannot print query to MySQL or excute SQL query', is_already_query_exist.__name__)
         return False
 """
 is_already_analyzed?
@@ -240,11 +240,14 @@ def write_each(scraping_data):
                     serialized_reviews  = str(serialized_reviews),
                     serialized_asins    = str(serialized_asins)
                 )
-                print(','.join(map(lambda x:str(x).replace(',', ''), ['[DEBUG] Created a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean, Serialized]) ) )
+                print(','.join(map(lambda x:str(x).replace(',', ''), ['[DEBUG] Created a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.uniq_hash, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean, Serialized]) ) )
                 break
             except UnicodeDecodeError, e:
                 print('[CRIT] Cannot create new entry! try 10 times...', write_each.__name__, _, e)
                 continue
+            except IntegrityError, e:
+                print('[CRIT] Cannot create new entry! because, itegrity error', write_each.__name__, _, e)
+                break
         else:
             """
             1. updateする際には、データ量が上回っている場合には保存せずに、古いデータを使いまわす

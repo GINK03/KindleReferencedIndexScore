@@ -35,4 +35,5 @@ class ScrapingData:
         self.product_info   = ''
         self.product_info_tf = []
         self.cooccurrence   = 0.0
+        self.uniq_hash      = ''
         self.all_tf  = []

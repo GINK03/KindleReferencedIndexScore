@@ -65,13 +65,16 @@ def html_adhoc_fetcher(url):
     標準のアクセス回数はRETRY_NUMで定義されている 
     """
     html = None
-    for _ in range(21):
+    for _ in range(5):
         opener = urllib2.build_opener()
         opener.addheaders.append( ('User-agent', CM.USER_AGENT) )
         opener.addheaders.append( ('Cookie', CM.SESSION_TOKEN) )
         _TIME_OUT = CM.HTTP_WAIT_SEC
         try:
             html = opener.open(str(url), timeout = _TIME_OUT).read()
+        except EOFError, e:
+            print('[WARN] Cannot access url with EOFError, try number is...', e, _, url, mp.current_process() )
+            continue
         except urllib2.URLError, e:
             if _ % 10 == 0 and _ > 10:
                 print('[WARN] Cannot access url with URLError, try number is...', e, _, url, mp.current_process() )
@@ -109,7 +112,7 @@ def html_adhoc_fetcher(url):
     return (html, title, soup)
 
 
-def map_data_to_local_db_from_url(scraping_data):
+def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
     html, soup = None, None
     if scraping_data.html == None or scraping_data.html == "":
         scraping_data.html, title, soup = html_adhoc_fetcher(scraping_data.url)
@@ -153,13 +156,15 @@ def map_data_to_local_db_from_url(scraping_data):
         
         child_scraping_data.url     = fixed_url
         
+        child_scraping_data.uniq_hash = uniq_hash
+
         child_scraping_data.normalized_url = '/'.join( filter( lambda x: not '=' in x, fixed_url.split('?').pop(0).split('/') ) )
                    
-        filter_len                  = len( filter(lambda x: child_scraping_data.normalized_url == x[0], all_scraping_data ) ) 
+        #filter_len                  = len( filter(lambda x: child_scraping_data.normalized_url == x[0], all_scraping_data ) ) 
         
         filter_len_in_tempory_param = len( filter(lambda x: child_scraping_data.normalized_url == x[0], child_scraping_data_list ) ) 
         
-        is_already_exist            = (lambda x: True if x > 0 else False )(filter_len + filter_len_in_tempory_param)
+        is_already_exist            = (lambda x: True if x > 0 else False )(filter_len_in_tempory_param)
         
         """
         すでに全データの中にscrape済みであるインスタンスがあれば、処理を行わない
@@ -195,7 +200,7 @@ def map_data_to_local_db_from_url(scraping_data):
         
         write_each(child_scraping_data)
     print('[DEBUG] Finish one loop, ', scraping_data.url, scraping_data.asins)
-    write_each(scraping_data)
+    #write_each(scraping_data)
     return child_scraping_data_list
 
 def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
@@ -240,10 +245,29 @@ def search_flatten_multiprocess(conn, chunked_list, all_scraping_data):
         scraping_data.count += 1
         print('[DEBUG] Eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', len(chunked_list), len(all_scraping_data), mp.current_process() ]) ) )
 
+def search_flatten_multiprocess_with_leveldb(conn):
+    db = plyvel.DB('./' + SnapshotDeal.DIST_LDB_NAME, create_if_missing=True)
+    for k,v in db:
+      scraping_data = pickle.loads(v.replace('', '\n'))
+      map_data_to_local_db_from_url(scraping_data)
+      print('[DEBUG] Eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', mp.current_process() ]) ) )
+
+def search_flatten_multiprocess_with_sql(conn, uniq_hash):
+    for keyurl, scraping_data in get_all_data_iter():
+      if hasattr(scraping_data, 'uniq_hash') and scraping_data.uniq_hash != uniq_hash:
+        scraping_data.uniq_hash = uniq_hash
+        map_data_to_local_db_from_url(scraping_data, uniq_hash)
+        print('[DEBUG] Eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', mp.current_process() ]) ) )
+      elif not hasattr(scraping_data, 'uniq_hash'):
+        setattr(scraping_data, 'uniq_hash', uniq_hash)
+        map_data_to_local_db_from_url(scraping_data, uniq_hash)
+        print('[DEBUG] Eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count, ' '.join( map(lambda x:str(x), [ _, '/', mp.current_process() ]) ) )
+
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
         yield l[i:i+n]
+
 import signal
 def exit_gracefully(signum, frame):
     # restore the original signal handler as otherwise evil things will happen
@@ -265,34 +289,36 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
     parser.add_argument('--URL', help='set default URL which to scrape at first')
     parser.add_argument('--depth', help='how number of url this program will scrape')
+    parser.add_argument('--mode', help='you can specify mode...')
 
     args_obj = vars(parser.parse_args())
   
     depth = (lambda x:int(x) if x else 1)( args_obj.get('depth') )
-
-    #""" SEEDが存在しないならば初期化 """
-    #if initiate_data(ALL_SCRAPING_DATA) == SEED_NO_EXIST:
-    #    initialize_parse_and_map_data_to_local_db()
-    #    ALL_SCRAPING_DATA = validate_is_asin(ALL_SCRAPING_DATA)
     
-    """
-    SnapshotDealデーモンが出力するデータをもとにスクレイピングを行う
-    NOTE: SQLの全アクセスは非常に動作コストが高く、推奨されない
-    NOTE: Snapshotが何もない場合、initialize_parse_and_map_data_to_local_dbを呼び出して初期化を行う
-    """
-    all_scraping_data = []
-    
-    SnapshotDeal.charge_memory()
-    _ = SnapshotDeal.get_all() 
-    if _ == [] or _ == None:
-        initialize_parse_and_map_data_to_local_db(all_scraping_data)
-    else:
-        all_scraping_data = map(lambda x:(x.url, x), SnapshotDeal.get_all() )
+    mode = (lambda x:x if x else 'undefined')( args_obj.get('mode') )
 
     """
     深さを決めて幅優先探索 
+    NOTE: chunked_listを使う方法はメモリのオーバーフローを容易に引き起すので、leveldbのキャッシュを並列読取してmysqlに書いていくほうがいいのでは内か 雑感
     """
-    for i in range(depth):
+    if mode == 'undefined':
+      print('[CRIT] You must specify mode(local|leveldb)')
+      sys.exit(0)
+    if mode == 'local':
+      """
+      SnapshotDealデーモンが出力するデータをもとにスクレイピングを行う
+      NOTE: SQLの全アクセスは非常に動作コストが高く、推奨されない
+      NOTE: Snapshotが何もない場合、initialize_parse_and_map_data_to_local_dbを呼び出して初期化を行う
+      """
+      all_scraping_data = []
+      
+      SnapshotDeal.charge_memory()
+      _ = SnapshotDeal.get_all() 
+      if _ == [] or _ == None:
+          initialize_parse_and_map_data_to_local_db(all_scraping_data)
+      else:
+          all_scraping_data = map(lambda x:(x.url, x), SnapshotDeal.get_all() )
+      for i in range(depth):
         chunked_lists = [ [] ]
         if len(all_scraping_data) == 0 : 
             chunked_lists = [ all_scraping_data ]
@@ -313,4 +339,26 @@ if __name__ == '__main__':
         #for x,p_conn in threads_list:
         #    ALL_SCRAPING_DATA.extend( p_conn.recv() )
         map(lambda x:x[0].join(), threads_list)
+    
+    if mode == 'leveldb' or mode == 'level':
+      for i in range(depth):
+        process_list = []
+        for _ in range(1):
+          p_conn, c_conn = mp.Pipe()
+          p = mp.Process(target=search_flatten_multiprocess_with_leveldb, args=(c_conn, ) )
+          p.deamon = True
+          process_list.append( (p,p_conn) )
+        map(lambda x:x[0].start(), process_list)
 
+    if mode == 'sqldb' or mode == 'sql':
+      import hashlib
+      import random
+      for i in range(depth):
+        uniq_hash =  str(hashlib.sha224(str(random.random()) ).hexdigest())
+        process_list = []
+        for _ in range(4):
+          p_conn, c_conn = mp.Pipe()
+          p = mp.Process(target=search_flatten_multiprocess_with_sql, args=(c_conn, uniq_hash ) )
+          p.deamon = True
+          process_list.append( (p,p_conn) )
+        map(lambda x:x[0].start(), process_list)
