@@ -3,5 +3,9 @@ sudo cp ./leveldb/out-shared/libleveldb.* /usr/local/lib
 # sudo vi /etc/ld.so.conf.d/usrlocallib.conf
 # ## add below line:
 # /usr/local/lib
+
+# if Cygwin
+cp ./leveldb/out-static/* /lib
+
 sudo ldconfig
 sudo pip install plyvel
