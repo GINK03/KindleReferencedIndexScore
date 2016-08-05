@@ -4,6 +4,8 @@ import bs4
 import sys
 import urllib2
 import urllib
+import httplib
+from socket import error as SocketError
 import ssl
 import os.path
 import argparse
@@ -87,6 +89,15 @@ def html_adhoc_fetcher(url):
             continue
         except ssl.SSLError, e:
             print('[WARN] Cannot access url with ssl error, try number is...', e, _, url, mp.current_process() )
+            continue
+        except httplib.BadStatusLine, e:
+            print('[WARN] Cannot access url with BadStatusLine, try number is...', e, _, url, mp.current_process() )
+            continue
+        except httplib.IncompleteRead, e:
+            print('[WARN] Cannot access url with IncompleteRead, try number is...', e, _, url, mp.current_process() )
+            continue
+        except SocketError, e:
+            print('[WARN] Cannot access url with SocketError, try number is...', e, _, url, mp.current_process() )
             continue
         except UnicodeEncodeError, e:
             """
@@ -315,14 +326,19 @@ if __name__ == '__main__':
       NOTE: Snapshotが何もない場合、initialize_parse_and_map_data_to_local_dbを呼び出して初期化を行う
       """
       all_scraping_data = []
-      
-      SnapshotDeal.charge_memory()
-      _ = SnapshotDeal.get_all() 
-      if _ == [] or _ == None:
-          initialize_parse_and_map_data_to_local_db(all_scraping_data)
-      else:
-          all_scraping_data = map(lambda x:(x.url, x), SnapshotDeal.get_all() )
+      """
+      速度の関係からLevelDBをオンメモリに変換
+      NOTE: LevelDBがmutable accessに対応していたらほんということない
+      NOTE: Leveldbファイルを作成 deamon呼出回数は一回
+      """
       for i in range(depth):
+        SnapshotDeal.run_as_a_ldb_deamon(1)
+        _ = SnapshotDeal.get_all_ldb() 
+        if _ == [] or _ == None:
+            initialize_parse_and_map_data_to_local_db(all_scraping_data)
+        else:
+          all_scraping_data = map(lambda x:(x.url, x), _ )
+
         chunked_lists = [ [] ]
         if len(all_scraping_data) == 0 : 
             chunked_lists = [ all_scraping_data ]
@@ -353,6 +369,8 @@ if __name__ == '__main__':
           p.deamon = True
           process_list.append( (p,p_conn) )
         map(lambda x:x[0].start(), process_list)
+        map(lambda x:x[0].join(), process_list)
+
 
     if mode == 'sqldb' or mode == 'sql':
       import hashlib
@@ -366,3 +384,4 @@ if __name__ == '__main__':
           p.deamon = True
           process_list.append( (p,p_conn) )
         map(lambda x:x[0].start(), process_list)
+        map(lambda x:x[0].join(), process_list)

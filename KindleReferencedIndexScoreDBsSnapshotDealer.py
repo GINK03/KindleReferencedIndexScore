@@ -31,8 +31,16 @@ class SnapshotDeal():
     """
     @staticmethod
     def get_all():
+        SnapshotDeal.charge_memory()
         return (lambda x:x if x != [] else None)( SnapshotDeal.SCRAPING_DATA_POOL )
     
+    @staticmethod
+    def get_all_ldb():
+        db = plyvel.DB('./' + SnapshotDeal.DIST_LDB_NAME, create_if_missing=True)
+        for (key, scraping_data) in get_all_data_iter():
+          yield scraping_data
+        db.close()
+
     """
     無限ループすることでデーモンとして起動する
     """
@@ -76,7 +84,7 @@ class SnapshotDeal():
             """
             count += 1
             if limit <= count:
-                sys.exit(0)
+                return
             """
             あまり頻度の高いリフレッシュはシステムに負荷をもたらすので、スリープする
             """
@@ -101,7 +109,7 @@ class SnapshotDeal():
             """
             count += 1
             if limit <= count:
-                sys.exit(0)
+                return
             """
             あまり頻度の高いリフレッシュはシステムに負荷をもたらすので、スリープする
             """
@@ -158,7 +166,6 @@ if 'KindleReferencedIndexScoreDBsSnapshotDealer' == __name__:
 
     SnapshotDeal.charge_memory()
 
-
 """
 main文として実行されたら、以下の命令が実行される
 """
@@ -175,7 +182,7 @@ if __name__ == '__main__':
 
     SnapshotDeal.REFRESH_RATE = (lambda x:x if x else SnapshotDeal.REFRESH_RATE)(args_obj.get('refresh_rate') )
     
-    if mode == 'tmp':
+    if mode == 'tmp' or mode == 'local':
       SnapshotDeal.run_as_a_deamon(limit)
     elif mode == 'leveldb' or mode == 'level':
       SnapshotDeal.run_as_a_ldb_deamon(limit)
