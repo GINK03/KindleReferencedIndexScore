@@ -9,12 +9,17 @@ if __name__ == '__main__':
     dics      = []
     for i, line in enumerate(sys.stdin):
         line = line[:-1].split(',').pop().strip()
-        dic = set(line.split(' ') )
-        if len(dic) == 1:
-            continue
+        if not '|' in line:
+          continue
+        ents = line.split(' ')
+        asin = ents.pop(0)
+        if len(asin ) != 10 :
+          continue
+        wf    = filter(lambda x:'|' in x, ents)
+        dic   = set(map(lambda x:x.split('|').pop(0), wf ) )
         [all_words.add(e) for e in dic]
         #print( i, len(all_words), len(dics) )
-        dics.append(dic)
+        dics.append({'dic':dic, 'asin':asin} )
 
 
     # 転置させてidfがどのようになっているか確認する
@@ -22,8 +27,9 @@ if __name__ == '__main__':
     results = []
     for i, w in enumerate(all_words):
         c = 0
+        asins = []
         for dic in dics:
-            if w in dic:
+            if w in dic['dic']:
                 c += 1
-        if D < c:
-            print(w, D, c, i, len(all_words) )
+                asins.append(dic['asin'] )
+        print(w, D, c, i, len(all_words), ','.join(asins) )
