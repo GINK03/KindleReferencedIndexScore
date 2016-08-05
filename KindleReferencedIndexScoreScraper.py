@@ -319,7 +319,7 @@ if __name__ == '__main__':
     if mode == 'undefined':
       print('[CRIT] You must specify mode(local|leveldb)')
       sys.exit(0)
-    if mode == 'local':
+    if mode == 'local' or mode == 'level':
       """
       SnapshotDealデーモンが出力するデータをもとにスクレイピングを行う
       NOTE: SQLの全アクセスは非常に動作コストが高く、推奨されない
@@ -359,18 +359,6 @@ if __name__ == '__main__':
         #for x,p_conn in threads_list:
         #    ALL_SCRAPING_DATA.extend( p_conn.recv() )
         map(lambda x:x[0].join(), threads_list)
-    
-    if mode == 'leveldb' or mode == 'level':
-      for i in range(depth):
-        process_list = []
-        for _ in range(1):
-          p_conn, c_conn = mp.Pipe()
-          p = mp.Process(target=search_flatten_multiprocess_with_leveldb, args=(c_conn, ) )
-          p.deamon = True
-          process_list.append( (p,p_conn) )
-        map(lambda x:x[0].start(), process_list)
-        map(lambda x:x[0].join(), process_list)
-
 
     if mode == 'sqldb' or mode == 'sql':
       import hashlib

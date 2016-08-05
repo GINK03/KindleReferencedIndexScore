@@ -355,8 +355,8 @@ if __name__ == '__main__':
     """
     #SnapshotDeal.charge_memory()
     #all_scraping_data = SnapshotDeal.SCRAPING_DATA_POOL
-    if (is_dump == None or is_dump == '') and mode and mode == 'local':
-        for scraping_data in SnapshotDeal.iter_all():
+    if (is_dump == None or is_dump == '') and mode and mode == 'sql':
+     for scraping_data in get_all_data_iter():
             parse_eval_and_update(scraping_data )
             print('[info] all_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0] + '|' + str(x[1]), scraping_data.all_tf) ) )
             print('[info] review_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
@@ -365,11 +365,11 @@ if __name__ == '__main__':
             print('[info] normal_mean, ', scraping_data.asin, scraping_data.normal_mean )
             print('[info] harmonic_mean, ', scraping_data.asin, scraping_data.harmonic_mean )
     """
-    MySQLのCラッパでSeverSideでクエリを発行する
-    NOTE: Ctrl+Cを発行したとしてもハングアップする
+    LevelDB経由のアクセスに変更。
+    NOTE: MySQLのアダプタがあんまちゃんと動かないので、廃止しLevelDBへ移行
     """
-    if (is_dump == None or is_dump == '') and mode and mode == 'sql':
-        for keyurl, scraping_data in get_all_data_iter():
+    if (is_dump == None or is_dump == '') and mode and mode == 'level':
+        for scraping_data in SnapshotDeal.get_all_ldb():
             parse_eval_and_update(scraping_data)
             print('[info] all_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0] + '|' + str(x[1]), scraping_data.all_tf) ) )
             print('[info] review_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
@@ -396,6 +396,7 @@ if __name__ == '__main__':
 
     """
     dumpモードならMySQLからすべてのデータをiterateにて処理する
+    NOTE: dumpはMySQLの内容をiteratorで取り出して表示するだけ
     """
     if is_dump:
         for keyurl, scraping_data in get_all_data_iter():
