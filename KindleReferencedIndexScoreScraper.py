@@ -10,7 +10,7 @@ import ssl
 import os.path
 import argparse
 import multiprocessing as mp
-import threading
+import threading as th
 import datetime
 from KindleReferencedIndexScoreClass import *
 from KindleReferencedIndexScoreDBs import *
@@ -305,6 +305,8 @@ if __name__ == '__main__':
     parser.add_argument('--URL', help='set default URL which to scrape at first')
     parser.add_argument('--depth', help='how number of url this program will scrape')
     parser.add_argument('--mode', help='you can specify mode...')
+    parser.add_argument('--cs', help='create snapshot(true|false)')
+
 
     args_obj = vars(parser.parse_args())
   
@@ -312,6 +314,7 @@ if __name__ == '__main__':
     
     mode = (lambda x:x if x else 'undefined')( args_obj.get('mode') )
 
+    cs    = (lambda x:False if x=='false' else True)( args_obj.get('cs') )
     """
     深さを決めて幅優先探索 
     NOTE: chunked_listを使う方法はメモリのオーバーフローを容易に引き起すので、leveldbのキャッシュを並列読取してmysqlに書いていくほうがいいのでは内か 雑感
@@ -332,12 +335,14 @@ if __name__ == '__main__':
       NOTE: Leveldbファイルを作成 deamon呼出回数は一回
       """
       for i in range(depth):
-        SnapshotDeal.run_as_a_ldb_deamon(1)
+        if cs:
+          SnapshotDeal.run_as_a_ldb_deamon(1)
         _ = SnapshotDeal.get_all_ldb() 
         if _ == [] or _ == None:
             initialize_parse_and_map_data_to_local_db(all_scraping_data)
         else:
           all_scraping_data = map(lambda x:(x.url, x), _ )
+        print('[INFO] Finish loading leveldb data to memory.')
 
         chunked_lists = [ [] ]
         if len(all_scraping_data) == 0 : 
@@ -348,7 +353,8 @@ if __name__ == '__main__':
         threads_list = []
         for i, chunked_list in enumerate(chunked_lists):
             p_conn, c_conn = mp.Pipe()
-            p = mp.Process(target=search_flatten_multiprocess, args=(c_conn, chunked_list,all_scraping_data ) )
+            #p = mp.Process(target=search_flatten_multiprocess, args=(c_conn, chunked_list,all_scraping_data ) )
+            p = th.Thread(target=search_flatten_multiprocess, args=(c_conn, chunked_list,all_scraping_data ) )
             p.deamon = True
             threads_list.append( (p,p_conn) )
         map(lambda x:x[0].start(), threads_list)
@@ -365,11 +371,21 @@ if __name__ == '__main__':
       import random
       for i in range(depth):
         uniq_hash =  str(hashlib.sha224(str(random.random()) ).hexdigest())
+        if not os.path.exists('lock.hash.tmp'):
+          with open('lock.hash.tmp', 'w+') as f:
+            f.write(uniq_hash)
+            print('[create new hash]', uniq_hash)
+        else:
+          with open('lock.hash.tmp') as f:
+            uniq_hash = f.read().strip()
+            print('read ', uniq_hash)
         process_list = []
-        for _ in range(CM.DESIRABLE_PROCESS_NUM):
+        for _ in range(CM.DESIRABLE_PROCESS_NUM_SQL):
           p_conn, c_conn = mp.Pipe()
           p = mp.Process(target=search_flatten_multiprocess_with_sql, args=(c_conn, uniq_hash, _ ) )
+          #p = th.Thread(target=search_flatten_multiprocess_with_sql, args=(c_conn, uniq_hash, _ ) )
           p.deamon = True
           process_list.append( (p,p_conn) )
         map(lambda x:x[0].start(), process_list)
         map(lambda x:x[0].join(), process_list)
+        os.remove('lock.hash.tmp')

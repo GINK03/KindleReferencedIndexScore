@@ -274,6 +274,9 @@ def write_each(scraping_data):
             except IntegrityError, e:
                 print('[CRIT] Cannot create new entry! because, itegrity error', write_each.__name__, _, e)
                 break
+            except OperationalError, e:
+                print('[CRIT] cannot create new entry! OperationalErro r', e, write_each.__name__, _)
+                break
         else:
             """
             1. updateする際には、データ量が上回っている場合には保存せずに、古いデータを使いまわす

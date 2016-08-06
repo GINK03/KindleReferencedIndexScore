@@ -21,6 +21,7 @@ class CM:
         CM.SESSION_TOKEN   = config.get('Section1', 'SESSION_TOKEN')
         CM.HTTP_WAIT_SEC   = config.getint('Section1', 'http_waitsec')
         CM.SQL_IP          = config.get('Section1', 'SQL_IP')
+        CM.DESIRABLE_PROCESS_NUM_SQL = config.getint('Section1', 'DESIRABLE_PROCESS_NUM_SQL')
         return
     
     @staticmethod
