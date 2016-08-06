@@ -52,7 +52,21 @@ def referenced_score(scraping_data_list):
     #source_list = sorted(scraping_data_list, key=lambda x:len(x[1].evaluated)*-1)
     for (url, scraping_data) in source_list:
         print(scraping_data.url, scraping_data, map(lambda x:x.from_url, scraping_data.evaluated) )
-
+"""
+mecabからのデータをstammingするデータエンジン
+"""
+def stamming(raw):
+    items = []
+    for line in str(raw).split('\n'):
+      if len(line.split(',')) < 3:
+        continue
+      head = line.split('\t').pop(0).lower()  
+      stam = line.split(',')[-3].lower()
+      if stam =='*':
+        items.append( head )
+      else:
+        items.append( '[' + stam + ']' )
+    return items
 """
 レビューの調和平均の計算
 """
@@ -90,8 +104,7 @@ def tokenize_all(soup):
     
     MT= MeCab.Tagger('mecabrc')
     res = MT.parse(build_text.encode('utf-8') )
-    items = map(lambda x:x.split('\t').pop(0).lower(), str(res).split('\n'))
-    counter = Counter(items)
+    counter = Counter( stamming(res) )
     tf      = filter(lambda x:not x[0] in STOPWORDS, sorted([(term, float(val)) for term, val in counter.items()], key=lambda x:x[1]*(-1) )  )
     tf      = filter(STOPLOGIC, tf )
     for t, f in tf:
@@ -107,8 +120,7 @@ def tokenize_reviews(reviews_context):
     #print('csource ', csource)
     MT= MeCab.Tagger('mecabrc')
     res = MT.parse(csource.encode('utf-8'))
-    items       = map(lambda x:x.split('\t').pop(0).lower(), str(res).split('\n'))
-    counter     = Counter(items)
+    counter = Counter( stamming(res) )
     #print('res ', res)
     #print('counter', counter)
     tf          = filter(lambda x:not x[0] in STOPWORDS, sorted([(term, float(val)) for term, val in counter.items()], key=lambda x:x[1]*(-1) ) )
@@ -130,8 +142,7 @@ def parse_productinfo(soup):
    
     MT= MeCab.Tagger('mecabrc')
     res = MT.parse(productinfo.encode('utf-8') )
-    items = map(lambda x:x.split('\t').pop(0).lower(), str(res).split('\n'))
-    counter = Counter(items)
+    counter = Counter( stamming(res) )
     tf      = filter(lambda x:not x[0] in STOPWORDS, sorted([(term, float(val)) for term, val in counter.items()], key=lambda x:x[1]*(-1) )  )
     tf      = filter(STOPLOGIC, tf )
     """
