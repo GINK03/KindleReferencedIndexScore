@@ -152,7 +152,8 @@ def is_already_query_exist(scraping_data):
     try:
         mydb.close()
     except:
-        print('[WARN] Mysql conn is already closed!')
+       # print('[WARN] Mysql conn is already closed!')
+        pass
     try:
         _db = MySQLDatabase(
             database = 'kindle',

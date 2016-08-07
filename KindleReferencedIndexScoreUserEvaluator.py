@@ -369,7 +369,7 @@ if __name__ == '__main__':
     if (is_dump == None or is_dump == '') and mode and mode == 'sql':
      for scraping_data in get_all_data_iter():
             parse_eval_and_update(scraping_data )
-            print('[info] all_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0] + '|' + str(x[1]), scraping_data.all_tf) ) )
+            print('[info] all_tf, ', scraping_data.asin, ''.join(map(lambda x:x[0] + '' + str(x[1]), scraping_data.all_tf) ) )
             print('[info] review_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
             print('[info] product_info_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.product_info_tf) ) )
             print('[info] relevancy, ', scraping_data.asin, scraping_data.relevancy )
@@ -382,7 +382,7 @@ if __name__ == '__main__':
     if (is_dump == None or is_dump == '') and mode and mode == 'level':
         for scraping_data in SnapshotDeal.get_all_ldb():
             parse_eval_and_update(scraping_data)
-            print('[info] all_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0] + '|' + str(x[1]), scraping_data.all_tf) ) )
+            print('[info] all_tf,', scraping_data.asin, '   '.join(map(lambda x:x[0] + '///' + str(x[1]), scraping_data.all_tf) ) )
             print('[info] review_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.review_tf) ) )
             print('[info] product_info_tf, ', scraping_data.asin, ' '.join(map(lambda x:x[0], scraping_data.product_info_tf) ) )
             print('[info] relevancy, ', scraping_data.asin, scraping_data.relevancy )

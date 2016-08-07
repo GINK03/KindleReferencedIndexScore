@@ -322,6 +322,22 @@ if __name__ == '__main__':
     if mode == 'undefined':
       print('[CRIT] You must specify mode(local|leveldb)')
       sys.exit(0)
+    if mode == 'single':
+      db = plyvel.DB('./' + SnapshotDeal.DIST_LDB_NAME + '.single', create_if_missing=True)
+      for k,v in db:
+        scraping_data = pickle.loads(v.replace('', '\n'))
+        p = th.Thread(target=map_data_to_local_db_from_url, args=(scraping_data, 'hash' ) )
+        p.deamon = True
+        #map_data_to_local_db_from_url(scraping_data)
+        p.start()
+        print('[DEBUG] Eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count ) 
+        print('[DEBUG] Active count', th.active_count())
+        if th.active_count() > 20:
+          while True:
+            time.sleep(1.0)
+            if th.active_count() <= 20:
+              break
+
     if mode == 'local' or mode == 'level':
       """
       SnapshotDealデーモンが出力するデータをもとにスクレイピングを行う
@@ -382,8 +398,8 @@ if __name__ == '__main__':
         process_list = []
         for _ in range(CM.DESIRABLE_PROCESS_NUM_SQL):
           p_conn, c_conn = mp.Pipe()
-          p = mp.Process(target=search_flatten_multiprocess_with_sql, args=(c_conn, uniq_hash, _ ) )
-          #p = th.Thread(target=search_flatten_multiprocess_with_sql, args=(c_conn, uniq_hash, _ ) )
+          #p = mp.Process(target=search_flatten_multiprocess_with_sql, args=(c_conn, uniq_hash, _ ) )
+          p = th.Thread(target=search_flatten_multiprocess_with_sql, args=(c_conn, uniq_hash, _ ) )
           p.deamon = True
           process_list.append( (p,p_conn) )
         map(lambda x:x[0].start(), process_list)
