@@ -6,34 +6,41 @@ import sys
 """
 if __name__ == '__main__':
     all_words = set()
-    dics      = []
-    asin_term_freq = {}
+    dics      = 0
+    #asin_term_freq = {}
+    term_asin      = {}
     for i, line in enumerate(sys.stdin):
-        line = line[:-1].split(',').pop().strip()
-        if not '|' in line:
+        line = line.strip()
+        if not '[info] all_tf' in line:
           continue
-        ents = line.split(' ')
-        asin = ents.pop(0)
+        """
+        use triple spaces to deliminate
+        """
+
+        ents = line.split('   ')
+        asin = line.split(' ')[2]
+        tf_raw = filter(lambda x: '///' in x, ents)
         if len(asin ) != 10 :
           continue
-        wf    = filter(lambda x:'|' in x, ents)
-        dic   = set(map(lambda x:x.split('|').pop(0), wf ) )
+        dic   = set(map(lambda x:x.split('///').pop(0), tf_raw ) )
         [all_words.add(e) for e in dic]
-        #print( i, len(all_words), len(dics) )
-        dics.append({'dic':dic, 'asin':asin} )
-        tfdic = dict( [ (x.split('|')[0], x.split('|')[1] ) for x in wf ] )
-        asin_term_freq.update( {asin: tfdic} )
-        #print(asin_term_freq[asin])
+        dics  += 1
+        #tfdic = dict( [ (x.split('///')[0], x.split('///')[1] ) for x in tf_raw ] )
+        #asin_term_freq.update( {asin: tfdic} )
+        for t in dic:
+          if term_asin.get(t) == None:
+           term_asin.update({t: asin })
+          else:
+           term_asin[t] += ',' + asin
 
     # 転置させてidfがどのようになっているか確認する
-    D = len(dics)
+    D = dics
     results = []
     for i, w in enumerate(all_words):
         c = 0
-        asins = []
-        for dic in dics:
-            if w in dic['dic']:
-                if asin_term_freq.get(dic['asin']) and asin_term_freq.get(dic['asin']).get(w):
-                  c += 1
-                  asins.append( (dic['asin'], asin_term_freq[dic['asin']][w] ) )
-        print(w, D, c, i, len(all_words), ','.join(map(lambda x:x[0] + '/' + x[1], asins)) )
+        asin_freq = []
+        c = len( term_asin[w].split(',') )
+        asins = term_asin[w].split(',')
+        for asin in asins:
+          asin_freq.append( asin )
+        print(w, D, c, i, len(all_words), ','.join(map(lambda x:x, asin_freq)) )
