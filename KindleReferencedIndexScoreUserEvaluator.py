@@ -104,6 +104,15 @@ def tokenize_all(soup):
     
     MT= MeCab.Tagger('mecabrc')
     res = MT.parse(build_text.encode('utf-8') )
+    """
+    tokenizerで[Kindle Unlimited会員の方は読み放題でお楽しみいただけます]が入っていたら、[@ThisIsKindleUnlimited]を追加
+    """
+    items = stamming(res)
+    if 'Kindle Unlimited会員の方は読み放題でお楽しみいただけます'.decode('utf-8')  in build_text:
+      items.append('[@ThisIsKindleUnlimited]')
+      print(res)
+      sys.exit(0)
+      
     counter = Counter( stamming(res) )
     tf      = filter(lambda x:not x[0] in STOPWORDS, sorted([(term, float(val)) for term, val in counter.items()], key=lambda x:x[1]*(-1) )  )
     tf      = filter(STOPLOGIC, tf )
@@ -223,9 +232,12 @@ def parse_eval_and_update(scraping_data):
     """
     すでに評価済みなら、処理しない
     """
-    if is_already_analyzed(scraping_data) == True:
+    try:
+      if is_already_analyzed(scraping_data) == True:
         print('[DEBUG] Already analyzed', scraping_data.asin)
         #return
+    except:
+      pass
 
     soup = bs4.BeautifulSoup(str(scraping_data.html))
 

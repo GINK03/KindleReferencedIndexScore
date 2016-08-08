@@ -24,6 +24,7 @@ class SnapshotDeal():
     SRC_FILE_NAME           = 'src_snapshot.tmp'
     DIST_LDB_NAME           = 'snapshot.ldb'
     SRC_LDB_NAME            = 'src_snapshot.ldb'
+    KEYURL_TERMS_LDB_NAME   = 'keyurl_terms.ldb'
     SCRAPING_DATA_POOL      = []
    
     """
@@ -115,6 +116,14 @@ class SnapshotDeal():
             あまり頻度の高いリフレッシュはシステムに負荷をもたらすので、スリープする
             """
             time.sleep(SnapshotDeal.REFRESH_RATE)
+    """
+    keyurl termsのペアを保存
+    """
+    @staticmethod
+    def write_to_keyurl_terms_ldb(keyurl, terms):
+        db = plyvel.DB('./' + SnapshotDeal.KEYURL_TERMS_LDB_NAME, create_if_missing=True)
+        db.put(keyurl, terms)
+        db.close()
     
     @staticmethod
     def charge_memory():

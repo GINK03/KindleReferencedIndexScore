@@ -1,6 +1,7 @@
 # coding: utf-8
 from __future__ import print_function
 import sys
+import re
 """
 形態そ解析された標準入力に対して、一行一コンテンツとして仮定して、IDF辞書を作成する
 """
@@ -23,11 +24,23 @@ if __name__ == '__main__':
         if len(asin ) != 10 :
           continue
         dic   = set(map(lambda x:x.split('///').pop(0), tf_raw ) )
-        [all_words.add(e) for e in dic]
+        fdic = set()
+        for d in dic:
+          """
+          [で始まって否く、\sを持っていたら、その単語は多分問題あり
+          """
+          if ' ' in d and '[info]' in d:
+            d = re.sub('\[info\]\sall_tf,\s.{1,}\s', '', d) 
+            fdic.add(d)
+          else:
+            fdic.add(d)
+        [all_words.add(e) for e in fdic]
         dics  += 1
-        #tfdic = dict( [ (x.split('///')[0], x.split('///')[1] ) for x in tf_raw ] )
-        #asin_term_freq.update( {asin: tfdic} )
-        for t in dic:
+        for t in fdic:
+          if 'info' in t:
+            #print(t)
+            #sys.exit(0)
+            pass
           if term_asin.get(t) == None:
            term_asin.update({t: asin })
           else:
@@ -43,4 +56,4 @@ if __name__ == '__main__':
         asins = term_asin[w].split(',')
         for asin in asins:
           asin_freq.append( asin )
-        print(w, D, c, i, len(all_words), ','.join(map(lambda x:x, asin_freq)) )
+        print('___'.join( map(lambda x:str(x), [w, D, c, i, len(all_words), ','.join(map(lambda x:x, asin_freq))] )  ) )
