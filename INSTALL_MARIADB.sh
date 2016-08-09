@@ -11,4 +11,9 @@ mysql_secure_installation
 
 # create "kindle" database
 mysql -u root -p
+
+# in ubuntu
+sudo apt-get install mysql-client
+sudo apt-get install libmysqld-dev
+
 #enter << 1234
