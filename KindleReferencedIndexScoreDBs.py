@@ -75,10 +75,40 @@ def initiate_data_generator():
         except UnicodeEncodeError, e:
             print('[CRIT] Cannot decode as ASCII', e)
             continue
+
+import MySQLdb.cursors
+import plyvel
+class MySQLWrapper:
+  @staticmethod
+  def get_all_data_iter_raw():
+    connection = MySQLdb.connect(
+        host   = "127.0.0.1",
+        user   = "root",
+        passwd = "1234",
+        db     = "kindle",
+        cursorclass = MySQLdb.cursors.SSCursor)
+
+    cursor = connection.cursor()
+    cursor.execute('SELECT keyurl, serialized FROM serialized')
+    result = cursor.fetchone()
+    while result != None:
+      keyurl, raw_scraping_data = result[0], result[1]
+      yield (keyurl, raw_scraping_data)
+      result = cursor.fetchone()
+
+  @staticmethod 
+  def dump2leveldb(filepath):
+    print('[INFO] Start dump2leveldb.')
+    db = plyvel.DB('./' + filepath, create_if_missing=True)
+    for keyurl, raw_scraping_data in MySQLWrapper.get_all_data_iter_raw():
+      if db.get(keyurl) == None:
+        db.put(keyurl, raw_scraping_data)
+    db.close()
+    print('[INFO] Finish dump2leveldb.')
+
 """
 サーバサイドイテレータなので、メモリの消費量を抑えることが可能
 """
-import MySQLdb.cursors
 def get_all_data_iter():
     connection = MySQLdb.connect(
         host   = "127.0.0.1",

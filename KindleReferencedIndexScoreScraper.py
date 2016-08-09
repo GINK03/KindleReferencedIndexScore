@@ -323,7 +323,10 @@ if __name__ == '__main__':
       print('[CRIT] You must specify mode(local|leveldb)')
       sys.exit(0)
     if mode == 'single':
-      db = plyvel.DB('./' + SnapshotDeal.DIST_LDB_NAME + '.single', create_if_missing=True)
+      filepath = SnapshotDeal.DIST_LDB_NAME + '.single'
+      if cs:
+        MySQLWrapper.dump2leveldb(filepath)
+      db = plyvel.DB('./' + filepath, create_if_missing=True)
       for k,v in db:
         scraping_data = pickle.loads(v.replace('', '\n'))
         p = th.Thread(target=map_data_to_local_db_from_url, args=(scraping_data, 'hash' ) )
@@ -332,10 +335,10 @@ if __name__ == '__main__':
         p.start()
         print('[DEBUG] Eval ', scraping_data.asin, scraping_data.url, 'counter =', scraping_data.count ) 
         print('[DEBUG] Active count', th.active_count())
-        if th.active_count() > 20:
+        if th.active_count() > 10:
           while True:
             time.sleep(1.0)
-            if th.active_count() <= 20:
+            if th.active_count() <= 10:
               break
 
     if mode == 'local' or mode == 'level':
