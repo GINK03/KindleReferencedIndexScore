@@ -4,4 +4,4 @@ yum -y install redis
 systemctl start redis.service
 systemctl enable redis.service
 # edit /etc/redis.conf
-# bind 127.0.0.1 0.0.0.0
+# bind .0.0.0
