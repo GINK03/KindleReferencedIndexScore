@@ -305,7 +305,7 @@ if __name__ == '__main__':
     parser.add_argument('--URL', help='set default URL which to scrape at first')
     parser.add_argument('--depth', help='how number of url this program will scrape')
     parser.add_argument('--mode', help='you can specify mode...')
-    parser.add_argument('--cs', help='create snapshot(true|false)')
+    parser.add_argument('--refresh', help='create snapshot(true|false)')
 
 
     args_obj = vars(parser.parse_args())
@@ -314,7 +314,7 @@ if __name__ == '__main__':
     
     mode = (lambda x:x if x else 'undefined')( args_obj.get('mode') )
 
-    cs    = (lambda x:False if x=='false' else True)( args_obj.get('cs') )
+    cs    = (lambda x:False if x=='false' else True)( args_obj.get('refresh') )
     """
     深さを決めて幅優先探索 
     NOTE: chunked_listを使う方法はメモリのオーバーフローを容易に引き起すので、leveldbのキャッシュを並列読取してmysqlに書いていくほうがいいのでは内か 雑感
