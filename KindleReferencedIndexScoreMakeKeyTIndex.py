@@ -92,18 +92,49 @@ def is_kindle_unlimited(soup):
       return None
     #print(boxs[0].text, 'Kindle Unlimited'.decode('utf-8') in boxs[0].text )
     #print(boxs[0].text, re.search( '(Kindle Unlimited.*?お楽しみいただけます)'.decode('utf-8'), boxs[0].text, re.UNICODE).groups() )
-    return  len(re.search( '(Kindle Unlimited.*?お楽しみいただけます)'.decode('utf-8'), boxs[0].text, re.UNICODE).groups() )
+    #return  len(re.search( '(Kindle Unlimited.*?お楽しみいただけます)'.decode('utf-8'), boxs[0].text, re.UNICODE).groups() )
+    return True
 
 import msgpack
+import redis
+r = redis.Redis(host=CM.REDIS_IP, port=6379, db=0)
+META_ALREADY_CHECKED = '[@META_ALREADY_CAHCKED]'
+already_checked = list()
+if r.hgetall(META_ALREADY_CHECKED):
+    already_checked = r.hkeys(META_ALREADY_CHECKED)
+import time
+import itertools
+import re 
+import regex
 def make_keyurl_Tindex(scraping_data):
-    soup = bs4.BeautifulSoup(str(scraping_data.html))
     asin = scraping_data.asin
+    """
+    重複コントロール
+    """
+    oldtime = r.hget(META_ALREADY_CHECKED, asin)
+    if oldtime and time.time() - float(oldtime) < 32400:
+        print('[INFO] 古い情報は一日間保持されます', asin)
+        return 
+    if asin in already_checked and oldtime and time.time() - float(oldtime) < 32400:
+        print('[INFO] すでに転地済みです', asin)
+        return 
+    start = time.time()
+    line = scraping_data.html.replace('\n', '')
+    line = regex.sub('<!--.*?-->', '',  line)
+    line = regex.sub('<style.*?/style>', '',  line)
+    html = regex.sub('<script.*?/script>', '', line ).replace('', '\n')
+    soup = bs4.BeautifulSoup(html)
+    already_checked.append(asin )
+    r.hset(META_ALREADY_CHECKED, asin,  time.time())
     is_unlimited = is_kindle_unlimited(soup)
     tf        = tokenize_all(soup)
-    tindexdb = plyvel.DB('./' + CM.DEFAULT_TINDEX_URL_TERM, create_if_missing=True)
     if is_unlimited:
       tf.update( {'[@ThisIsKindleUnlimited]': 1} )
       print('[INFO] Kindle Unlimited Found')
+    """
+    あまりに遅いので語数を制限しよう
+    """
+    raw = list()
     for t,f in  tf.items():
       idfw =  idfdic.get(t)
       """
@@ -111,23 +142,25 @@ def make_keyurl_Tindex(scraping_data):
       """
       if not idfw:
         idfw = defaultidfsize
-      line = tindexdb.get(t)
-      if line == None:
-        tindexdb.put(t, msgpack.packb( {asin: f*idfw} ) )
-      else:
-        dic = msgpack.unpackb(line)
-        if dic.get(asin):
-          dic[asin] = f*idfw
-        else:
-          dic.update( {asin: f*idfw} )
-        tindexdb.put(t, msgpack.packb( dic ) )
-    
-    tindexdb.close()
+      raw.append( (t,idfw) ) 
+    sliced = itertools.islice(sorted(raw, key=lambda x:x[1]*-1), 0, 2000)
+    length = 0
+    for t, idfw in sliced:
+        length += 1
+        r.hset(t, asin, idfw)
+        #print(t, asin, idfw)
+    end = time.time() - start 
+    print('[INFO] Elapsed time {} term num {}'.format(end, length) ) 
 
 def Tindex_dumper():
+    """
     tindexdb = plyvel.DB('./' + CM.DEFAULT_TINDEX_URL_TERM, create_if_missing=True)
     for k, v in tindexdb:
         d = msgpack.unpackb(v)
+        print(k, len(d.keys()), ' '.join([x + '/' + str(y) for x,y in d.items()]) )
+    """
+    for k in r.keys():
+        d = r.hgetall(k)
         print(k, len(d.keys()), ' '.join([x + '/' + str(y) for x,y in d.items()]) )
 """
 load default idf dictionary to memory

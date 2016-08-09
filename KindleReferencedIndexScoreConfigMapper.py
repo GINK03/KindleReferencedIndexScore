@@ -14,6 +14,7 @@ class CM:
     DEFAULT_IDFDIC      = './stash/idf_base_27gb_snapshot_index40000shuf.txt' 
     DEFAULT_TINDEX_URL_TERM = 'tindex_url_term.ldb'
     SQL_IP              = '128.0.0.1'
+    REDIS_IP              = '128.0.0.1'
 
     @staticmethod
     def init():
@@ -27,6 +28,7 @@ class CM:
         CM.SESSION_TOKEN   = config.get('Section1', 'SESSION_TOKEN')
         CM.HTTP_WAIT_SEC   = config.getint('Section1', 'http_waitsec')
         CM.SQL_IP          = config.get('Section1', 'SQL_IP')
+        CM.REDIS_IP          = config.get('Section1', 'REDIS_IP')
         CM.DESIRABLE_PROCESS_NUM_SQL = config.getint('Section1', 'DESIRABLE_PROCESS_NUM_SQL')
         CM.LEVELDB_SHADOW_TINDEX = config.get('Section1', 'LEVELDB_SHADOW_TINDEX')
         CM.KINDLE_UNLIMITED_SPECIAL_WORDS = config.get('Section1', 'KINDLE_UNLIMITED_SPECIAL_WORDS').decode('utf-8')
