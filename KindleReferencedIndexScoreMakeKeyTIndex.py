@@ -128,7 +128,7 @@ def Tindex_dumper():
     tindexdb = plyvel.DB('./' + CM.DEFAULT_TINDEX_URL_TERM, create_if_missing=True)
     for k, v in tindexdb:
         d = msgpack.unpackb(v)
-        print(k, ' '.join([x + '/' + str(y) for x,y in d.items()]) )
+        print(k, len(d.keys()), ' '.join([x + '/' + str(y) for x,y in d.items()]) )
 """
 load default idf dictionary to memory
 """
