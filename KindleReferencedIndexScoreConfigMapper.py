@@ -8,7 +8,12 @@ class CM:
     DESIRABLE_PROCESS_NUM = None
     SESSION_TOKEN       = None
     HTTP_WAIT_SEC       = 2
-    
+    DESIRABLE_PROCESS_NUM_SQL = 10
+    LEVELDB_SHADOW_TINDEX = 'shadow_snapshot.ldb'
+    KINDLE_UNLIMITED_SPECIAL_WORDS = 'Kindle Unlimited会員の方は読み放題でお楽しみいただけます'
+    DEFAULT_IDFDIC      = './stash/idf_base_27gb_snapshot_index40000shuf.txt' 
+    DEFAULT_TINDEX_URL_TERM = 'tindex_url_term.ldb'
+
     @staticmethod
     def init():
         my_file = (os.path.join(os.getcwd(),'settings.cfg'))
@@ -22,6 +27,10 @@ class CM:
         CM.HTTP_WAIT_SEC   = config.getint('Section1', 'http_waitsec')
         CM.SQL_IP          = config.get('Section1', 'SQL_IP')
         CM.DESIRABLE_PROCESS_NUM_SQL = config.getint('Section1', 'DESIRABLE_PROCESS_NUM_SQL')
+        CM.LEVELDB_SHADOW_TINDEX = config.get('Section1', 'LEVELDB_SHADOW_TINDEX')
+        CM.KINDLE_UNLIMITED_SPECIAL_WORDS = config.get('Section1', 'KINDLE_UNLIMITED_SPECIAL_WORDS').decode('utf-8')
+        CM.DEFAULT_IDFDIC  = config.get('Section1', 'DEFAULT_IDFDIC')
+        CM.DEFAULT_TINDEX_URL_TERM = config.get('Section1', 'DEFAULT_TINDEX_URL_TERM')
         return
     
     @staticmethod

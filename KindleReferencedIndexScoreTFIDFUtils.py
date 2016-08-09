@@ -23,5 +23,5 @@ class IDFHolder:
         for t,idf in sorted(IDFHolder.IDFs.items(), key=lambda x:x[1]):
             print(t, idf)
             pass
-
-IDFHolder.loadFile(sys.argv[1])
+if __name__ == '__main__':
+  IDFHolder.loadFile(sys.argv[1])

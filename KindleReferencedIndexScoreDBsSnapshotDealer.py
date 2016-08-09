@@ -36,8 +36,8 @@ class SnapshotDeal():
         return (lambda x:x if x != [] else None)( SnapshotDeal.SCRAPING_DATA_POOL )
     
     @staticmethod
-    def get_all_ldb():
-        db = plyvel.DB('./' + SnapshotDeal.DIST_LDB_NAME, create_if_missing=True)
+    def get_all_ldb(filepath=CM.LEVELDB_SHADOW_TINDEX):
+        db = plyvel.DB('./' + filepath, create_if_missing=True)
         for (key, scraping_data) in db:
           scraping_data = pickle.loads(scraping_data.replace('', '\n') )
           yield scraping_data
