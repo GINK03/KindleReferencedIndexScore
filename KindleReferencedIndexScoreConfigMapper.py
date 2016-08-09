@@ -13,6 +13,7 @@ class CM:
     KINDLE_UNLIMITED_SPECIAL_WORDS = 'Kindle Unlimited会員の方は読み放題でお楽しみいただけます'
     DEFAULT_IDFDIC      = './stash/idf_base_27gb_snapshot_index40000shuf.txt' 
     DEFAULT_TINDEX_URL_TERM = 'tindex_url_term.ldb'
+    SQL_IP              = '128.0.0.1'
 
     @staticmethod
     def init():

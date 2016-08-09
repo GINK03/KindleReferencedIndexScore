@@ -38,10 +38,8 @@ def exit_gracefully(signum, frame):
         sys.exit(1)
     signal.signal(signal.SIGINT, exit_gracefully)
 
-
 NUMBER_PATTERN = r'[+-]?\d+(?:\.\d+)?' 
 NUMBER_REGEX = re.compile(r'[+-]?\d+(?:\.\d+)?')
-
 
 STOPWORDS = map(lambda x:x, 'abcdejghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.?:')
 nltk.download('stopwords')
@@ -115,7 +113,7 @@ def make_keyurl_Tindex(scraping_data):
         idfw = defaultidfsize
       line = tindexdb.get(t)
       if line == None:
-        tindexdb.put(t, msgpack.packb( {t: f*idfw} ) )
+        tindexdb.put(t, msgpack.packb( {asin: f*idfw} ) )
       else:
         dic = msgpack.unpackb(line)
         if dic.get(asin):
@@ -125,7 +123,12 @@ def make_keyurl_Tindex(scraping_data):
         tindexdb.put(t, msgpack.packb( dic ) )
     
     tindexdb.close()
-      
+
+def Tindex_dumper():
+    tindexdb = plyvel.DB('./' + CM.DEFAULT_TINDEX_URL_TERM, create_if_missing=True)
+    for k, v in tindexdb:
+        d = msgpack.unpackb(v)
+        print(k, len(d.keys()), ' '.join([x + '/' + str(y) for x,y in d.items()]) )
 """
 load default idf dictionary to memory
 """
@@ -145,6 +148,7 @@ with open(CM.DEFAULT_IDFDIC, 'r') as f:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
     parser.add_argument('--mode',   help='You can specify DB, which local or SQL.')
+    parser.add_argument('--refresh', help='You can choose refresh new db or use old db.')
     args_obj = vars(parser.parse_args())
 
     # store the original SIGINT handler
@@ -152,10 +156,14 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, exit_gracefully)
 
     mode                    = args_obj.get('mode')
-    
+    refresh                 = args_obj.get('refresh') 
     if mode and mode == 'level':
-        MySQLWrapper.dump2leveldb(CM.LEVELDB_SHADOW_TINDEX)
+        if refresh == None or refresh.lower() == 'false':
+            pass
+        else:
+            MySQLWrapper.dump2leveldb(CM.LEVELDB_SHADOW_TINDEX)
         for _, scraping_data in enumerate(SnapshotDeal.get_all_ldb() ):
             make_keyurl_Tindex(scraping_data)
             print('[INFO] Now analyzing ...', _ )
-
+    if mode and mode == 'dump':
+        Tindex_dumper()
