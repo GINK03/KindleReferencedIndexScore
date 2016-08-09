@@ -16,7 +16,7 @@ mydb = MySQLDatabase(
        database = 'kindle',
        user     = 'root',
        password = '1234',
-       host     = '127.0.0.1',
+       host     = CM.SQL_IP,
        port     = 3306)
 
 SEED_EXIST              = True
@@ -82,7 +82,7 @@ class MySQLWrapper:
   @staticmethod
   def get_all_data_iter_raw():
     connection = MySQLdb.connect(
-        host   = "127.0.0.1",
+        host   = CM.SQL_IP,
         user   = "root",
         passwd = "1234",
         db     = "kindle",
@@ -111,7 +111,7 @@ class MySQLWrapper:
 """
 def get_all_data_iter():
     connection = MySQLdb.connect(
-        host   = "127.0.0.1",
+        host   = CM.SQL_IP,
         user   = "root",
         passwd = "1234",
         db     = "kindle",
@@ -128,7 +128,7 @@ def get_all_data_iter():
 
 def get_all_data_iter_box(box_size = CM.DESIRABLE_PROCESS_NUM):
     connection = MySQLdb.connect(
-        host   = "127.0.0.1",
+        host   = CM.SQL_IP,
         user   = "root",
         passwd = "1234",
         db     = "kindle",
@@ -189,7 +189,7 @@ def is_already_query_exist(scraping_data):
             database = 'kindle',
             user     = 'root',
             password = '1234',
-            host     = '127.0.0.1',
+            host     = CM.SQL_IP,
             port     = 3306)
         _db.connect()
     except:
@@ -243,7 +243,7 @@ def write_each(scraping_data):
             database = 'kindle',
             user     = 'root',
             password = '1234',
-            host     = '127.0.0.1',
+            host     = CM.SQL_IP,
             port     = 3306)
         _db.connect()
     except:
