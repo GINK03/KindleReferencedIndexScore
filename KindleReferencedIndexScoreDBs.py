@@ -87,7 +87,6 @@ class MySQLWrapper:
         passwd = "1234",
         db     = "kindle",
         cursorclass = MySQLdb.cursors.SSCursor)
-
     cursor = connection.cursor()
     cursor.execute('SELECT keyurl, serialized FROM serialized')
     result = cursor.fetchone()
@@ -105,6 +104,23 @@ class MySQLWrapper:
         db.put(keyurl, raw_scraping_data)
     db.close()
     print('[INFO] Finish dump2leveldb.')
+  
+  @staticmethod
+  def get_all_rand_iter():
+    connection = MySQLdb.connect(
+        host   = CM.SQL_IP,
+        user   = "root",
+        passwd = "1234",
+        db     = "kindle",
+        cursorclass = MySQLdb.cursors.SSCursor)
+    cursor = connection.cursor()
+    cursor.execute('SELECT keyurl, serialized FROM serialized order by RAND()')
+    while True:
+      result = cursor.fetchone()
+      if not result:
+        break
+      keyurl, scraping_data = result[0], pickle.loads(result[1])
+      yield (keyurl, scraping_data)
 
 """
 サーバサイドイテレータなので、メモリの消費量を抑えることが可能

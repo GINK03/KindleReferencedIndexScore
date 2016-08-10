@@ -112,10 +112,11 @@ def make_keyurl_Tindex(scraping_data):
     重複コントロール
     """
     oldtime = r.hget(META_ALREADY_CHECKED, asin)
-    if oldtime and time.time() - float(oldtime) < 32400:
-        print('[INFO] 古い情報は一日間保持されます', asin)
+    print('[DEBUG] ', oldtime)
+    if oldtime and time.time() - float(oldtime) < 86400 * 31:
+        print('[INFO] 古い情報は31日間保持されます', asin)
         return 
-    if asin in already_checked and oldtime and time.time() - float(oldtime) < 32400:
+    if asin in already_checked and oldtime and time.time() - float(oldtime) < 86400 * 31:
         print('[INFO] すでに転地済みです', asin)
         return 
     start = time.time()
