@@ -350,7 +350,8 @@ def write_each(scraping_data):
                 old_instance.product_tf != [] or \
                 old_instance.reviews    != [] or \
                 old_instance.reviews_tf != [] ) :
-                    break
+                    #break
+                    pass
 
             """ 3. """
             if old_scraping_data.html == None:
@@ -358,9 +359,6 @@ def write_each(scraping_data):
             if scraping_data.html != None: 
                 scraping_data.html              = (lambda x:x.html if len(x.html) > len(old_scraping_data.html) else old_scraping_data.html )(scraping_data)
 
-            pickle.dumps(scraping_data)
-            pickle.dumps(scraping_data.reviews)
-            pickle.dumps(scraping_data.asins)
             try:
                 q = Serialized.update(
                     date                = datetime.utcnow(),
