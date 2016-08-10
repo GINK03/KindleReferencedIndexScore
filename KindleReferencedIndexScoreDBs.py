@@ -170,41 +170,52 @@ def finish_procedure(all_scraping_data):
     for normalized_url, scraping_data in all_scraping_data:
         write_each(scraping_data)
 
-"""
-is_already_query_exist?
-retval: True, already query exists
-        False, query not exists
-"""
-def is_already_query_exist(scraping_data):
-    """
-    サブプロセスとして起動した後は、コネクションの使いまわしができなくなるので、コネクションを破棄し、作り直す
-    """
-    try:
-        mydb.close()
-    except:
-       # print('[WARN] Mysql conn is already closed!')
-        pass
-    try:
-        _db = MySQLDatabase(
-            database = 'kindle',
-            user     = 'root',
-            password = '1234',
-            host     = CM.SQL_IP,
-            port     = 3306)
-        _db.connect()
-    except:
-        print('[CRIT] Cannot creal MySQL connector!', is_already_query_exist.__name__)
+import time
+from KindleReferencedIndexScoreClass import *
+class SerializedUtils:
+
+  """
+  is_already_query_exist_and_too_old?
+  retval: True, already query exists
+          False, query not exists
+  """
+  @staticmethod
+  def is_too_old_query(scraping_data):
+      """
+      サブプロセスとして起動した後は、コネクションの使いまわしができなくなるので、コネクションを破棄し、作り直す
+      """
+      try:
+          mydb.close()
+      except:
+         # print('[WARN] Mysql conn is already closed!')
+          pass
+      try:
+          _db = MySQLDatabase(
+              database = 'kindle',
+              user     = 'root',
+              password = '1234',
+              host     = CM.SQL_IP,
+              port     = 3306)
+          _db.connect()
+      except:
+          print('[CRIT] Cannot creal MySQL connector!', is_too_old_query.__name__)
+          return False
+      
+      keyurl                  = scraping_data.asin 
+      q = Serialized.select().where(Serialized.keyurl == keyurl)
+      if not q.exists():
+        print('[INFO] 初めてのアクセスです。新規にアクセスします' )
         return False
-    
-    keyurl                  = scraping_data.asin 
-    try:
-        query = Serialized.select().where(Serialized.keyurl == keyurl)
-        if query.exists():
-            return True
-        else:
-            return False
-    except:
-        print('[CRIT] cannot print query to MySQL or excute SQL query', is_already_query_exist.__name__)
+      serialized_raw = pickle.loads( str(Serialized.select().where(Serialized.keyurl == keyurl).get().serialized) )
+      
+      ScrapingDataHelp.attribute_valid(serialized_raw)
+      old_time_stamp = serialized_raw.last_scrape_time
+      print('[notice]', old_time_stamp)
+      if time.time() - old_time_stamp < 86400 * 31:
+        print('[INFO]', serialized_raw.asin, 'はまだまだ使えます。我慢してください' )
+        return True
+      else:
+        print('[INFO] {} は充分古いです。再度スクレイピングを行います'.format(serialized_raw.asin) )
         return False
 """
 is_already_analyzed?
