@@ -37,3 +37,14 @@ class ScrapingData:
         self.cooccurrence   = 0.0
         self.uniq_hash      = ''
         self.all_tf  = []
+        self.last_scrape_time = 0
+
+class ScrapingDataHelp:
+  
+  @staticmethod
+  def attribute_valid(scraping_data):
+    if hasattr(scraping_data, 'last_scrape_time'):
+      pass
+    else:
+      setattr(scraping_data, 'last_scrape_time', 0)
+

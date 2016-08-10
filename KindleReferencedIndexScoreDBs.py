@@ -98,7 +98,7 @@ class MySQLWrapper:
 
   @staticmethod 
   def dump2leveldb(filepath):
-    print('[INFO] Start dump2leveldb.')
+    print('[INFO] Start dump2leveldb to ', filepath)
     db = plyvel.DB('./' + filepath, create_if_missing=True)
     for keyurl, raw_scraping_data in MySQLWrapper.get_all_data_iter_raw():
       if db.get(keyurl) == None:

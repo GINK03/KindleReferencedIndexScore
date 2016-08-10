@@ -124,12 +124,16 @@ def html_adhoc_fetcher(url):
 
 
 def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
+    ScrapingDataHelp.attribute_valid(scraping_data)
+    if time.time() - scraping_data.last_scrape_time < 86400 * 31:
+      print('[INFO] 直近一ヶ月以内にスクレイプしたので、処理しません。', scraping_data.asin)
+      return []
+    scraping_data.last_scrape_time = time.time()
+
     html, soup = None, None
     if scraping_data.html == None or scraping_data.html == "":
         scraping_data.html, title, soup = html_adhoc_fetcher(scraping_data.url)
         html                            = scraping_data.html
-        #""" add html to scraping_data.html """
-        #write_each(scraping_data)
     else:
         html, soup = scraping_data.html, bs4.BeautifulSoup(scraping_data.html)
         pass
@@ -314,7 +318,7 @@ if __name__ == '__main__':
     
     mode = (lambda x:x if x else 'undefined')( args_obj.get('mode') )
 
-    cs    = (lambda x:False if x=='false' else True)( args_obj.get('refresh') )
+    refresh    = (lambda x:False if x=='false' else True)( args_obj.get('refresh') )
     """
     深さを決めて幅優先探索 
     NOTE: chunked_listを使う方法はメモリのオーバーフローを容易に引き起すので、leveldbのキャッシュを並列読取してmysqlに書いていくほうがいいのでは内か 雑感
@@ -324,7 +328,7 @@ if __name__ == '__main__':
       sys.exit(0)
     if mode == 'single':
       filepath = SnapshotDeal.DIST_LDB_NAME + '.single'
-      if cs:
+      if refresh:
         MySQLWrapper.dump2leveldb(filepath)
       db = plyvel.DB('./' + filepath, create_if_missing=True)
       for k,v in db:
