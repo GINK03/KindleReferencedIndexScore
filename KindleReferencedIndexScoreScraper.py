@@ -61,7 +61,7 @@ def initialize_parse_and_map_data_to_local_db(all_scraping_data):
                 write_each(scraping_data)
 
                 all_scraping_data.append( (scraping_data.normalized_url, scraping_data) )
-
+import regex
 def html_adhoc_fetcher(url):
     """ 
     標準のアクセス回数はRETRY_NUMで定義されている 
@@ -118,6 +118,14 @@ def html_adhoc_fetcher(url):
         break
     if html == None:
         return (None, None, None)
+    """
+    remove extra data
+    """
+    line = scraping_data.html.replace('\n', '^A^B^C')
+    line = regex.sub('<!--.*?-->', '',  line)
+    line = regex.sub('<style.*?/style>', '',  line)
+    html = regex.sub('<script.*?/script>', '', line ).replace('^A^B^C', '\n')
+ 
     soup = bs4.BeautifulSoup(html)
     title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
     return (html, title, soup)
@@ -139,7 +147,7 @@ def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
         pass
     if html == None or html == '' : return []
     """ 
-    scraping_dataの子ノードをchild_soupsという変数名で返却, htmlはフェッチしていないので軽い 
+    scraping_dataの子ノードをchild_soupsという変数名で返却
     """
     child_scraping_data_list = []
     for i, a in enumerate(soup.find_all('a')):
@@ -175,25 +183,14 @@ def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
 
         child_scraping_data.normalized_url = '/'.join( filter( lambda x: not '=' in x, fixed_url.split('?').pop(0).split('/') ) )
                    
-        #filter_len                  = len( filter(lambda x: child_scraping_data.normalized_url == x[0], all_scraping_data ) ) 
         
-        filter_len_in_tempory_param = len( filter(lambda x: child_scraping_data.normalized_url == x[0], child_scraping_data_list ) ) 
-        
-        is_already_exist            = (lambda x: True if x > 0 else False )(filter_len_in_tempory_param)
-        
-        """
-        すでに全データの中にscrape済みであるインスタンスがあれば、処理を行わない
-        """
-        if is_already_exist == True:
-            continue
-
        	"""
-	      SQLサーバにすでにqueryが存在しているのならば、処理を行わない
+	      SQLサーバにすでにqueryが存在していて古くないのならば、処理を行わない
 	      """
-        if is_already_query_exist(child_scraping_data) == True:
+        if SerializedUtils.is_too_old_query(child_scraping_data) == True:
           continue
- 
         child_scraping_data.url = fixed_url
+        child_scraping_data.last_scrape_time = time.time()
 
         """
         scraping_dataインスタンスが持つ、html情報を元に参照しているasinのコードをアップデート
@@ -210,13 +207,12 @@ def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
         """
         if child_scraping_data.html == None or soup == None:
             continue
-        
         child_scraping_data_list.append((child_scraping_data.normalized_url, child_scraping_data) )
         
         write_each(child_scraping_data)
     print('[DEBUG] Finish one loop, ', scraping_data.url, scraping_data.asins)
-    #write_each(scraping_data)
-    return child_scraping_data_list
+    write_each(scraping_data)
+    return []
 
 def evaluatate_other_page(normalized_url, scraping_data_list, from_url):
     split_url = normalized_url.split('?').pop(0) 
