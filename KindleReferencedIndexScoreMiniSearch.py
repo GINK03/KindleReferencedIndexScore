@@ -9,6 +9,7 @@ from KindleReferencedIndexScoreConfigMapper import *
 import redis
 r = redis.Redis(host=CM.REDIS_IP, port=6379, db=0)
 META_ALREADY_CHECKED = '[@META_ALREADY_CAHCKED]'
+
 already_checked = list()
 
 if __name__ == '__main__' :
@@ -17,28 +18,30 @@ if __name__ == '__main__' :
     for raw in raws:
         qs.extend( make_query(raw) )
     print(' '.join(qs))
+ 
+    term = set()
     ldic = []
+    common_asins = set()
     for q in qs:
-        ldic.append( r.hgetall(q) )
-
-  
-    common_keys = set()
+        dic = r.hgetall(q)
+        ldic.append( dic )
+        [common_asins.add(asin) for asin in  dic.keys()]
+        print(q, dic.keys() ) 
     #from itertools import chain
     #list(chain.from_iterable(l))
-    for d in ldic:
-        for x in d.keys():
-            common_keys.add(x)
+    
     rank_with = []
 
     res = {}
-    for k in common_keys:
-        for d in ldic:
-            if res.get(k) == None:
-                res.update({k:(lambda x:float(x) if x else 0.)(d.get(k) ) } )
+    for asin in common_asins:
+        for dic in ldic:
+            if res.get(asin) == None:
+                res.update({asin:(lambda x:float(x) if x else 0.)(dic.get(asin) ) } )
             else:
-                res[k] += (lambda x:float(x) if x else 0.)(d.get(k) )
+                res[asin] += (lambda x:float(x) if x else 0.)(dic.get(asin) )
+
     import itertools
-    for k, v in itertools.islice(sorted( res.items(), key=lambda x:x[1]*-1), 0, 20):
+    for k, v in sorted( res.items(), key=lambda x:x[1]*-1)[:20]:
         print('http://amazon.jp/dp/' + k,v)
             
 
