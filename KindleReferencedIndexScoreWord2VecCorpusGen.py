@@ -82,23 +82,22 @@ def make_flatten_list(scraping_data):
     flatten_list   = tokenize_flatten_list(soup)
     return msgpack.packb(flatten_list)
 
-def flash_disk(line):
-    with open('./tmp/corpuses_serialized.msgpack', 'a+') as f:
-        f.write(line)
 if __name__ == '__main__':
     asins = list()
-    with open('./tmp/corpus_asins.msgpack', 'r') as f:
-        try:
-            _asins = msgpack.unpackb(f.read())
-        except IOError:
-            _asins = []
-    def save_asins(_asins):
-        with open('./tmp/corpus_asins.msgpack', 'w+') as f:
-            f.write(msgpack.packb(_asins) )
-    parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
-    args_obj = vars(parser.parse_args())
-    for _, (keyurl, scraping_data) in enumerate(get_all_data_iter() ):
-        if not keyurl in asins:
-            line = make_flatten_list(scraping_data) 
-            print(_, line)
-            save_asins(asins)
+    #parser = argparse.ArgumentParser(description='Process Kindle Referenced Index Score.')
+    #args_obj = vars(parser.parse_args())
+    
+    if '-d' in sys.argv:
+       for k, v in plyvel.DB('./tmp/word2vec_corpus.ldb' , create_if_missing=True):
+         print(k, v) 
+    
+    if '-a' in sys.argv:
+	db = plyvel.DB('./tmp/word2vec_corpus.ldb', create_if_missing=True)
+	for _, (keyurl, scraping_data) in enumerate(get_all_data_iter() ):
+	    if db.get(keyurl):
+                print('[INFO] ', _, keyurl, 'will be passed!')
+		continue
+	    line = make_flatten_list(scraping_data) 
+	    print(_, keyurl, line)
+	    db.put(keyurl, line)
+	db.close()
