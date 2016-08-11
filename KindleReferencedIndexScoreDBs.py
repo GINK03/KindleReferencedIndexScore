@@ -228,7 +228,8 @@ class SerializedUtils:
       old_time_stamp = serialized_raw.last_scrape_time
       print('[notice]', old_time_stamp)
       if time.time() - old_time_stamp < 86400 * 31:
-        print('[INFO]', serialized_raw.asin, 'はまだまだ使えます。我慢してください' )
+        import hashlib
+        print('[INFO]', serialized_raw.asin, 'はまだまだ使えます。我慢してください', ' sha1', str(hashlib.md5(serialized_raw.html).hexdigest()))
         return True
       else:
         print('[INFO] {} は充分古いです。再度スクレイピングを行います'.format(serialized_raw.asin) )
