@@ -24,13 +24,14 @@ def flatten_tokens(texts):
     start = time.time()
     from itertools import chain
     #corpus = [str(md5(x.replace('[','').replace(']', '')).hexdigest()) for x in list(chain.from_iterable(texts))]
-    corpus = [x.replace('[','').replace(']', '').replace(' ', '') for x in list(chain.from_iterable(texts))]
+    corpus = [x.replace('[','').replace(']', '').replace(' ', '_') for x in list(chain.from_iterable(texts))]
     print '[INFO] End count words... Elapsed time', time.time() - start
     
     
     dictionary = corpora.Dictionary(texts)
     dictionary.save('./tmp/word2vec.dict') # store the dictionary, for future reference
-    with open('./tmp/text8corpus.txt', 'w') as f:
+    #with open('./tmp/text8corpus.txt', 'w') as f:
+    with open('./tmp/text8corpus.txt', 'a') as f:
         f.write( ' '.join(corpus)) 
 
 def extra():
@@ -62,23 +63,23 @@ def most_similar(posi, nega=[], n=5):
         print cnt, r[0], r[1]
         cnt += 1
 
+def dump_keys():
+    model = word2vec.Word2Vec.load('./tmp/text8.model')
+    for k in model.vocab.keys():
+        print k
 if __name__ == '__main__':
     import plyvel
     import msgpack
     
     if '-d' in sys.argv:
         db = plyvel.DB('./tmp/word2vec_corpus.ldb' , create_if_missing=True)
-        """
-        必要な情報だけプリロードしてdbを閉じる
-        """
-        mdb = [x for x in db]
-        db.close()
         texts = []
-        for k, raw in mdb:
+        for k, raw in db:
             loaded = msgpack.unpackb(raw)
             if type(loaded) is list:
                 texts.append( loaded)
-        flatten_tokens(texts)
+            flatten_tokens(texts)
+        db.close()
     
     if '-m' in sys.argv:
         #with open('./tmp/text8corpus.txt', 'r') as f:
@@ -90,3 +91,6 @@ if __name__ == '__main__':
         print sys.argv[2].decode('utf-8')
         pwords = [x.decode('utf-8') for x in sys.argv[2].split(':')[1:] ]
         most_similar(pwords, [], 20)
+
+    if '-k' in sys.argv:
+        dump_keys()

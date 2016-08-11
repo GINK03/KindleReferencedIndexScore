@@ -121,13 +121,13 @@ def html_adhoc_fetcher(url):
     """
     remove extra data
     """
-    line = scraping_data.html.replace('\n', '^A^B^C')
+    line = html.replace('\n', '^A^B^C')
     line = regex.sub('<!--.*?-->', '',  line)
     line = regex.sub('<style.*?/style>', '',  line)
     html = regex.sub('<script.*?/script>', '', line ).replace('^A^B^C', '\n')
  
     soup = bs4.BeautifulSoup(html)
-    title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
+    title = (lambda x:unicode(x.string) if x != None else 'Untitled')(soup.title )
     return (html, title, soup)
 
 
