@@ -197,6 +197,7 @@ if __name__ == '__main__':
         else:
             MySQLWrapper.dump2leveldb(CM.LEVELDB_SHADOW_TINDEX)
         for _, scraping_data in enumerate(SnapshotDeal.get_all_ldb() ):
+        
             make_keyurl_Tindex(scraping_data)
             print('[INFO] Now analyzing ...', _ )
     if mode and mode == 'dump':
