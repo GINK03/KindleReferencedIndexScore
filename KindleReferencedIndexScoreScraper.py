@@ -133,9 +133,9 @@ def html_adhoc_fetcher(url):
 
 def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
     ScrapingDataHelp.attribute_valid(scraping_data)
-    if time.time() - scraping_data.last_scrape_time < 86400 * 31:
-      print('[INFO] 直近一ヶ月以内にスクレイプしたので、処理しません。', scraping_data.asin)
-      return []
+    #if time.time() - scraping_data.last_scrape_time < 86400 * 31:
+    #  print('[INFO] this data is too fresh, no need to scrape.', scraping_data.asin)
+    #  return []
     scraping_data.last_scrape_time = time.time()
 
     html, soup = None, None
@@ -150,19 +150,19 @@ def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
     scraping_dataの子ノードをchild_soupsという変数名で返却
     """
     child_scraping_data_list = []
-    for i, a in enumerate(soup.find_all('a')):
+    for i, a in enumerate(set(map(lambda x:x['href'], soup.find_all('a', href=True) ) ) ):
         #print(soup.find_all('a'))
         """ 
         アマゾン外のドメインの場合、全部パス 
         """
-        if not (a.has_attr('href') and len(a['href']) > 1 and not 'www.amazon.co.jp' in a['href']):
+        if not 'www.amazon.co.jp' in a:
             continue
         """ 
         子ノードの作成 
         """
         child_scraping_data = ScrapingData()
         
-        fixed_url = (lambda x: 'https://www.amazon.co.jp' + x if '/' == x[0] else x)(a['href'])
+        fixed_url = (lambda x: 'https://www.amazon.co.jp' + x if '/' == x[0] else x)(a)
         """ 
         '\n'コードを削除 ' 'を削除 
         """
@@ -170,12 +170,12 @@ def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
         
         """ 
         ASINコードに類似していないURLは解析しない
-        """
+        this data is too fresh, no need to scrape."""
         asin = get_asin(fixed_url)
         if not asin:
             continue
         child_scraping_data.asin     = asin
-        child_scraping_data.title    = (lambda x:x if x else 'Untitled')(a.get('title') )
+        child_scraping_data.title    = 'Untitled'
         
         child_scraping_data.url     = fixed_url
         
@@ -354,14 +354,12 @@ if __name__ == '__main__':
       NOTE: Leveldbファイルを作成 deamon呼出回数は一回
       """
       for i in range(depth):
-        if cs:
+        if refresh:
           SnapshotDeal.run_as_a_ldb_deamon(1)
         _ = SnapshotDeal.get_all_ldb() 
-        if _ == [] or _ == None:
+        all_scraping_data = map(lambda x:(x.url, x), _ )
+        if all_scraping_data == [] or all_scraping_data == None:
             initialize_parse_and_map_data_to_local_db(all_scraping_data)
-        else:
-          all_scraping_data = map(lambda x:(x.url, x), _ )
-        print('[INFO] Finish loading leveldb data to memory.')
 
         chunked_lists = [ [] ]
         if len(all_scraping_data) == 0 : 

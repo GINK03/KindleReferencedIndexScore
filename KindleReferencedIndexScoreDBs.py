@@ -229,10 +229,10 @@ class SerializedUtils:
       print('[notice]', old_time_stamp)
       if time.time() - old_time_stamp < 86400 * 31:
         import hashlib
-        print('[INFO]', serialized_raw.asin, 'はまだまだ使えます。我慢してください', ' sha1', str(hashlib.md5(serialized_raw.html).hexdigest()))
+        print('[INFO]', serialized_raw.asin, ' is not too old, no need to scrape. ', ' md5', str(hashlib.md5(serialized_raw.html).hexdigest()))
         return True
       else:
-        print('[INFO] {} は充分古いです。再度スクレイピングを行います'.format(serialized_raw.asin) )
+        print('[INFO] {} is too old, re-scrape it.'.format(serialized_raw.asin) )
         return False
 """
 is_already_analyzed?
@@ -320,16 +320,16 @@ def write_each(scraping_data):
                 Serialized.create(
                     keyurl              = keyurl,
                     date                = datetime.utcnow(),
-                    serialized          = str(dumps),
+                    serialized          = str(dumps).decode('utf-8'),
                     datetime_reviews    = reviews_datetime,
                     serialized_reviews  = str(serialized_reviews),
                     serialized_asins    = str(serialized_asins)
                 )
                 print(','.join(map(lambda x:str(x).replace(',', ''), ['[DEBUG] Created a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.uniq_hash, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean, Serialized]) ) )
                 break
-            except UnicodeDecodeError, e:
-                print('[CRIT] Cannot create new entry! try 10 times...', write_each.__name__, _, e)
-                continue
+            #except UnicodeDecodeError, e:
+            #    print('[CRIT] Cannot create new entry! try 10 times...', write_each.__name__, _, e)
+            #    continue
             except IntegrityError, e:
                 print('[CRIT] Cannot create new entry! because, itegrity error', write_each.__name__, _, e)
                 break
