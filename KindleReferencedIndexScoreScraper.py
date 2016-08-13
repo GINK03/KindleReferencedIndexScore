@@ -130,7 +130,7 @@ def html_adhoc_fetcher(url):
     title = (lambda x:unicode(x.string) if x != None else 'Untitled')(soup.title )
     return (html, title, soup)
 
-
+linkbuffer = list()
 def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
     ScrapingDataHelp.attribute_valid(scraping_data)
     #if time.time() - scraping_data.last_scrape_time < 86400 * 31:
@@ -174,6 +174,14 @@ def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
         asin = get_asin(fixed_url)
         if not asin:
             continue
+        if asin in linkbuffer:
+            print('[INFO] This asin already in linkbuffer ', asin, len(linkbuffer) )
+            continue
+        else:
+            if len(linkbuffer) < 1000:
+               linkbuffer.append(asin)
+            else:
+               linkbuffer.pop(0)
         child_scraping_data.asin     = asin
         child_scraping_data.title    = 'Untitled'
         
