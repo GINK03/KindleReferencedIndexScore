@@ -9,6 +9,7 @@ class CM:
     SESSION_TOKEN       = None
     HTTP_WAIT_SEC       = 2
     DESIRABLE_PROCESS_NUM_SQL = 10
+    DESIRABLE_SCRAPING_THREAD_NUM = 20
     LEVELDB_SHADOW_TINDEX = 'shadow_snapshot.ldb'
     KINDLE_UNLIMITED_SPECIAL_WORDS = 'Kindle Unlimited会員の方は読み放題でお楽しみいただけます'
     DEFAULT_IDFDIC      = './stash/idf_base_27gb_snapshot_index40000shuf.txt' 
@@ -25,6 +26,7 @@ class CM:
         CM.RETRY_NUM       = config.get('Section1', 'RETRY_NUM')
         CM.USER_AGENT      = config.get('Section1', 'USER_AGENT')
         CM.DESIRABLE_PROCESS_NUM = config.getint('Section1', 'DESIRABLE_PROCESS_NUM')
+        CM.DESIRABLE_SCRAPING_THREAD_NUM = config.getint('Section1', 'DESIRABLE_SCRAPING_THREAD_NUM')
         CM.SESSION_TOKEN   = config.get('Section1', 'SESSION_TOKEN')
         CM.HTTP_WAIT_SEC   = config.getint('Section1', 'http_waitsec')
         CM.SQL_IP          = config.get('Section1', 'SQL_IP')

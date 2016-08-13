@@ -220,7 +220,7 @@ class SerializedUtils:
       keyurl                  = scraping_data.asin 
       q = Serialized.select().where(Serialized.keyurl == keyurl)
       if not q.exists():
-        print('[INFO] 初めてのアクセスです。新規にアクセスします' )
+        print('[INFO] This access is first, it will create new record.' )
         return False
       serialized_raw = pickle.loads( str(Serialized.select().where(Serialized.keyurl == keyurl).get().serialized) )
       
@@ -327,9 +327,9 @@ def write_each(scraping_data):
                 )
                 print(','.join(map(lambda x:str(x).replace(',', ''), ['[DEBUG] Created a record to mysql', write_each.__name__, scraping_data.asin, scraping_data.uniq_hash, scraping_data.title.encode('utf-8'), scraping_data.url.encode('utf-8'), scraping_data.harmonic_mean, scraping_data.relevancy, scraping_data.cooccurrence, scraping_data.normal_mean, Serialized]) ) )
                 break
-            #except UnicodeDecodeError, e:
-            #    print('[CRIT] Cannot create new entry! try 10 times...', write_each.__name__, _, e)
-            #    continue
+            except UnicodeDecodeError, e:
+                print('[CRIT] Cannot create new entry! UnicodeDecodeError...', write_each.__name__, _, e)
+                continue
             except IntegrityError, e:
                 print('[CRIT] Cannot create new entry! because, itegrity error', write_each.__name__, _, e)
                 break
