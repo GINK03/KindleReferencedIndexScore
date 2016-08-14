@@ -48,16 +48,16 @@ def extra():
         except:
             pass
 
-def dealmodel():
-    data = word2vec.Text8Corpus('./tmp/text8corpus.txt')
+def dealmodel(corpus_file = './tmp/text8corpus.txt', save = './tmp/text8.model'):
+    data = word2vec.Text8Corpus(corpus_file)
     model = word2vec.Word2Vec(data, size=50, min_count=1)
-    model.save('./tmp/text8.model')
+    model.save(save)
     for k in model.vocab.keys():
         print k
 
-def most_similar(posi, nega=[], n=5):
+def most_similar(posi, nega=[], n=5, tgt_model = './tmp/text8.model'):
     cnt = 1
-    model = word2vec.Word2Vec.load('./tmp/text8.model')
+    model = word2vec.Word2Vec.load(tgt_model)
     result = model.most_similar(positive = posi, negative = nega, topn = n)
     for r in result:
         print cnt, r[0], r[1]
@@ -81,16 +81,36 @@ if __name__ == '__main__':
             flatten_tokens(texts)
         db.close()
     
+    if '-dmm-d' in sys.argv:
+        texts = []
+        with open('./query-expansion/dmm_wakati.txt') as f:
+            texts = f.read().split('\n')
+        for text in texts:
+            try:
+                print text.decode('utf-8')
+            except UnicodeDecodeError:
+                pass
+            pass
+        
     if '-m' in sys.argv:
         #with open('./tmp/text8corpus.txt', 'r') as f:
         #    f.read()
         dealmodel()
     
+    if '-dmm-m' in sys.argv:
+        dealmodel('./query-expansion/dmm_wakati_utf8.txt', './tmp/dmm.model')
+    
     if '-e' in sys.argv:
         # '-p:' in sys.argv[2]
         print sys.argv[2].decode('utf-8')
         pwords = [x.decode('utf-8') for x in sys.argv[2].split(':')[1:] ]
-        most_similar(pwords, [], 20)
+        most_similar(pwords, [], 20, './tmp/text8.model')
+
+    if '-dmm-e' in sys.argv:
+        # '-p:' in sys.argv[2]
+        print sys.argv[1].decode('utf-8')
+        pwords = [x.decode('utf-8') for x in sys.argv[2].split(':')[1:] ]
+        most_similar(pwords, [], 20, './tmp/dmm.model')
 
     if '-k' in sys.argv:
         dump_keys()

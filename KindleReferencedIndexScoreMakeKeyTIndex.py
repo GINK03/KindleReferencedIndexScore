@@ -12,7 +12,7 @@ from datetime import datetime
 import re
 import hashlib
 import KindleReferencedIndexScoreTinyDBConnector
-
+import threading as th
 import nltk
 from nltk.corpus import stopwords
 
@@ -151,7 +151,7 @@ def make_keyurl_Tindex(scraping_data):
         r.hset(t, asin, idfw)
         #print(t, asin, idfw)
     end = time.time() - start 
-    print('[INFO] Elapsed time {} term num {}'.format(end, length) ) 
+    print('[INFO] Elapsed time {} term num {} thread number {}'.format(end, length, th.currentThread()) ) 
 
 def Tindex_dumper():
     """
@@ -197,8 +197,15 @@ if __name__ == '__main__':
         else:
             MySQLWrapper.dump2leveldb(CM.LEVELDB_SHADOW_TINDEX)
         for _, scraping_data in enumerate(SnapshotDeal.get_all_ldb() ):
-        
-            make_keyurl_Tindex(scraping_data)
-            print('[INFO] Now analyzing ...', _ )
+            p = th.Thread(target=make_keyurl_Tindex, args=(scraping_data,) )        
+            p.deamon = True
+            p.start()
+            #make_keyurl_Tindex(scraping_data)
+            print('[INFO] Now analyzing ...', _, th.active_count() )
+	    if th.active_count() > 10:
+		while True:
+		    time.sleep(1.0)
+		    if th.active_count() <= 10:
+		        break
     if mode and mode == 'dump':
         Tindex_dumper()
