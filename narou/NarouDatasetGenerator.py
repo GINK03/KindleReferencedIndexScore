@@ -53,16 +53,63 @@ def html_adhoc_fetcher(url, db):
  
     soup = bs4.BeautifulSoup(html)
     title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
-    links = filter(lambda x: regenx.match('/\d{1,}/', x) , [ a['href'] for a in soup.find_all('a',href=True) ])
-
+    links =  map( lambda x:'http://ncode.syosetu.com' + x, \
+                filter(lambda x: x[0] == '/' and regex.search('/[0-9a-z]{1,}/\d{1,}/', x), \
+                    [ a['href'] for a in soup.find_all('a',href=True) ]) \
+             )
+    
+    links = list(set(links))
     return (html, title,  links, soup)
 
 import plyvel
 import cPickle as pickle
+import copy
+
+def stemming_pair(soup):
+    contents = soup.findAll('div', {'class': 'novel_view'})
+    content  = ''.join( map(lambda x:x.text, contents) )
+    textlist = regex.sub('\s{1,}', '\n', content.encode('utf-8') ).split('\n')
+    textlistd= copy.copy(textlist) 
+    textlist.insert(0, 'None')
+    zipped   = zip(textlist, textlistd )
+    zipped.pop(0)
+    zipped.pop(0)
+    zipped.pop()
+    return zipped
+
 if __name__ == '__main__':
-    seedurl = 'http://ncode.syosetu.com/n1576cu/306/'
     db = plyvel.DB('./url_contents_pair.ldb', create_if_missing=True)
-    html, title, links, soup = html_adhoc_fetcher(seedurl) 
-    for link in links:
-        print(link)
+    import MeCab
+    tagger = MeCab.Tagger("-Owakati")
+    if '--getall' in sys.argv:
+        seedurl = 'http://ncode.syosetu.com/n1576cu/306/'
+        html, title, links, soup = html_adhoc_fetcher(seedurl, db) 
+        zipped = stemming_pair(soup)
+        db.put(seedurl, '\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
+        linkstack = links
+        for link in linkstack:
+            if db.get(str(link)) == None:
+                html, title, links, soup = html_adhoc_fetcher(link, db) 
+                zipped = stemming_pair(soup)
+                db.put(str(link), '\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
+                print('\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
+                linkstack.extend(links)
+    if '--dumpall' in sys.argv:
+        with open('narou.src.txt', 'w') as fsrc:
+            with open('narou.tgt.txt', 'w') as ftgt:
+                with open('narou_dev.src.txt', 'w') as fdevsrc:
+                    with open('narou_dev.tgt.txt', 'w') as fdevtgt:
+                        alldata = [ v for k, v in db]
+                        alllen  = len(alldata)
+                        for e, v in enumerate(alldata):
+                            for line in v.split('\n'):
+                                head, tail = line.split('@@@')
+                                headw = tagger.parse(head)
+                                tailw = tagger.parse(tail)
+                                if float(e)/alllen < 4./5:
+                                    fsrc.write(headw)
+                                    ftgt.write(tailw)
+                                else:
+                                    fdevsrc.write(headw)
+                                    fdevtgt.write(tailw)
     #while True:
