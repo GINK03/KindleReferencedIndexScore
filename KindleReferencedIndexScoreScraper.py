@@ -67,7 +67,8 @@ def html_adhoc_fetcher(url):
     標準のアクセス回数はRETRY_NUMで定義されている 
     """
     html = None
-    for _ in range(5):
+    retrys = [i for i in range(10)]
+    for _ in retrys :
         opener = urllib2.build_opener()
         opener.addheaders.append( ('User-agent', CM.USER_AGENT) )
         opener.addheaders.append( ('Cookie', CM.SESSION_TOKEN) )
@@ -174,6 +175,7 @@ def map_data_to_local_db_from_url(scraping_data, uniq_hash = ''):
         asin = get_asin(fixed_url)
         if not asin:
             continue
+        
         if asin in linkbuffer:
             print('[INFO] This asin already in linkbuffer ', asin, len(linkbuffer) )
             continue

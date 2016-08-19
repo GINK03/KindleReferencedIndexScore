@@ -222,8 +222,11 @@ class SerializedUtils:
       if not q.exists():
         print('[INFO] This access is first, it will create new record.' )
         return False
-      serialized_raw = pickle.loads( str(Serialized.select().where(Serialized.keyurl == keyurl).get().serialized) )
-      
+      try:
+        serialized_raw = pickle.loads( str(Serialized.select().where(Serialized.keyurl == keyurl).get().serialized) )
+      except:
+        print('[CRIT] Cannot deserialize serialized object! keyurl=', keyurl)
+        return False
       ScrapingDataHelp.attribute_valid(serialized_raw)
       old_time_stamp = serialized_raw.last_scrape_time
       print('[notice]', old_time_stamp)
