@@ -34,9 +34,8 @@ if FLAGS.eval_train:
     x_raw, y_test = data_helpers.load_data_and_labels()
     y_test = np.argmax(y_test, axis=1)
 else:
-    x_raw = ["a masterpiece four years in the making", "everything is off.", 'it is very nice.', 'fuck off.', 'its not bad.']
-    y_test = [1, 0, 1, 0, 1]
-    yy_test = [[1,0], [0,1], [1,0], [0,1], [1,0]]
+    x_raw = ["a masterpiece four years in the making", "everything is off."]
+    y_test = [1, 0]
 
 # Map data into vocabulary
 vocab_path = os.path.join(FLAGS.checkpoint_dir, "..", "vocab")
@@ -61,40 +60,24 @@ with graph.as_default():
 
         # Get the placeholders from the graph by name
         input_x = graph.get_operation_by_name("input_x").outputs[0]
-        input_y = graph.get_operation_by_name("input_y").outputs[0]
+        # input_y = graph.get_operation_by_name("input_y").outputs[0]
         dropout_keep_prob = graph.get_operation_by_name("dropout_keep_prob").outputs[0]
 
         # Tensors we want to evaluate
         predictions = graph.get_operation_by_name("output/predictions").outputs[0]
-        #prediction = tf.argmax(y_test ,2)
-        scores = graph.get_operation_by_name("output/scores").outputs[0]
-        losses = graph.get_operation_by_name("loss/scwl").outputs[0]
-        for e in[n.name for n in graph.get_operations()]:
-          if 'loss' in e:
-            print(e)
-        
+
         # Generate batches for one epoch
         batches = data_helpers.batch_iter(list(x_test), FLAGS.batch_size, 1, shuffle=False)
+
         # Collect the predictions here
         all_predictions = []
-        all_scores = []
-        all_losses = []
+
         for x_test_batch in batches:
-            print(x_test_batch)
             batch_predictions = sess.run(predictions, {input_x: x_test_batch, dropout_keep_prob: 1.0})
-            #batch_predictions = sess.run([2], {input_x: x_test_batch, dropout_keep_prob: 1.0})
-            batch_scores      = sess.run(scores, {input_x: x_test_batch, dropout_keep_prob: 1.0})
-            batch_losses      = sess.run(losses, {input_x: x_test_batch, input_y:yy_test, dropout_keep_prob: 1.0})
             all_predictions = np.concatenate([all_predictions, batch_predictions])
-            all_scores.extend(batch_scores)
-            all_losses.extend(batch_losses)
-            print(batch_predictions)
-            print(batch_scores)
-            print(batch_losses)
 
 # Print accuracy if y_test is defined
 if y_test is not None:
     correct_predictions = float(sum(all_predictions == y_test))
     print("Total number of test examples: {}".format(len(y_test)))
-    print(all_scores)
-    print("Accuracy: {}".format(correct_predictions/float(len(y_test))))
+    print("Accuracy: {:g}".format(correct_predictions/float(len(y_test))))
