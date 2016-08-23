@@ -161,6 +161,7 @@ def train():
            % FLAGS.max_train_data_size)
     dev_set = read_data(en_dev, fr_dev)
     train_set = read_data(en_train, fr_train, FLAGS.max_train_data_size)
+    #print(train_set)
     train_bucket_sizes = [len(train_set[b]) for b in xrange(len(_buckets))]
     train_total_size = float(sum(train_bucket_sizes))
 
@@ -232,23 +233,33 @@ def decode():
 
     # Load vocabularies.
     en_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab%d.en" % FLAGS.en_vocab_size)
+                                 "vocab%d.tgt" % FLAGS.en_vocab_size)
     fr_vocab_path = os.path.join(FLAGS.data_dir,
-                                 "vocab%d.fr" % FLAGS.fr_vocab_size)
-    en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path + '.head1000')
-    _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path + '.head1000')
+                                 "vocab%d.src" % FLAGS.fr_vocab_size)
+    en_vocab, _ = data_utils.initialize_vocabulary(en_vocab_path )
+    _, rev_fr_vocab = data_utils.initialize_vocabulary(fr_vocab_path )
 
     # Decode from standard input.
     sys.stdout.write("> ")
     sys.stdout.flush()
     sentence = sys.stdin.readline()
-    while sentence:
+    sentence = map(lambda x:x.decode('utf-8'), ['こんにちは']).pop()
+    with open('./narou/narou_dev.src.txt', 'r')  as f:
+        lines = f.read().split('\n')
+        print(lines)
+    #while sentence:
+    for sentence in lines:
+      print(sentence)
       # Get token-ids for the input sentence.
       token_ids = data_utils.sentence_to_token_ids(tf.compat.as_bytes(sentence), en_vocab)
+      print(token_ids)
       # Which bucket does it belong to?
-      bucket_id = min([b for b in xrange(len(_buckets))
+      try:
+        bucket_id = min([b for b in xrange(len(_buckets))
                        if _buckets[b][0] > len(token_ids)])
-      # Get a 1-element batch to feed the sentence to the model.
+      except:
+        continue
+        # Get a 1-element batch to feed the sentence to the model.
       encoder_inputs, decoder_inputs, target_weights = model.get_batch(
           {bucket_id: [(token_ids, [])]}, bucket_id)
       # Get output logits for the sentence.
@@ -256,12 +267,15 @@ def decode():
                                        target_weights, bucket_id, True)
       # This is a greedy decoder - outputs are just argmaxes of output_logits.
       outputs = [int(np.argmax(logit, axis=1)) for logit in output_logits]
+    
       # If there is an EOS symbol in outputs, cut them at that point.
       if data_utils.EOS_ID in outputs:
         outputs = outputs[:outputs.index(data_utils.EOS_ID)]
+
       # Print out French sentence corresponding to outputs.
-      print(" ".join([tf.compat.as_str(rev_fr_vocab[output]) for output in outputs]))
+      print("ANS:>", " ".join([tf.compat.as_str(rev_fr_vocab[output]) for output in outputs]))
       print("> ", end="")
+      continue
       sys.stdout.flush()
       sentence = sys.stdin.readline()
 
