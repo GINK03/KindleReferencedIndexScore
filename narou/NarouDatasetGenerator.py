@@ -82,7 +82,7 @@ if __name__ == '__main__':
     import MeCab
     tagger = MeCab.Tagger("-Owakati")
     if '--getall' in sys.argv:
-        seedurl = 'http://ncode.syosetu.com/n1576cu/306/'
+        seedurl = 'http://ncode.syosetu.com/n9669bk/1/'
         html, title, links, soup = html_adhoc_fetcher(seedurl, db) 
         zipped = stemming_pair(soup)
         db.put(seedurl, '\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
