@@ -1,0 +1,1 @@
+python ./main.test.py --dataset conv --c_dim 3 --is_train True --visualize True --is_crop True

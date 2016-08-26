@@ -1,0 +1,1 @@
+python ./main.py --dataset celebA --is_train True --is_crop True --visualize True
