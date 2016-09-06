@@ -30,6 +30,6 @@ with open('./tweets/dump' + str(datetime.datetime.now()), 'w' ) as f:
     """
     stime = data.get("created_at")
     tdatetime = datetime.datetime.strptime(stime, '%a %b %d %H:%M:%S +0000 %Y')
-    line = " ".join( ["[TEXT]", data.get("text").encode('utf-8'), "[CREATED_AT]", str(tdatetime)] )
+    line = " ".join( ["[TEXT]", data.get("text").encode('utf-8'), "[CREATED_AT]", str(tdatetime)], "\n" )
     print "[TEXT]", data.get("text"), "[CREATED_AT]", str(tdatetime)
     f.write(line)
