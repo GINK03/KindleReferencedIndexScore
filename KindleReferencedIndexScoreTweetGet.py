@@ -66,8 +66,10 @@ def mostsim():
 	cnt = 1 # 表示した単語の個数カウント用
 	# 学習済みモデルからcos距離が最も近い単語n個(topn個)を表示する
 	result = model.most_similar(positive = posi, negative = nega, topn = n)
+        print posi[0].encode('utf-8')
+        print model[posi[0]]
 	for r in result:
-	    print cnt,'　', r[0],'　', r[1]
+	    print cnt,'　', str(r[0].encode('utf-8')),'　', str(r[1])
 	    cnt += 1
     s(["live".encode('utf-8')])
     s(["私".decode('utf-8')])
@@ -76,6 +78,7 @@ def mostsim():
     s(["ポケモンGO".decode('utf-8')])
     s(["アニメ".decode('utf-8')])
     s(["iPhone".decode('utf-8')])
+    s(["艦これ".decode('utf-8')])
 
 
 if __name__ == '__main__' :
