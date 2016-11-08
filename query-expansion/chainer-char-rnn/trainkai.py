@@ -1,4 +1,4 @@
-#%%
+# ciding: utf-8
 import time
 import math
 import sys
@@ -129,7 +129,8 @@ for i in xrange(jump * n_epochs):
         optimizer.clip_grads(grad_clip)
         optimizer.update()
 
-    if (i + 1) % 10000 == 0:
+#    if (i + 1) % 10000 == 0:
+    if (i + 1) % 10 == 0:
         fn = ('%s/charrnn_epoch_%.2f.chainermodel' % (args.checkpoint_dir, float(i)/jump))
         pickle.dump(copy.deepcopy(model).to_cpu(), open(fn, 'wb'))
         pickle.dump(copy.deepcopy(model).to_cpu(), open('%s/latest.chainermodel'%(args.checkpoint_dir), 'wb'))
