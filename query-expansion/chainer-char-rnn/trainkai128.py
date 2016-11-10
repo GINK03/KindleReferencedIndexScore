@@ -1,4 +1,4 @@
-# ciding: utf-8
+# coding: utf-8
 import time
 import math
 import sys
@@ -20,11 +20,11 @@ def load_data(args):
     #words = codecs.open('%s/input.txt' % args.data_dir, 'rb', 'utf-8').read()
     words = ''
     c = 0
-    line = 'a'
+    line = ''
     with open('%s/input.txt' % args.data_dir, 'rb') as f:
         while line:
             try:
-                line = f.readline()
+                line = f.readline().replace('\n', '')
                 words += line
                 c += 1
             except:

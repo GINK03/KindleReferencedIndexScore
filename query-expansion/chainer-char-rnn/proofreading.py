@@ -25,12 +25,14 @@ parser.add_argument('--sample',     type=int,   default=1)
 parser.add_argument('--primetext',  type=str,   default='')
 parser.add_argument('--length',     type=int,   default=2000)
 parser.add_argument('--gpu',        type=int,   default=-1)
+parser.add_argument('--text',       type=str,   default='')
 
 args = parser.parse_args()
 
 # 形態素解析して、日本語を分解する
 mt = MeCab.Tagger('-Owakati')
-text = "話し言葉や書き言葉と同一の言語である"
+#text = "また、実際の車両の修理代以外でも、例えば契約者の車両が破損してしまって走行できない状況になった場合に必要なお車のレッカー代や応急処置費用なども一定の限度額以内で車両保険とは別に支払われます。"
+text = args.text
 res = mt.parse(text).strip()
 print 'input', res
 inputs = res.split(' ')
@@ -41,14 +43,18 @@ np.random.seed(args.seed)
 vocab = pickle.load(open(args.vocabulary, 'rb'))
 # 日本語をvocab indexに変換
 
+for k, v in vocab.iteritems():
+    print k, v, vocab.get('アイロン')
 inputs_index = []
 for word in inputs:
-  if vocab.get(word):
+  if vocab.get(word) != None:
     inputs_index.append( vocab.get(word) ) 
   else:
+    print word,  "is not found."
     inputs_index.append( 'UNK' )
 print inputs
 print inputs_index
+sys.exit(0)
 #print(vocab)
 ivocab = {}
 for e, (c, i) in enumerate(vocab.items()):
@@ -72,7 +78,7 @@ prev_char = np.array([0], dtype=np.int32)
 if args.gpu >= 0:
     prev_char = cuda.to_gpu(prev_char)
 
-
+chosen_ps = []
 for i in xrange(len(inputs_index)):
     state, prob = model.forward_one_step(prev_char, prev_char, state, train=False)
 
@@ -85,12 +91,17 @@ for i in xrange(len(inputs_index)):
     prob_with_index.sort(key=lambda x:-1 * x[1] )
     #index = np.random.choice(range(len(probability)), p=probability)
     index = inputs_index[i]
-    chosen_p = probability[index]
+    print "index", index
+    if 'UNK' != index:
+      chosen_p = probability[index]
+      chosen_ps.append(chosen_p)
+    else:
+      chosen_ps.append(0)
     #else:
     #    index = np.argmax(cuda.to_cpu(prob.data))
     
     #sys.stdout.write(ivocab[index].decode('utf-8'))
-    print "try", i, "vocindex", index, "probability", chosen_p, "voc", ivocab[index].decode('utf-8')
+    print "try", i, "vocindex", index, "probability", chosen_p, "voc", (lambda x: ivocab[index].decode('utf-8') if index != 'UNK' else 'UNK')(None)
     top_n_p_sum = 0.
     n_p_var = np.var(probability)
     for e, p, t in prob_with_index[0:10]:
@@ -99,8 +110,10 @@ for i in xrange(len(inputs_index)):
     top_n_p_sum /= 10.
     print "  average of top 10's prob sum", top_n_p_sum
     print "  probability's variance ", n_p_var
-    prev_char = np.array([index], dtype=np.int32)
-    if args.gpu >= 0:
+    if index != 'UNK':
+      prev_char = np.array([index], dtype=np.int32)
+      if args.gpu >= 0:
         prev_char = cuda.to_gpu(prev_char)
 
+print 'chosen_ps =', ' '.join(map(str, chosen_ps))
 print
