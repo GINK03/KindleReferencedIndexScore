@@ -19,21 +19,14 @@ def load_data(args):
     print ('%s/input.txt'% args.data_dir)
     #words = codecs.open('%s/input.txt' % args.data_dir, 'rb', 'utf-8').read()
     words = ''
-    c = 0
     line = ''
     with open('%s/input.txt' % args.data_dir, 'rb') as f:
-        while line:
-            try:
-                line = f.readline().replace('\n', '')
-                words += line
-                c += 1
-            except:
-                pass
-    print c
+      line = f.read()
+      line = line.replace('\n', ' ')
+      words += line
     #words = list(words)
     words = words.split(' ')
     #print words
-    #sys.exit(0)
     dataset = np.ndarray((len(words),), dtype=np.int32)
     for i, word in enumerate(words):
         if word not in vocab:

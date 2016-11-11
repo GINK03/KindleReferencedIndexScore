@@ -42,9 +42,8 @@ np.random.seed(args.seed)
 # load vocabulary
 vocab = pickle.load(open(args.vocabulary, 'rb'))
 # 日本語をvocab indexに変換
-
-for k, v in vocab.iteritems():
-    print k, v, vocab.get('アイロン')
+#for k, v in vocab.iteritems():
+#    print k, v, vocab.get('アイロン')
 inputs_index = []
 for word in inputs:
   if vocab.get(word) != None:
@@ -54,7 +53,7 @@ for word in inputs:
     inputs_index.append( 'UNK' )
 print inputs
 print inputs_index
-sys.exit(0)
+#sys.exit(0)
 #print(vocab)
 ivocab = {}
 for e, (c, i) in enumerate(vocab.items()):
@@ -87,7 +86,10 @@ for i in xrange(len(inputs_index)):
     probability /= np.sum(probability)
     prob_with_index = []
     for e, p in enumerate(probability):
-        prob_with_index.append( [e, p, ivocab[e].decode('utf-8') ] )
+        try:
+            prob_with_index.append( [e, p, ivocab[e].decode('utf-8') ] )
+        except:
+            pass
     prob_with_index.sort(key=lambda x:-1 * x[1] )
     #index = np.random.choice(range(len(probability)), p=probability)
     index = inputs_index[i]
@@ -96,6 +98,7 @@ for i in xrange(len(inputs_index)):
       chosen_p = probability[index]
       chosen_ps.append(chosen_p)
     else:
+      chosen_p = 0.
       chosen_ps.append(0)
     #else:
     #    index = np.argmax(cuda.to_cpu(prob.data))
