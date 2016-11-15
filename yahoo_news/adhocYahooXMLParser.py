@@ -60,24 +60,30 @@ soup = bs4.BeautifulSoup(html)
 links = set()
 import feedparser
 import plyvel
+import sys
 db = plyvel.DB('yahoo_news.ldb', create_if_missing=True) 
-for link in set([a['href'] for a in soup.find_all('a', href=True)]):
-  obj = feedparser.parse(link)
-  for i, e in enumerate(obj.entries):
-    print '[[' + str(i) + ']]'
-    print e.title.encode('utf-8')
-    print e.link
-    link = str(e.link)
-    if db.get(link) == None:
-      tp = html_adhoc_fetcher(e.link)
-      if tp == None:
-        continue
-      title, contents0_text = tp
-      print "パースしますよ！"
-      print title 
-      contents = str(contents0_text.encode('utf-8'))
-      print contents
-
-      print "raw", contents0_text
-      db.put(link, contents )
+# クロウラーモード
+if '-c' in sys.argv:
+  for link in set([a['href'] for a in soup.find_all('a', href=True)]):
+    obj = feedparser.parse(link)
+    for i, e in enumerate(obj.entries):
+      print '[[' + str(i) + ']]'
+      print e.title.encode('utf-8')
+      print e.link
+      link = str(e.link)
+      if db.get(link) == None:
+        tp = html_adhoc_fetcher(e.link)
+        if tp == None:
+          continue
+        title, contents0_text = tp
+        print "パースしますよ！"
+        print title 
+        contents = str(contents0_text.encode('utf-8'))
+        print contents
+        print "raw", contents0_text
+        db.put(link, contents )
+# ダンプモード
+if '-d' in sys.argv:
+  for url, contents in db:
+    print contents
 
