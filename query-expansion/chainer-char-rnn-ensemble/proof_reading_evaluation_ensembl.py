@@ -27,7 +27,7 @@ if __name__ == '__main__':
                                                                     '--length','15', \
                                                                     '--text', text])
         #print(res)
-        print res
+        #print res
         ps_raw = filter(lambda x: 'ensembl_ps' in x , res.split('\n'))
         ps_raw = ps_raw.pop().split('=').pop().strip()
         import json

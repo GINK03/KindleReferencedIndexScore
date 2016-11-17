@@ -67,7 +67,7 @@ for vocab, inputs_index in [ (vocab1, inputs_index1), (vocab2, inputs_index2), (
     if vocab.get(word) != None:
       inputs_index.append( vocab.get(word) ) 
     else:
-      print word,  "is not found."
+      #print word,  "is not found."
       inputs_index.append( 'UNK' )
 for vocab, ivocab in [ (vocab1, ivocab1), (vocab2, ivocab2), (vocab3, ivocab3), (vocab4, ivocab4)]:
   for e, (c, i) in enumerate(vocab.items()):
