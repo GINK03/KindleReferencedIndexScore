@@ -1,0 +1,78 @@
+package main 
+
+import ( 
+  "fmt"
+	_ "math"
+	"sort"
+	_ "strings"
+)
+ 
+func plist(in int) []int {
+	motos := []bool{}
+	for i := 0; i <= in; i++ {
+	  motos = append(motos, true)
+	}
+	i := 2
+	for i*i <= in {
+    if motos[i] {
+      j := i*2
+      for j <= in { 
+         motos[j] = false
+         j += i
+      }
+    }
+    i += 1
+	}
+  res := []int{}
+  for i := 2; i <= in; i++ {
+    if motos[i] {
+      res = append(res, i)
+    }
+  }
+  return res
+}
+func comp_list(a, b []int) bool {
+  for i := range a {
+      if a[i] != b[i] {
+          return false
+      }
+  }
+  return true
+}
+func main() {
+  primes := plist(1000000) 
+	prime_buf := make(map[int]int, 0)
+	S, E := 0, 0
+	fmt.Scan(&S)
+	fmt.Scan(&E)
+	for _, prime := range primes {
+	  for i := E; i >= S; i-- {
+		  if i%prime == 0 && i/prime != 1{
+			  prime_buf[prime] = i
+        break
+	      fmt.Println(prime_buf, prime)
+		  }
+	  }
+	}
+  fmt.Println("finishe making base")
+  keys := []int{}
+	for k := range prime_buf {
+    for _, prime := range primes {
+      if prime_buf[k]%prime == 0 && k > prime { 
+        val := prime_buf[k]
+        delete(prime_buf, k)
+        prime_buf[prime] = val
+        break 
+      } 
+    }
+  }
+  for k := range prime_buf {
+    keys = append(keys, k)
+  }
+  fmt.Println(prime_buf)
+  sort.Ints(keys)
+  fmt.Println(keys)
+	fmt.Println(prime_buf[keys[len(keys) - 1]] )
+
+
+}
