@@ -13,10 +13,10 @@ import bs4
 
 def html_adhoc_fetcher(url):
     html = None
-    for _ in range(4):
+    for _ in range(3):
         #opener = urllib2.build_opener()
         try:
-            TIME_OUT = 5.0
+            TIME_OUT = 2.5
             print url, _
             req = urllib2.Request(url, headers = {'User-agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'} )
             html = urllib2.urlopen(req, timeout=TIME_OUT).read()
@@ -73,6 +73,37 @@ if '-idf' in sys.argv:
     db = plyvel.DB('posi_contents.ldb', create_if_missing=True) 
     import json
     for line in open('./posi_156657.txt').read().split('\n'):
+        line = regex.sub('\s{1,}', ' ', line)
+        ents = line.split(' ')
+        url = ents[0].split('?').pop(0)
+        if db.get(url) != None:
+            continue
+        flag = None
+        if ents[1] == '-': 
+            flag = True
+        else:
+            flag = False
+        reses = html_adhoc_fetcher(url)
+        if reses == None:
+            print 'error occurred'
+            db.put(url, '___error___')
+            continue
+        title  = reses[0]
+        anchor = reses[1]
+        urls   = reses[2]
+        body   = reses[3]
+        try:
+          print flag, url, title, anchor, urls, body
+          db.put(url, json.dumps( {'f':flag, 'uk':url, 't':title, 'a':anchor, 'us':urls, 'b':body} ) )
+        except:
+          print 'error occurred'
+          db.put(url, '___error1___' )
+
+# ネガティブなURL HTML辞書作成モード
+if '-nidf' in sys.argv:
+    db = plyvel.DB('nega_contents.ldb', create_if_missing=True) 
+    import json
+    for line in open('./nega_156657.txt').read().split('\n'):
         line = regex.sub('\s{1,}', ' ', line)
         ents = line.split(' ')
         url = ents[0].split('?').pop(0)
