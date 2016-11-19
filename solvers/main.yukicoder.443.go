@@ -66,7 +66,17 @@ func main() {
 		}
 	}
 	target := lines[0]
+	set := make(map[rune]struct{})
 	runes := []rune(target)
+	for _, r := range runes {
+		set[r] = struct{}{}
+	}
+	setl := []rune{}
+	for r := range set {
+		setl = append(setl, r)
+	}
+	fmt.Println(string(setl))
+	runes = []rune(setl)
 	i := Iter(runes)
 	ns := []big.Int{}
 	for sign := i(); sign != 0; sign = i() {
