@@ -13,10 +13,10 @@ import bs4
 
 def html_adhoc_fetcher(url):
     html = None
-    for _ in range(2):
+    for _ in range(4):
         #opener = urllib2.build_opener()
         try:
-            TIME_OUT = 2.0
+            TIME_OUT = 5.0
             print url, _
             req = urllib2.Request(url, headers = {'User-agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'} )
             html = urllib2.urlopen(req, timeout=TIME_OUT).read()
@@ -25,6 +25,7 @@ def html_adhoc_fetcher(url):
             print('[WARN] Cannot access url with EOFError, try number is...', e, _, url, mp.current_process() )
             continue
         except urllib2.URLError, e:
+            print('[WARN] Cannot access url with urllib2.URLError, ', e, 'reason', e.reason, 'num', _, url, mp.current_process() )
             continue
         except urllib2.HTTPError, e:
             print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url, mp.current_process() )
@@ -67,11 +68,11 @@ import feedparser
 import plyvel
 import sys
 import regex
-# IDF辞書作成モード
+# ポジティブIDF辞書作成モード
 if '-idf' in sys.argv:
-    db = plyvel.DB('allcontents.ldb', create_if_missing=True) 
+    db = plyvel.DB('posi_contents.ldb', create_if_missing=True) 
     import json
-    for line in open('./nega_posi.url_score.txt').read().split('\n'):
+    for line in open('./posi_156657.txt').read().split('\n'):
         line = regex.sub('\s{1,}', ' ', line)
         ents = line.split(' ')
         url = ents[0].split('?').pop(0)
@@ -84,14 +85,19 @@ if '-idf' in sys.argv:
             flag = False
         reses = html_adhoc_fetcher(url)
         if reses == None:
+            print 'error occurred'
             db.put(url, '___error___')
             continue
         title  = reses[0]
         anchor = reses[1]
         urls   = reses[2]
         body   = reses[3]
-        print flag, url, title, anchor, urls, body
-        db.put(url, json.dumps( {'f':flag, 'uk':url, 't':title, 'a':anchor, 'us':urls, 'b':body} ) )
+        try:
+          print flag, url, title, anchor, urls, body
+          db.put(url, json.dumps( {'f':flag, 'uk':url, 't':title, 'a':anchor, 'us':urls, 'b':body} ) )
+        except:
+          print 'error occurred'
+          db.put(url, '___error1___' )
 
 # クロウラーモード
 if '-c' in sys.argv:
