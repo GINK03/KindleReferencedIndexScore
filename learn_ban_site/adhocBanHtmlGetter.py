@@ -33,6 +33,9 @@ def html_adhoc_fetcher(url):
         except ssl.SSLError, e:
             print('[WARN] Cannot access url with ssl error, try number is...', e, _, url, mp.current_process() )
             continue
+        except ssl.CertificateError, e:
+            print('[WARN] Cannot access url with ssl error, try number is...', e, _, url, mp.current_process() )
+            continue 
         except httplib.BadStatusLine, e:
             print('[WARN] Cannot access url with BadStatusLine, try number is...', e, _, url, mp.current_process() )
             continue
