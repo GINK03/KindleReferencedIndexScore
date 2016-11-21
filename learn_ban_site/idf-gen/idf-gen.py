@@ -7,25 +7,19 @@ import os
 
 import MeCab
 
-mt = MeCab.Tagger("mecabrc")
 
-res = mt.parseToNode("ハイパー雷巡コンビ")
-while res != None:
-    print res.surface
-    print res.feature
-    res = res.next
-
-
+tagger = MeCab.Tagger('-Owakati')
 alltext = open('./positive.sites.20161121.json').read() + '\n' + open('./negative.sites.20161121.json').read()
 dic = {}
+count = 0
 for index, line in enumerate( alltext.split('\n') ):
+    count += 1
     try:
       obj = json.loads(line)
     except ValueError, e:
       continue 
     body = obj['b']
     body = body.encode('utf-8')
-    tagger = MeCab.Tagger('-Owakati')
     result = tagger.parse(body)
     if result == None:
         continue
@@ -36,8 +30,11 @@ for index, line in enumerate( alltext.split('\n') ):
         else:
             dic[term].add(index)
 
-dicnum = {}
+idf = {"___DOC_NUM___": count}
+term_num = {}
 for term, s in dic.iteritems():
-   dicnum[term] = len(s)
+   idf[term] = float(count) / math.log(len(s))
+   term_num[term] = len(s)
 
-print open('idf.json', 'w').write(json.dumps(dicnum))
+print open('idf.json', 'w').write(json.dumps(idf))
+print open('term_num.json', 'w').write(json.dumps(term_num))
