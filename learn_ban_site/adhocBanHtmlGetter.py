@@ -102,6 +102,12 @@ if '-idf' in sys.argv:
           print 'error occurred'
           db.put(url, '___error1___' )
 
+if '-pd' in sys.argv:
+    db = plyvel.DB('posi_contents.ldb')
+    import json
+    for k, v in db:
+        print v
+
 # ネガティブなURL HTML辞書作成モード
 if '-nidf' in sys.argv:
     db = plyvel.DB('nega_contents.ldb', create_if_missing=True) 
@@ -133,7 +139,7 @@ if '-nidf' in sys.argv:
           print 'error occurred'
           db.put(url, '___error1___' )
 
-if '-nd':
+if '-nd' in sys.argv:
     db = plyvel.DB('nega_contents.ldb')
     import json
     for k, v in db:
