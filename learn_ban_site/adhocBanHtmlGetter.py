@@ -133,6 +133,11 @@ if '-nidf' in sys.argv:
           print 'error occurred'
           db.put(url, '___error1___' )
 
+if '-nd':
+    db = plyvel.DB('nega_contents.ldb')
+    import json
+    for k, v in db:
+        print v
 # クロウラーモード
 if '-c' in sys.argv:
   for link in set([a['href'] for a in soup.find_all('a', href=True)]):
