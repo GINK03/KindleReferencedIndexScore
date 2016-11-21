@@ -34,6 +34,8 @@ def load_data(args):
         dataset[i] = vocab[word]
     print 'corpus length:', len(words)
     print 'vocab size:', len(vocab)
+    print 'rnn_size size:', args.rnn_size
+    print 'saving file name is %s/latest_%s_%d.chainermodel'%(args.checkpoint_dir, args.data_dir.split('/').pop(), n_units)
     return dataset, words, vocab
 
 # arguments
