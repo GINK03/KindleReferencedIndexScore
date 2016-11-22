@@ -59,113 +59,32 @@ def html_adhoc_fetcher(url):
     soup = bs4.BeautifulSoup(html)
     title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
     anchor = ' '.join([a.text for a in soup.findAll('a') ])
-    urls = ''
-    for a in soup.findAll('a'):
-        if a.has_key('href'):
-           urls += a.get('href').encode('utf-8')
+    urls = []
+    for a in soup.find_all('a', href=True):
+        urls.append( a.get('href').encode('utf-8') )
 
     body = (lambda x:x.text if x != None else "" )(soup.find('body') )
-    return title, anchor, url, body
+    return title, anchor, urls, body
 #soup = bs4.BeautifulSoup(html)
 import feedparser
-import plyvel
 import sys
 import regex
 # ポジティブIDF辞書作成モード
-if '-idf' in sys.argv:
-    db = plyvel.DB('posi_contents.ldb', create_if_missing=True) 
+if '-gq' in sys.argv:
     import json
-    for line in open('./posi_156657.txt').read().split('\n'):
+    for line in ['いずこ']:
         line = regex.sub('\s{1,}', ' ', line)
-        ents = line.split(' ')
-        url = ents[0].split('?').pop(0)
-        if db.get(url) != None:
-            continue
-        flag = None
-        if ents[1] == '-': 
-            flag = True
-        else:
-            flag = False
-        reses = html_adhoc_fetcher(url)
-        if reses == None:
-            print 'error occurred'
-            db.put(url, '___error___')
-            continue
+        reses = html_adhoc_fetcher('https://www.google.co.jp/search?q=test')
         title  = reses[0]
         anchor = reses[1]
         urls   = reses[2]
         body   = reses[3]
-        try:
-          print flag, url, title, anchor, urls, body
-          db.put(url, json.dumps( {'f':flag, 'uk':url, 't':title, 'a':anchor, 'us':urls, 'b':body} ) )
-        except:
-          print 'error occurred'
-          db.put(url, '___error1___' )
+        print title
+        print urls
 
-if '-pd' in sys.argv:
+if '-gd' in sys.argv:
     db = plyvel.DB('posi_contents.ldb')
     import json
     for k, v in db:
         print v
-
-# ネガティブなURL HTML辞書作成モード
-if '-nidf' in sys.argv:
-    db = plyvel.DB('nega_contents.ldb', create_if_missing=True) 
-    import json
-    for line in open('./nega_156657.txt').read().split('\n'):
-        line = regex.sub('\s{1,}', ' ', line)
-        ents = line.split(' ')
-        url = ents[0].split('?').pop(0)
-        if db.get(url) != None:
-            continue
-        flag = None
-        if ents[1] == '-': 
-            flag = True
-        else:
-            flag = False
-        reses = html_adhoc_fetcher(url)
-        if reses == None:
-            print 'error occurred'
-            db.put(url, '___error___')
-            continue
-        title  = reses[0]
-        anchor = reses[1]
-        urls   = reses[2]
-        body   = reses[3]
-        try:
-          print flag, url, title, anchor, urls, body
-          db.put(url, json.dumps( {'f':flag, 'uk':url, 't':title, 'a':anchor, 'us':urls, 'b':body} ) )
-        except:
-          print 'error occurred'
-          db.put(url, '___error1___' )
-
-if '-nd' in sys.argv:
-    db = plyvel.DB('nega_contents.ldb')
-    import json
-    for k, v in db:
-        print v
-# クロウラーモード
-if '-c' in sys.argv:
-  for link in set([a['href'] for a in soup.find_all('a', href=True)]):
-    obj = feedparser.parse(link)
-    for i, e in enumerate(obj.entries):
-      print '[[' + str(i) + ']]'
-      print e.title.encode('utf-8')
-      print e.link
-      link = str(e.link)
-      if db.get(link) == None:
-        tp = html_adhoc_fetcher(e.link)
-        if tp == None:
-          continue
-        title, contents0_text = tp
-        print "パースしますよ！"
-        print title 
-        contents = str(contents0_text.encode('utf-8'))
-        print contents
-        print "raw", contents0_text
-        db.put(link, contents )
-# ダンプモード
-if '-d' in sys.argv:
-  for url, contents in db:
-    print contents
 
