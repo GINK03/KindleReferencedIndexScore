@@ -16,7 +16,7 @@ def html_adhoc_fetcher(url):
     for _ in range(3):
         #opener = urllib2.build_opener()
         try:
-            TIME_OUT = 2.5
+            TIME_OUT = 1.0
             #print url, _
             req = urllib2.Request(url, headers = {'User-agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'} )
             html = urllib2.urlopen(req, timeout=TIME_OUT).read()
@@ -87,6 +87,8 @@ if '-gq' in sys.argv:
         line = line[1] #""" 一番目のインデックスは、用法が含まれたデータになっているはず """
         encoded = urllib.quote(line)
         reses = html_adhoc_fetcher('https://www.google.co.jp/search?q=' + encoded + '&num=50')
+        if reses == None:
+            continue
         title  = reses[0]
         anchor = reses[1]
         urls   = reses[2]
@@ -110,10 +112,12 @@ if '-gq' in sys.argv:
                 n, p = np
                 body2= regex.sub(n, p, body2)
             if line in body2:
-              db.put(url, body2.replace(line, "<<<" + line + ">>>") )
+                print enum, line, "scripting 完了です"
+                db.put(url, body2.replace(line, "<<<" + line + ">>>") )
 if '-gd' in sys.argv:
-    db = plyvel.DB('posi_contents.ldb')
+    import plyvel
     import json
+    db = plyvel.DB('正しい日本語.ldb')
     for k, v in db:
         print v
 
