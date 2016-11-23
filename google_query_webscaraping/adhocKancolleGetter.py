@@ -61,7 +61,8 @@ def html_adhoc_fetcher(url):
         print "HTMLのパースに失敗しました"
         return None
     title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
-    anchor = ' '.join([a.text for a in soup.findAll('a') ])
+    anchor = 'ダミー'
+    """anchor = ' '.join([a.text for a in soup.findAll('a') ])"""
     urls = []
     for a in soup.find_all('a', href=True):
         urls.append( a.get('href').encode('utf-8') )
@@ -85,8 +86,8 @@ if '-gq' in sys.argv:
     nps = filter(lambda x:x!=('', ), [tuple(l.split('\t') ) for l in open('./kancolle.dat').read().split('\n')] )
     #print nps
     for line in nps:
-        n, query = line[0].split(' ')  #""" 一番目のインデックスは、用法が含まれたデータになっているはず """
-        print line
+        query = line[0]
+        print query
         encoded = urllib.quote('艦これ+かわいい+' + query)
         reses = html_adhoc_fetcher('https://www.google.co.jp/search?q=' + encoded + '&num=100')
         if reses == None:
