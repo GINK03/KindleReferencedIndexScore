@@ -17,7 +17,7 @@ for i, line in enumerate(sys.stdin):
 
 idflog = {}
 for t, n in idf.iteritems():
-    """$B=hM}$G$-$k7W;;7k2L$h$j!"(Bidf$B$,(B4$B0J2<$N$_J]B8$9$k(B """
+    """処理できる計算結果より、idfが4以下のみ保存する """
     if int( math.log( maxx/float(idf[t]) ) ) <= 4:
         idflog[t] = math.log( maxx/float(idf[t]) )
 
@@ -26,7 +26,7 @@ for line in hozon:
         if idflog.get(t) != None:
             print t, 
         else:
-            print "mask"
+            print "M", 
     print
 
 if "-c" in sys.argv:
