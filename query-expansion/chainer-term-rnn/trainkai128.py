@@ -66,6 +66,8 @@ grad_clip   = args.grad_clip
 
 train_data, words, vocab = load_data(args)
 pickle.dump(vocab, open('%s/vocab.bin'%args.data_dir, 'wb'))
+filename = args.data_dir.split('/')[1]
+print 'I will save a file name contains ', filename
 
 if len(args.init_from) > 0:
     model = pickle.load(open(args.init_from, 'rb'))
@@ -93,6 +95,7 @@ else:
     accum_loss   = Variable(np.zeros((), dtype=np.float32))
 
 print 'going to train {} iterations'.format(jump * n_epochs)
+loss_rate = 0.0
 for i in xrange(jump * n_epochs):
     x_batch = np.array([train_data[(jump * j + i) % whole_len]
                         for j in xrange(batchsize)])
@@ -109,6 +112,7 @@ for i in xrange(jump * n_epochs):
     if (i + 1) % bprop_len == 0:  # Run truncated BPTT
         now = time.time()
         print '{}/{}, train_loss = {}, time = {:.2f}'.format((i+1)/bprop_len, jump, accum_loss.data / bprop_len, now-cur_at)
+        loss_rate = accum_loss.data / bprop_len
         cur_at = now
 
         optimizer.zero_grads()
@@ -118,19 +122,18 @@ for i in xrange(jump * n_epochs):
             accum_loss = Variable(cuda.zeros(()))
         else:
             accum_loss = Variable(np.zeros((), dtype=np.float32))
-
         optimizer.clip_grads(grad_clip)
         optimizer.update()
-
 #    if (i + 1) % 10000 == 0:
     if (i + 1) % 300 == 0:
-        fn = ('%s/charrnn_%d_epoch_%.2f.chainermodel' % (args.checkpoint_dir, n_units, float(i)/jump))
-        pickle.dump(copy.deepcopy(model).to_cpu(), open(fn, 'wb'))
-        pickle.dump(copy.deepcopy(model).to_cpu(), open('%s/latest_%d.chainermodel'%(args.checkpoint_dir, n_units), 'wb'))
+        print ' will save chainermodel data...'
+        fn = ('%s/charrnn_%s_%d_epoch_%.2f_lr_%.2f.chainermodel' % (args.checkpoint_dir, filename, n_units, float(i)/jump, loss_rate ) )
+        copyed_obj = copy.deepcopy(model).to_cpu()
+        pickle.dump(copyed_obj, open(fn, 'wb'))
+        pickle.dump(copyed_obj, open('%s/latest_%s_%d_lr_%.2f.chainermodel'%(args.checkpoint_dir, filename, n_units, loss_rate), 'wb'))
 
     if (i + 1) % jump == 0:
         epoch += 1
-
         if epoch >= args.learning_rate_decay_after:
             optimizer.lr *= args.learning_rate_decay
             print 'decayed learning rate by a factor {} to {}'.format(args.learning_rate_decay, optimizer.lr)
