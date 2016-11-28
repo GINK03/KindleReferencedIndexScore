@@ -75,7 +75,6 @@ def html_adhoc_fetcher(url):
     for a in soup.find_all('a', href=True):
         urls.append( a.get('href') )
         #print("debug", a.get("href"))
-
     """ アンカータグ a-tagを削除 """
     for t in soup.findAll("a"):
         t.extract()
@@ -96,15 +95,16 @@ if '-gq' in sys.argv:
     for line in nps:
         query = line.strip()
         print(query)
-        encoded = '+'.join(map(urllib.parse.quote_plus, ['艦これ', 'かわいい', query]))
-        reses = html_adhoc_fetcher('https://www.google.co.jp/search?client=ubuntu&channel=fs&q=' + encoded + '&num=10')
+        #encoded = '+'.join(map(urllib.parse.quote_plus, ['艦これ', 'かわいい', query]))
+        #reses = html_adhoc_fetcher('https://www.google.co.jp/search?client=ubuntu&channel=fs&q=' + encoded + '&num=10')
+        reses = html_adhoc_fetcher('https://www.bing.com/search?q=' + urllib.parse.quote_plus('艦これ かわいい ' + query) + '&count=100')
         if reses == None:
             continue
         title  = reses[0]
         anchor = reses[1]
         urls   = reses[2]
         body   = reses[3]
-        urls   = filter( lambda x:'google' not in x and 'http' in x and '/' != x[0] and 'youtube' not in x and 'blogger' not in x, urls)
+        urls   = filter( lambda x:'google' not in x and 'http' in x and '/' != x[0] and 'youtube' not in x and 'blogger' not in x and 'bing' not in x and 'microsoft' not in x, urls)
         for enum, url in enumerate(urls):
             keyurl = bytes(url, 'utf-8')
             if db.get(keyurl) != None:
@@ -130,7 +130,16 @@ if '-gq' in sys.argv:
 if '-gd' in sys.argv:
     import plyvel
     import json
+    names = set(filter(lambda x:"" != x, open('./kancolle.dat').read().split('\n')))
     db = plyvel.DB('kancolle.ldb')
+    results = set()
     for ind, (k, v) in enumerate(db):
-        print(k, ind, v.decode('utf-8'))
+        #print(k, ind, v.decode('utf-8'))
+        lines = filter(lambda x:"。" in x, v.decode('utf-8').split(' '))
+        for line in lines:
+            if any(map(lambda x: x in line, names)):
+                line = regex.sub('\d{1,}', 'number', line)
+                line = line.lower()
+                results.add(line)
 
+    open('results.txt', 'w').write('\n'.join(list(results)) )
