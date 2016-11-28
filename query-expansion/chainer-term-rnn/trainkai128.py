@@ -3,7 +3,7 @@ import time
 import math
 import sys
 import argparse
-import cPickle as pickle
+import pickle as pickle
 import copy
 import os
 import codecs
@@ -16,11 +16,11 @@ from CharRNN import CharRNN, make_initial_state
 # input data
 def load_data(args):
     vocab = {}
-    print ('%s/input.txt'% args.data_dir)
+    print(('%s/input.txt'% args.data_dir))
     #words = codecs.open('%s/input.txt' % args.data_dir, 'rb', 'utf-8').read()
     words = ''
     line = ''
-    with open('%s/input.txt' % args.data_dir, 'rb') as f:
+    with open('%s/input.txt' % args.data_dir, 'r') as f:
       line = f.read()
       line = line.replace('\n', ' ')
       words += line
@@ -32,8 +32,8 @@ def load_data(args):
         if word not in vocab:
             vocab[word] = len(vocab)
         dataset[i] = vocab[word]
-    print 'corpus length:', len(words)
-    print 'vocab size:', len(vocab)
+    print('corpus length:', len(words))
+    print('vocab size:', len(vocab))
     return dataset, words, vocab
 
 # arguments
@@ -67,7 +67,7 @@ grad_clip   = args.grad_clip
 train_data, words, vocab = load_data(args)
 pickle.dump(vocab, open('%s/vocab.bin'%args.data_dir, 'wb'))
 filename = args.data_dir.split('/')[1]
-print 'I will save a file name contains ', filename
+print('I will save a file name contains ', filename)
 
 if len(args.init_from) > 0:
     model = pickle.load(open(args.init_from, 'rb'))
@@ -89,18 +89,18 @@ cur_at       = start_at
 state        = make_initial_state(n_units, batchsize=batchsize)
 if args.gpu >= 0:
     accum_loss   = Variable(cuda.zeros(()))
-    for key, value in state.items():
+    for key, value in list(state.items()):
         value.data = cuda.to_gpu(value.data)
 else:
     accum_loss   = Variable(np.zeros((), dtype=np.float32))
 
-print 'going to train {} iterations'.format(jump * n_epochs)
+print('going to train {} iterations'.format(jump * n_epochs))
 loss_rate = 0.0
-for i in xrange(jump * n_epochs):
+for i in range(int(jump * n_epochs)):
     x_batch = np.array([train_data[(jump * j + i) % whole_len]
-                        for j in xrange(batchsize)])
+                        for j in range(batchsize)])
     y_batch = np.array([train_data[(jump * j + i + 1) % whole_len]
-                        for j in xrange(batchsize)])
+                        for j in range(batchsize)])
 
     if args.gpu >=0:
         x_batch = cuda.to_gpu(x_batch)
@@ -111,7 +111,7 @@ for i in xrange(jump * n_epochs):
 
     if (i + 1) % bprop_len == 0:  # Run truncated BPTT
         now = time.time()
-        print '{}/{}, train_loss = {}, time = {:.2f}'.format((i+1)/bprop_len, jump, accum_loss.data / bprop_len, now-cur_at)
+        print('{}/{}, train_loss = {}, time = {:.2f}'.format((i+1)/bprop_len, jump, accum_loss.data / bprop_len, now-cur_at))
         loss_rate = accum_loss.data / bprop_len
         cur_at = now
 
@@ -125,17 +125,17 @@ for i in xrange(jump * n_epochs):
         optimizer.clip_grads(grad_clip)
         optimizer.update()
 #    if (i + 1) % 10000 == 0:
-    if (i + 1) % 300 == 0:
-        print ' will save chainermodel data...'
+    if (i + 1) % 3000 == 0:
+        print(' will save chainermodel data...')
         fn = ('%s/charrnn_%s_%d_epoch_%.2f_lr_%.2f.chainermodel' % (args.checkpoint_dir, filename, n_units, float(i)/jump, loss_rate ) )
         copyed_obj = copy.deepcopy(model).to_cpu()
         pickle.dump(copyed_obj, open(fn, 'wb'))
-        pickle.dump(copyed_obj, open('%s/latest_%s_%d_lr_%.2f.chainermodel'%(args.checkpoint_dir, filename, n_units, loss_rate), 'wb'))
+        pickle.dump(copyed_obj, open('%s/latest_%s_%d.chainermodel'%(args.checkpoint_dir, filename, n_units), 'wb'))
 
     if (i + 1) % jump == 0:
         epoch += 1
         if epoch >= args.learning_rate_decay_after:
             optimizer.lr *= args.learning_rate_decay
-            print 'decayed learning rate by a factor {} to {}'.format(args.learning_rate_decay, optimizer.lr)
+            print('decayed learning rate by a factor {} to {}'.format(args.learning_rate_decay, optimizer.lr))
 
     sys.stdout.flush()
