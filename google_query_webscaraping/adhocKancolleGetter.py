@@ -52,10 +52,13 @@ def html_adhoc_fetcher(url):
         break
     if html == None:
         return None
-    #line = regex.sub('\n', '^A^B^C', html)
-    #line = regex.sub('<!--.*?-->', '',  line)
-    #line = regex.sub('<style.*?/style>', '',  line)
-    #html = regex.sub('<script.*?/script>', '', line ).replace('^A^B^C', ' ')
+    try:
+        line = regex.sub('\n', '^A^B^C', html.decode('utf-8'))
+    except:
+        return None
+    line = regex.sub('<!--.*?-->', '',  line)
+    line = regex.sub('<style.*?/style>', '',  line)
+    html = bytes(regex.sub('<script.*?/script>', '', line ).replace('^A^B^C', ' '), 'utf-8')
     #print(html)
     #sys.exit(0)
     soup = bs4.BeautifulSoup(html)
@@ -69,12 +72,10 @@ def html_adhoc_fetcher(url):
     anchor = 'ダミー'
     """anchor = ' '.join([a.text for a in soup.findAll('a') ])"""
     urls = []
-    print(str(html))
     for a in soup.find_all('a', href=True):
         urls.append( a.get('href') )
-        print("debug", a.get("href"))
+        #print("debug", a.get("href"))
 
-    sys.exit()
     """ アンカータグ a-tagを削除 """
     for t in soup.findAll("a"):
         t.extract()
@@ -90,16 +91,12 @@ if '-gq' in sys.argv:
     import json
     import plyvel 
     db = plyvel.DB("kancolle.ldb", create_if_missing=True, error_if_exists=False)
-    #nps = filter(lambda x:x!=('', ), [tuple(l.split('\t') ) for l in open('./negative_positive.dat').read().split('\n')] )
-    print(open('./kancolle.dat').read())
     nps = open('./kancolle.dat').read().split('\n')
     print(nps)
-    #print nps
     for line in nps:
         query = line.strip()
         print(query)
         encoded = '+'.join(map(urllib.parse.quote_plus, ['艦これ', 'かわいい', query]))
-        #encoded = "kaii"
         reses = html_adhoc_fetcher('https://www.google.co.jp/search?client=ubuntu&channel=fs&q=' + encoded + '&num=10')
         if reses == None:
             continue
@@ -107,16 +104,16 @@ if '-gq' in sys.argv:
         anchor = reses[1]
         urls   = reses[2]
         body   = reses[3]
-        print(urls)
+        urls   = filter( lambda x:'google' not in x and 'http' in x and '/' != x[0] and 'youtube' not in x and 'blogger' not in x, urls)
         for enum, url in enumerate(urls):
-            url = bytes(url, 'utf-8')
-            if db.get(url) != None:
+            keyurl = bytes(url, 'utf-8')
+            if db.get(keyurl) != None:
                 print(enum, line, "すでに解析済みです")
                 continue
             reses2 = html_adhoc_fetcher(url)
             if reses2 == None:
                 print("htmlの取得ができませんでした")
-                db.put(url, "___error1___")
+                db.put(keyurl, bytes("___error1___", 'utf-8') )
                 continue
             title2  = reses2[0]
             anchor2 = reses2[1]
@@ -129,11 +126,11 @@ if '-gq' in sys.argv:
                 body2 = regex.sub(s, t, body2)
             body2 = body2.lower()
             print(enum, query, "scripting 完了です")
-            db.put(url, body2 )
+            db.put(keyurl, bytes(body2, 'utf-8') )
 if '-gd' in sys.argv:
     import plyvel
     import json
     db = plyvel.DB('kancolle.ldb')
     for ind, (k, v) in enumerate(db):
-        print(k, ind, v)
+        print(k, ind, v.decode('utf-8'))
 
