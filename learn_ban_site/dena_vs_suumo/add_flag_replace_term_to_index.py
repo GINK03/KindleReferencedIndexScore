@@ -17,12 +17,15 @@ for filename, flag in [('./dena.wakati.txt', 1), ('./suumo.wakati.enum.txt' , 0)
     except:
       continue
     cnt = Counter(line.split(' ')[1:])
-    print flag,
+    buff = []
     for (t, f) in cnt.items():
         t = t.decode('utf-8')
         try:
-          print ':'.join(map(str, [idf[t][1],idf[t][0]*f])), 
+          buff.append( [idf[t][1], ':'.join(map(str, [idf[t][1]+1,idf[t][0]*f]))] )
           pass
         except:
           pass
+    print flag,
+    for tp in sorted(buff, key=lambda x:x[0]):
+        print tp[1],
     print 
