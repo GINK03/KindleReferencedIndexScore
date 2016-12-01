@@ -35,16 +35,26 @@ def func(ps, *xs):
         print 'iter ', error
     return error
 
+filenames = filter(lambda x:'-f=' in x, sys.argv)
+filename = ''
+if filenames != []:
+    filename = filenames.pop().split('=').pop()
+
+modelnames = filter(lambda x:'-m=' in x, sys.argv)
+modelname = ''
+if modelnames != []:
+    modelname = modelnames.pop().split('=').pop()
+
 if 'train' in sys.argv:
     max_f = 0
-    for line in open('./machine.txt.train').read().split('\n'):
+    for line in open(filename).read().split('\n'):
         if line == '': continue
         tp = line.split(' ')
         tp.pop(0)
         max_f = max(max_f, max( map(lambda x:int(x.split(':').pop(0)), tp) ) )
 
     max_f += 1
-    print max_f
+    #print max_f
     inits = np.array([0.0]*(max_f+1))
     bounds = []
     for _ in range(max_f+1):
@@ -52,25 +62,24 @@ if 'train' in sys.argv:
 
     from collections import Counter
     container = []
-    for line in open('./machine.txt.train').read().split('\n'):
+    for line in open(filename).read().split('\n'):
         if line == '': continue
         tp = line.split(' ')
         t = float(tp.pop(0))
         c = dict(map(lambda x: (int(x.split(':')[0]), float(x.split(':')[1])), tp) )
         container.append( (t, c) )
 
-    print container
     result = scipy.optimize.fmin_l_bfgs_b(func, x0=inits, args=(x_, y_), bounds=bounds, approx_grad=True)
-    print result
+    print 'result', result
     model = result[0]
-    print list(model)
+    print 'model', ', '.join(map(str, list(model)))
     import json
-    open('./test' + '.model', 'w').write(json.dumps(list(model)))
+    open(filename + '.model', 'w').write(json.dumps(list(model)))
 
 if 'pred' in sys.argv:
     import json
-    model = json.loads(open('./test' + '.model').read())
-    for line in open('./machine.txt.test').read().split('\n'):
+    model = json.loads(open(modelname).read())
+    for line in open(filename).read().split('\n'):
         if line == '' : continue
         tp = line.split(' ')
         target = float(tp.pop(0))
@@ -79,6 +88,6 @@ if 'pred' in sys.argv:
         for index, b in c.items():
            pred += b*model[index]
         pred += model[-1]
-        print target, pred
+        print target, 'pred', pred, 'real', target, 'delta**2', (target - pred)**2
          
 
