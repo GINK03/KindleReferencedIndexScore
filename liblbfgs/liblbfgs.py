@@ -11,15 +11,74 @@ m_ = 0
 b_ = 1.0
 y_ = m_*x_ + b_
 
+it = 1
 def func(ps, *xs):
+    global it
     x = xs[0]
     y = xs[1]
-    p1, p2 = ps
-    error = [p1**2 + p2**2]
-    return sum(error)
+    p1 = ps[0]
+    p2 = ps[1]
+    error = 0.
+    it += 1
+    for contain in container:
+        target = contain[0]
+        buff = 0.
+        buff += target
+        feats  = contain[1]
+        for i in range(max_f):
+           if feats.get(i) != None:
+             buff -= feats[i]*ps[i]
+        buff -= ps[max_f]
+        error += buff**2
+        #print buff, feats, ps
+    if it % 500 == 0:
+        print 'iter ', error
+    return error
 
-inits = np.array([1.0, 0.0])
-bounds = [(None,200), (None,None)]
+if 'train' in sys.argv:
+    max_f = 0
+    for line in open('./machine.txt.train').read().split('\n'):
+        if line == '': continue
+        tp = line.split(' ')
+        tp.pop(0)
+        max_f = max(max_f, max( map(lambda x:int(x.split(':').pop(0)), tp) ) )
 
-result = scipy.optimize.fmin_l_bfgs_b(func, x0=inits, args=(x_, y_), bounds=bounds, approx_grad=True)
-print result
+    max_f += 1
+    print max_f
+    inits = np.array([0.0]*(max_f+1))
+    bounds = []
+    for _ in range(max_f+1):
+        bounds.append( (None,None) )
+
+    from collections import Counter
+    container = []
+    for line in open('./machine.txt.train').read().split('\n'):
+        if line == '': continue
+        tp = line.split(' ')
+        t = float(tp.pop(0))
+        c = dict(map(lambda x: (int(x.split(':')[0]), float(x.split(':')[1])), tp) )
+        container.append( (t, c) )
+
+    print container
+    result = scipy.optimize.fmin_l_bfgs_b(func, x0=inits, args=(x_, y_), bounds=bounds, approx_grad=True)
+    print result
+    model = result[0]
+    print list(model)
+    import json
+    open('./test' + '.model', 'w').write(json.dumps(list(model)))
+
+if 'pred' in sys.argv:
+    import json
+    model = json.loads(open('./test' + '.model').read())
+    for line in open('./machine.txt.test').read().split('\n'):
+        if line == '' : continue
+        tp = line.split(' ')
+        target = float(tp.pop(0))
+        c = dict(map(lambda x: (int(x.split(':')[0]), float(x.split(':')[1])), tp) )
+        pred = 0.
+        for index, b in c.items():
+           pred += b*model[index]
+        pred += model[-1]
+        print target, pred
+         
+
