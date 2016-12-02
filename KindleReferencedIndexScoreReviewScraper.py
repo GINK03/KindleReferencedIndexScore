@@ -298,6 +298,7 @@ if __name__ == '__main__':
     parser.add_argument('--depth', help='how number of url this program will scrape')
     parser.add_argument('--mode', help='you can specify mode...')
     parser.add_argument('--refresh', help='create snapshot(true|false)')
+    parser.add_argument('--file', help='input filespath')
 
     args_obj = vars(parser.parse_args())
   
@@ -306,6 +307,8 @@ if __name__ == '__main__':
     mode = (lambda x:x if x else 'undefined')( args_obj.get('mode') )
 
     refresh    = (lambda x:False if x=='false' else True)( args_obj.get('refresh') )
+
+    filename = args_obj.get('file')
 
     if mode == 'local' or mode == 'level':
       db = plyvel.DB('./tmp/asin_reviews', create_if_missing=True)
@@ -323,6 +326,9 @@ if __name__ == '__main__':
           if 'offer-listing' in link: continue
           if '/e/' in link: continue
           if '/gp/' in link: continue
+          if '/ntpoffrw' in link: continue
+          link = (lambda x: x.split('?').pop(0) )(link)
+          link = (lambda x: x.split('=').pop(0).replace('/ref', '') )(link)
           links.add(link)
         print("リカバリーしました")
 
@@ -344,6 +350,8 @@ if __name__ == '__main__':
           for i, a in enumerate(set(map(lambda x:x['href'], soup.find_all('a', href=True) ) ) ):
             if len(a) <= 2: continue
             a = (lambda x: 'https://www.amazon.co.jp' + x if '/' == x[0] else x)(a)
+            a = (lambda x: x.split('?').pop(0) )(a)
+            a = (lambda x: x.split('=').pop(0).replace('/ref', '') )(a)
             if not 'www.amazon.co.jp' in a:
                 continue
             if get_asin(a) == None:
@@ -355,15 +363,94 @@ if __name__ == '__main__':
             if 'offer-listing' in a: continue
             if '/e/' in a: continue
             if '/gp/' in a: continue
+            if '/ntpoffrw' in a: continue
             links.add(a)
             db.put('___URLS___', json.dumps(list(links)))
           print('Saved ', url, ' 残り', len(links))
-    if mode == 'leveldump' or mode == 'localdump':
+
+if mode == 'leveldump' or mode == 'localdump':
         db = plyvel.DB('./tmp/asin_reviews', create_if_missing=True)
         for k, raw in db:
             if k == '___URLS___': continue
             if json.loads(raw) == []: continue
-            print(k)
+            #print(k)
             for txts in json.loads(raw):
-                rank, con = txts
-                print(rank.encode('utf-8'), con.encode('utf-8'))
+                rank, con = map(lambda x:x.encode('utf-8'), txts)
+                rank = float(rank.split(' ').pop())
+                print(rank, con)
+
+import MeCab
+import math
+import json
+if mode ==  'makeidf' :
+    idf = {}
+    c = 0
+    for line in open(filename).read().split('\n'):
+        c += 1
+        line = line.strip()
+        if line == '' : continue
+        tp  = line.lower().split(' ')
+        head = tp.pop(0)
+        contents = ''.join(tp)
+        m = MeCab.Tagger ("-Owakati")
+        for t in set(m.parse(contents).strip().split(' ')):
+            if idf.get(t) == None:
+                idf[t] = 1
+            else:
+                idf[t] += 1
+
+    it = {}
+    ti = {}
+    for i, (t, n) in enumerate(sorted(idf.items(), key=lambda x:x[1]*-1)):
+        idf[t] = math.log( float(c)/n )
+        ti[t] = i
+        it[i] = t
+  
+    open(filename + '.idf.json', 'w').write(json.dumps(idf))
+    open(filename + '.it.json', 'w').write(json.dumps(it))
+    open(filename + '.ti.json', 'w').write(json.dumps(ti))
+    for t, w in sorted(idf.items(), key=lambda x:x[1]*-1):
+        print(t, w)
+
+        
+if mode ==  'makesvm' :
+    idf = json.loads(open(filename + '.idf.json').read())
+    it  = json.loads(open(filename + '.it.json').read())
+    ti  = json.loads(open(filename + '.ti.json').read())
+    import random
+    from collections import Counter
+    inputs = list(filter(lambda x:x != '', open(filename).read().split('\n')))
+    random.shuffle(inputs)
+    for line in inputs:
+        line = line.strip()
+        if line == '' : continue
+        tp  = line.lower().split(' ')
+        head = int(float(tp.pop(0)))
+        contents = ''.join(tp)
+        m = MeCab.Tagger ("-Owakati")
+        res = []
+        if head in [1, 2, 3]:
+            print(0, end=" ")
+        elif head in [5]:
+            print(1, end=" ")
+        else: 
+            continue
+
+        for t, num in Counter(m.parse(contents).strip().split(' ')).items():
+            t = t.decode('utf-8')
+            res.append([ti[t], num*idf[t]])
+        for e, l in enumerate(sorted(res, key=lambda x:x[0])):
+            if e == 0: continue
+            print(':'.join(map(str, l)), end=" ")
+        print()
+
+if mode == "dumplinear":
+    it  = json.loads(open(filename + '.it.json').read())
+    evals = filter(lambda x:x!='', open(filename).read().split('\n'))
+    tw = {}
+    fixer = 0
+    for i, e in enumerate(evals[6:]):
+        #print(i, e, it.get(str(i)).encode('utf-8'))
+        tw[it.get(str(i+1)).encode('utf-8')] = float(e)
+    for t, w in sorted(tw.items(), key=lambda x:x[1]*-1):
+        print(t,w)
