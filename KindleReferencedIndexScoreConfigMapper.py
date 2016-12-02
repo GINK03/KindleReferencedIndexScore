@@ -3,6 +3,7 @@ import ConfigParser
 
 class CM:
     KINDLE_URL          = 'https://www.amazon.co.jp/Kindle-%E3%82%AD%E3%83%B3%E3%83%89%E3%83%AB-%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/b?ie=UTF8&node=2250738051'
+    REVIEW_URL          = 'https://www.amazon.co.jp/Amazon-W87CUN-Fire-TV-Stick/dp/B00ZVNYLS8/ref=lp_2408695051_1_1?s=digital-text&ie=UTF8&qid=1480579893&sr=1-1'
     RETRY_NUM           = 10
     USER_AGENT          = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36'
     DESIRABLE_PROCESS_NUM = None
