@@ -51,11 +51,10 @@ def html_adhoc_fetcher(url):
 	import cookielib
 	jar = cookielib.CookieJar()
 	jar.set_cookie(makeCookie("session-token", "mu26PbfgQT4xERN6gtu8SkSoPQ7kwdgVpR7LHWqDJep5QE34DERo6AkSa0hCEhblH9k/YZkyPjnI1OIAe1+dWkZAcWZSl7fdH6SilVpQlTiFWjlsrvrvxLvb3tx2oLReL+vmG1KVWqQngeJ0JzL1asxIc+ktBPwbu7J8DPkOq05vckf90UUTPYCi6EFG2KmCYj7Yy86T9lc/CiGp7ZOUswI4cLM6rt4mKUEqnhDmpSvWKqaPWsT9EWSHXtUyyugY"))
-	#ar.set_cookie(makeCookie("where", "here"))	
 	headers = {"Accept-Language": "en-US,en;q=0.5","User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Referer": "http://thewebsite.com","Connection": "keep-alive" } 
 	request = urllib2.Request(url=url, headers=headers)
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
-        _TIME_OUT = 5.#CM.HTTP_WAIT_SEC
+        _TIME_OUT = 5.
         try:
             html = opener.open(request, timeout = _TIME_OUT).read()
         except EOFError, e:
@@ -446,11 +445,33 @@ if mode ==  'makesvm' :
 
 if mode == "dumplinear":
     it  = json.loads(open(filename + '.it.json').read())
-    evals = filter(lambda x:x!='', open(filename).read().split('\n'))
+    evals = filter(lambda x:x!='', open(filename + '.model').read().split('\n'))
     tw = {}
     fixer = 0
     for i, e in enumerate(evals[6:]):
-        #print(i, e, it.get(str(i)).encode('utf-8'))
-        tw[it.get(str(i+1)).encode('utf-8')] = float(e)
+        tw[it.get(str(i+1)).encode('utf-8')] = float(e) 
     for t, w in sorted(tw.items(), key=lambda x:x[1]*-1):
         print(t,w)
+
+if mode == 'score':
+    tsv = filter(lambda x:x != '', open('stash/star_ranking.tsv').read().split('\n'))
+    trank = {}
+    for t_w in tsv:
+        t, w = t_w.split(' ')
+        trank[t] = float(w)
+    import json
+    import math
+    idf = json.loads(open(filename + '.idf.json').read())
+    m = MeCab.Tagger ("-Owakati")
+    for line in sys.stdin:
+        score = 0.
+        line = line.strip()
+        for t in m.parse(line).strip().split(' '):
+            if idf.get(t.decode('utf-8')) != None and trank.get(t) != None:
+                score += idf.get(t.decode('utf-8')) * trank.get(t)
+        res = int(1. / (1. + math.pow(math.e, score*-1 ) ) * 100)
+        if res < 50.:
+            print("だめっぽい文章", end=" ")
+        else:
+            print("よいっぽい文章", end=" ")
+        print("score =", res)
