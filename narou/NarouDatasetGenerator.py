@@ -41,6 +41,7 @@ def html_adhoc_fetcher(url, db):
         except UnicodeEncodeError, e:
             print('[WARN] Cannot access url with UnicodeEncodeError, try number is...', e, _, url, mp.current_process() )
             continue
+        break
     if html == None:
         return (None, None, None, None)
     """
@@ -51,7 +52,7 @@ def html_adhoc_fetcher(url, db):
     line = regex.sub('<style.*?/style>', '',  line)
     html = regex.sub('<script.*?/script>', '', line ).replace('^A^B^C', ' ')
  
-    soup = bs4.BeautifulSoup(html)
+    soup = bs4.BeautifulSoup(html, "lxml")
     title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
     links =  map( lambda x:'http://ncode.syosetu.com' + x, \
                 filter(lambda x: x[0] == '/' and regex.search('/[0-9a-z]{1,}/\d{1,}/', x), \
@@ -68,6 +69,7 @@ import copy
 def stemming_pair(soup):
     contents = soup.findAll('div', {'class': 'novel_view'})
     content  = ''.join( map(lambda x:x.text, contents) )
+    content  = regex.sub('\s{1,}', '\n', content)
     textlist = regex.sub('\s{1,}', '\n', content.encode('utf-8') ).split('\n')
     textlistd= copy.copy(textlist) 
     textlist.insert(0, 'None')
@@ -75,7 +77,9 @@ def stemming_pair(soup):
     zipped.pop(0)
     zipped.pop(0)
     zipped.pop()
-    return zipped
+    
+    #return zipped
+    return content
 
 if __name__ == '__main__':
     db = plyvel.DB('./url_contents_pair.ldb', create_if_missing=True)
@@ -85,15 +89,20 @@ if __name__ == '__main__':
         seedurl = 'http://ncode.syosetu.com/n9669bk/1/'
         html, title, links, soup = html_adhoc_fetcher(seedurl, db) 
         zipped = stemming_pair(soup)
-        db.put(seedurl, '\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
+        db.put(seedurl, zipped.encode('utf-8') )
         linkstack = links
-        for link in linkstack:
+        for i, link in enumerate(linkstack):
             if db.get(str(link)) == None:
                 html, title, links, soup = html_adhoc_fetcher(link, db) 
                 zipped = stemming_pair(soup)
-                db.put(str(link), '\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
-                print('\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
+                db.put(str(link), zipped.encode('utf-8'))
+                print(str(link), 'num=', i)
+                #db.put(str(link), '\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
+                #print('\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
                 linkstack.extend(links)
+    if '--plane' in sys.argv:
+        for k, v in db:
+            print(v)
     if '--dumpall' in sys.argv:
         with open('narou.src.txt', 'w') as fsrc:
             with open('narou.tgt.txt', 'w') as ftgt:
