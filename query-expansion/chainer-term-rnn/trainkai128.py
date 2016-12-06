@@ -41,7 +41,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir',                   type=str,   default='data/tinyshakespeare')
 parser.add_argument('--checkpoint_dir',             type=str,   default='cv')
 parser.add_argument('--gpu',                        type=int,   default=-1)
-parser.add_argument('--rnn_size',                   type=int,   default=128)
+parser.add_argument('--rnn_size',                   type=int,   default=768)
 parser.add_argument('--learning_rate',              type=float, default=2e-3)
 parser.add_argument('--learning_rate_decay',        type=float, default=0.97)
 parser.add_argument('--learning_rate_decay_after',  type=int,   default=10)
@@ -125,11 +125,11 @@ for i in range(int(jump * n_epochs)):
         optimizer.clip_grads(grad_clip)
         optimizer.update()
 #    if (i + 1) % 10000 == 0:
-    if (i + 1) % 3000 == 0:
+    if (i + 1) % 5000 == 0:
         print(' will save chainermodel data...')
         fn = ('%s/charrnn_%s_%d_epoch_%.2f_lr_%.2f.chainermodel' % (args.checkpoint_dir, filename, n_units, float(i)/jump, loss_rate ) )
         copyed_obj = copy.deepcopy(model).to_cpu()
-        pickle.dump(copyed_obj, open(fn, 'wb'))
+        #pickle.dump(copyed_obj, open(fn, 'wb'))
         pickle.dump(copyed_obj, open('%s/latest_%s_%d.chainermodel'%(args.checkpoint_dir, filename, n_units), 'wb'))
 
     if (i + 1) % jump == 0:
