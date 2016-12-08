@@ -74,6 +74,7 @@ if args.gpu >= 0:
     prev_char = cuda.to_gpu(prev_char)
 
 chosen_ps = []
+banset = set(open('./ban_words.txt').read().split('\n'))
 for i in range(len(inputs_index)):
     state, prob = model.forward_one_step(prev_char, prev_char, state, train=False)
 
@@ -83,13 +84,17 @@ for i in range(len(inputs_index)):
     prob_with_index = []
     for e, p in enumerate(probability):
         try:
-            prob_with_index.append( [e, p, ivocab[e] ] )
+            if ivocab[e] not in banset:
+                prob_with_index.append( [e, p, ivocab[e] ] )
+            else:
+                #print(ivocab[e])
+                pass
         except:
             pass
     prob_with_index.sort(key=lambda x:-1 * x[1] )
     #index = np.random.choice(range(len(probability)), p=probability)
     index = inputs_index[i]
-    print(( "index", index ))
+    #print( "index", index )
     if 'UNK' != index:
       chosen_p = probability[index]
       chosen_ps.append(chosen_p)
@@ -98,16 +103,22 @@ for i in range(len(inputs_index)):
       chosen_ps.append(0)
     #else:
     #    index = np.argmax(cuda.to_cpu(prob.data))
-    
-    print(( "try", i, "vocindex", index, "probability", chosen_p, "voc", (lambda x: ivocab[index] if index != 'UNK' else 'UNK')(None) ))
+    if index == 'UNK':
+      #print(   "try", i, "vocindex", index, "probability", chosen_p, "voc", (lambda x: ivocab[index] if index != 'UNK' else 'UNK')(None), end='' )
+      print( 'P1 ' + inputs[0] + ' ' , end='')
+      pass
     top_n_p_sum = 0.
     n_p_var = np.var(probability)
-    for e, p, t in prob_with_index[0:10]:
-        print(( "candidate", e, p, t ))
+    for e, p, t in prob_with_index[0:1000]:
+        if index == 'UNK':
+          #print( ' '.join(map(str, [" candidate", e, p, t])), end='' )
+          print( ':'.join(map(str, [t, p])) + ' ', end='' )
         top_n_p_sum += p
+    if index == 'UNK':
+        print()
     top_n_p_sum /= 10.
-    print(( "  average of top 10's prob sum", top_n_p_sum ))
-    print(( "  probability's variance ", n_p_var ))
+    #print( "  average of top 10's prob sum", top_n_p_sum )
+    #print( "  probability's variance ", n_p_var )
     if index != 'UNK':
       prev_char = np.array([index], dtype=np.int32)
       if args.gpu >= 0:
