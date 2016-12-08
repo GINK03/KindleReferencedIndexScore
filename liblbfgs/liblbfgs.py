@@ -28,9 +28,8 @@ def func(ps, *xs):
              buff -= feats[i]*ps[i]
         buff -= ps[max_f]
         error += buff**2
-        #print buff, feats, ps
     if it % 500 == 0:
-        print 'iter ', error
+        print 'iter ', it, 'error rate', error
     return error
 
 filenames = filter(lambda x:'-f=' in x, sys.argv)
