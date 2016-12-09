@@ -104,23 +104,24 @@ for j in range(10):
     """
     TOP N random select
     """
-    probs = [prob_with_index[0][1], prob_with_index[1][1]]
-    probs = [probs[0]/sum(probs), probs[1]/sum(probs)]
+    probs = [prob_with_index[0][1], prob_with_index[1][1], prob_with_index[2][1], prob_with_index[3][1]]
+    probs = [probs[0]/sum(probs), probs[1]/sum(probs),  probs[2]/sum(probs), probs[3]/sum(probs)]
     import random
-    saikoro = 0
     """
     任意のワードが支配的になってしまうことを防ぐ
     """
-    index = prob_with_index[saikoro][0]
-    if ivocab[index] in ['そ', '俺']:
-        if random.random() < 0.5:
-            saikoro = 1
-    if random.random() < 0.05:
-        saikoro = 1
-    index = prob_with_index[saikoro][0]
+    saikoro = 0
+    for _ in range(5):
+      index = prob_with_index[saikoro][0]
+      if ivocab[index] in ['こ', 'そ', '俺', '魔']:
+        seed =  random.random()
+        #print(saikoro, index, ivocab[index], seed)
+        if seed < 0.5:
+            saikoro += 1
         
     #print("try", i, "vocindex", index, "probability", chosen_p, "voc", ivocab[index])
     print(ivocab[index], end="")
+    #print(ivocab[index], ivocab[index] in ['こ', 'そ', '俺', '魔'] )
     result.append(ivocab[index])
     top_n_p_sum = 0.
     n_p_var = np.var(probability)
