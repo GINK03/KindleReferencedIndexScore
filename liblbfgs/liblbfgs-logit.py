@@ -24,7 +24,8 @@ def func(ps, *xs):
            if feats.get(i) != None:
              buff += feats[i]*ps[i]
         buff += ps[max_f]
-        error += buff - 1. / (1. + math.pow(math.e, buff*-1) )
+        error += (target - 1. / (1. + math.pow(math.e, buff*-1) ) )**2
+        #print error
     if it % 10 == 0:
         print 'iter ', it, 'error rate', error, 'buff', buff
     return error
@@ -52,7 +53,7 @@ if 'train' in sys.argv:
     inits = np.array([0.0]*(max_f+1))
     bounds = []
     for _ in range(max_f+1):
-        bounds.append( (-1.,1.) )
+        bounds.append( (-10.,10.) )
 
     from collections import Counter
     container = []
