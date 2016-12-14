@@ -48,10 +48,15 @@ def html_adhoc_fetcher(url):
     html = None
     retrys = [i for i in range(10)]
     for _ in retrys :
-	import cookielib
+	import cookielib, random
 	jar = cookielib.CookieJar()
 	jar.set_cookie(makeCookie("session-token", CM.SESSION_TOKEN))
 	jar.set_cookie(makeCookie("PHPSESSID", "375f0bb5f7425c4c75f3c7cd0123689a"))
+        ses_rand = int(random.random())
+        if ses_rand == 0:
+          jar.set_cookie(makeCookie("PHPSESSID", "5994399_b2be5341b1a9b7c34088e962b697a261"))
+        else:
+          jar.set_cookie(makeCookie("PHPSESSID", "5994399_79083e004df24ff1c4224888c65b60be"))
 	headers = {"Accept-Language": "en-US,en;q=0.5","User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Referer": "http://thewebsite.com","Connection": "keep-alive" } 
 	request = urllib2.Request(url=url, headers=headers)
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
@@ -314,15 +319,8 @@ if __name__ == '__main__':
 
       while links != set() :
         url = links.pop()
-        #print('url', url)
         def analyzing(links):
-          for _ in range(100):
-            html, title, soup = html_adhoc_fetcher(url)
-            if soup == None: 
-              #print('コンテンツが空でした', url)
-              continue
-            else:
-              break
+          html, title, soup = html_adhoc_fetcher(url)
           if soup == None:
             print('まじむりっす、ごめんなさい', url)
             return
@@ -340,9 +338,15 @@ if __name__ == '__main__':
             import urllib, random
             import cookielib
             jar = cookielib.CookieJar()
-            jar.set_cookie(makeCookie("PHPSESSID", "5994399_b2be5341b1a9b7c34088e962b697a261"))
-            ses_rand = int(randam.random()*2 )
             jar.set_cookie(makeCookie("device_token", "08a49c60aaeb60e12623e7ba23b31e22"))
+            jar.set_cookie(makeCookie("PHPSESSID", "5994399_b2be5341b1a9b7c34088e962b697a261"))
+            ses_rand = int(random.random()*2 )
+            
+            if ses_rand == 0:
+                jar.set_cookie(makeCookie("PHPSESSID", "5994399_b2be5341b1a9b7c34088e962b697a261"))
+            else:
+                jar.set_cookie(makeCookie("PHPSESSID", "5994399_79083e004df24ff1c4224888c65b60be"))
+
             headers = {"Accept-Language": "en-US,en;q=0.5","User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Referer": "http://thewebsite.com","Connection": "keep-alive"  } 
             request = urllib2.Request(url=imgurl, headers=headers)
             request.add_header('Referer', url)
@@ -364,51 +368,51 @@ if __name__ == '__main__':
             print("発見した画像", ' '.join(tags_save), url, imgurl)
 
           for imgurl in filter(lambda x:x!=None, [img.get('src') for img in  soup.find_all('img')]):
-                  #if '艦これ' not in tags_save and '艦隊これくしょん' not in tags_save:
-                  #    print('目的以外の画像です', ' '.join(tags_save))
-                  #    break
+            #if '艦これ' not in tags_save and '艦隊これくしょん' not in tags_save:
+            #    print('目的以外の画像です', ' '.join(tags_save))
+            #    break
             if '600x600' not in str(imgurl):
               continue
             import threading as T
             t = T.Thread(target=parse_img, args=(url,))
             t.start()
           if db.get(str(url)) == None and 'member_illust.php?' in url:
-              db.put(str(url), 'miss')
+            db.put(str(url), 'miss')
           
           tags = soup.find_all('a' )
           for tag in tags:
-              urllocal = tag.get('href')
-              try:
-                  str(urllocal)
-              except:
-                  continue
-              if urllocal != None and '/tags.php?tag=' in urllocal:
-                continue
-                #fullurl = 'http://www.pixiv.net/' + urllocal
-                #if db.get(str(fullurl)) == None:
-                #    links.add(fullurl)
-                #    db.put(str(fullurl), 'dummy')
-              if urllocal != None and '/search.php?word=' in urllocal:
-                fullurl = 'http://www.pixiv.net/' + urllocal
-                if '%E8%89%A6%E3%81%93%E3%82%8C' in fullurl and db.get(str(fullurl)) == None and 'novel' not in fullurl:
-                    urlparam = urllocal.split('=').pop()
-                    decode_urlparam = urllib.unquote(urlparam.encode('utf-8'))
-                    links.add(fullurl)
-                    db.put(str(fullurl), 'dummy')
-              if urllocal != None and '/member_illust.php?' in urllocal:
-                if 'http://' not in urllocal:
-                    fullurl = 'http://www.pixiv.net/' + urllocal
-                else:
-                    fullurl = urllocal
-                if db.get(str(fullurl)) == None and 'novel' not in fullurl:
-                    links.add(fullurl)
+            urllocal = tag.get('href')
+            try:
+              str(urllocal)
+            except:
+              continue
+            if urllocal != None and '/tags.php?tag=' in urllocal:
+              continue
+            #fullurl = 'http://www.pixiv.net/' + urllocal
+            #if db.get(str(fullurl)) == None:
+            #    links.add(fullurl)
+            #    db.put(str(fullurl), 'dummy')
+            if urllocal != None and '/search.php?word=' in urllocal:
+              fullurl = 'http://www.pixiv.net/' + urllocal
+              if '%E8%89%A6%E3%81%93%E3%82%8C' in fullurl and db.get(str(fullurl)) == None and 'novel' not in fullurl:
+                  urlparam = urllocal.split('=').pop()
+                  decode_urlparam = urllib.unquote(urlparam.encode('utf-8'))
+                  links.add(fullurl)
+                  db.put(str(fullurl), 'dummy')
+            if urllocal != None and '/member_illust.php?' in urllocal:
+              if 'http://' not in urllocal:
+                  fullurl = 'http://www.pixiv.net/' + urllocal
+              else:
+                  fullurl = urllocal
+              if db.get(str(fullurl)) == None and 'novel' not in fullurl:
+                  links.add(fullurl)
           db.put('___URLS___', json.dumps(list(links)))
           print("残りURLは", len(links), "です")
         import threading as T
         t = T.Thread(target=analyzing, args=(links,))
         t.start()
         #print("theadの数は" , T.active_count())
-        while T.active_count() > 50:
+        while T.active_count() > 10:
             import time 
             time.sleep(0.12)
         #analyzing(links)
