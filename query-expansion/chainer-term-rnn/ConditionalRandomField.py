@@ -38,9 +38,13 @@ class TextList:
         TextList.state =  make_initial_state(n_units, batchsize=1, train=False)
     @staticmethod
     def process_state():
+        buff = []
         for index,term in [(vocab.get(term),term) for term in TextList.data]:
             if index == None:
                 print(term, '0', 'undefined')
+                _ = [ term + ':0'] 
+                _.extend( ['0:0' for x in range(10)] ) 
+                buff.append( _ )
                 continue
 
             char = np.array([index], dtype=np.int32)
@@ -53,11 +57,22 @@ class TextList:
             prob_with_term = sorted(prob_with_term, key=lambda x:-1 * x[0] )
             if TextList.before_rank == None:
                 print(ivocab[index], "this is head")
+                _ = [ ivocab[index] + ':0.'] 
+                _.extend( ['0:0' for x in range(10)] ) 
+                buff.append( _ )
             else:
-                print(''.join(map(str,[ivocab[index],":",TextList.before_prob[index]])), ' '.join([':'.join(map(str, [(lambda x:x if x not in ['', ' ', '　'] else '<space>')(tp[1]), str(tp[0])[:10] ] )) for tp in TextList.before_rank[:10]]) )
+                print(''.join(map(str,[ivocab[index],":",str(math.log(TextList.before_prob[index]))[:5]])), \
+                        [':'.join(map(str, [(lambda x:x if x not in ['', ' ', '　'] else '<space>')(tp[1]), str(math.log(tp[0]))[:5] ] )) for tp in TextList.before_rank[:10]] \
+                        )
+                _ = [ ''.join(map(str,[ivocab[index],":",str(math.log(TextList.before_prob[index]))[:5]])) ]
+                _.extend( [':'.join(map(str, [(lambda x:x if x not in ['', ' ', '　'] else '<space>')(tp[1]), str(math.log(tp[0]))[:5] ] )) for tp in TextList.before_rank[:10]] )
+                buff.append( _ )
             TextList.before_prob = probability
             TextList.before_rank = prob_with_term
         print()
+        #print( list(map(list, zip(*buff))) )
+        inv = list(map(list, zip(*buff))) 
+        print('\n'.join([','.join(map(str, iner)) for iner in inv]) )
         return TextList.state
 
 if __name__ == '__main__':
