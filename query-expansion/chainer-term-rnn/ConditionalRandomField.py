@@ -41,8 +41,9 @@ class TextList:
         buff = []
         for index,term in [(vocab.get(term),term) for term in TextList.data]:
             if index == None:
-                print(term, '0', 'undefined')
-                _ = [ term + ':0'] 
+                #print(term, '0', 'undefined')
+                # _ = [ term + ':0'] 
+                _ = [ term ] 
                 _.extend( ['0:0' for x in range(10)] ) 
                 buff.append( _ )
                 continue
@@ -56,31 +57,43 @@ class TextList:
                 prob_with_term.append( [p, ivocab[e] ] )
             prob_with_term = sorted(prob_with_term, key=lambda x:-1 * x[0] )
             if TextList.before_rank == None:
-                print(ivocab[index], "this is head")
-                _ = [ ivocab[index] + ':0.'] 
+                #print(ivocab[index], "this is head")
+                #_ = [ ivocab[index] + ':0.'] 
+                _ = [ ivocab[index] ] 
                 _.extend( ['0:0' for x in range(10)] ) 
                 buff.append( _ )
             else:
-                print(''.join(map(str,[ivocab[index],":",str(math.log(TextList.before_prob[index]))[:5]])), \
-                        [':'.join(map(str, [(lambda x:x if x not in ['', ' ', '　'] else '<space>')(tp[1]), str(math.log(tp[0]))[:5] ] )) for tp in TextList.before_rank[:10]] \
-                        )
-                _ = [ ''.join(map(str,[ivocab[index],":",str(math.log(TextList.before_prob[index]))[:5]])) ]
+                #print(''.join(map(str,[ivocab[index],":",str(math.log(TextList.before_prob[index]))[:5]])), \
+                #        [':'.join(map(str, [(lambda x:x if x not in ['', ' ', '　'] else '<space>')(tp[1]), str(math.log(tp[0]))[:5] ] )) for tp in TextList.before_rank[:10]] \
+                #        )
+                #print(TextList.before_prob[index])
+                if TextList.before_prob[index] == 0.:
+                    _ = [ ''.join(map(str,["<<", ivocab[index] , ">>"])) ]
+                elif math.log(TextList.before_prob[index]) <= -20:
+                    _ = [ ''.join(map(str,["<<", ivocab[index] , ">>"])) ]
+                else:
+                    #_ = [ ''.join(map(str,[ivocab[index] + "",":",str(math.log(TextList.before_prob[index]))[:5]])) ]
+                    _ = [ ''.join(map(str,[ivocab[index] + ""])) ]
                 _.extend( [':'.join(map(str, [(lambda x:x if x not in ['', ' ', '　'] else '<space>')(tp[1]), str(math.log(tp[0]))[:5] ] )) for tp in TextList.before_rank[:10]] )
                 buff.append( _ )
             TextList.before_prob = probability
             TextList.before_rank = prob_with_term
-        print()
+        #print()
         #print( list(map(list, zip(*buff))) )
         inv = list(map(list, zip(*buff))) 
-        print('\n'.join([','.join(map(str, iner)) for iner in inv]) )
+        
+        #print('\n'.join([','.join(map(str, iner)) for iner in inv]) )
+        print("[proofreading]", [''.join(map(str, iner)) for iner in inv].pop(0) )
         return TextList.state
 
 if __name__ == '__main__':
     for line in sys.stdin:
+        line = line.strip()
+        if line == '' or 'http' in line: continue
         TextList.init_state()
         line = line.strip()
         TextList.update_data(line)
-        print(line)
+        print("[original]", line)
         state = TextList.process_state()
 
 
