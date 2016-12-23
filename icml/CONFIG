@@ -1,7 +1,7 @@
 # bird related data
-CUB_IMG_DIR=/home/gimpei/text_to_image/CUB_200_2011/images
-CUB_META_DIR=/home/gimpei/text_to_image/cub_icml
-CUB_NET_TXT=/home/gimpei/text_to_image/tori_all_enocoders\(lm_sje_nc4_cub_hybrid_gru18_a1_c512_0.00070_1_10_trainvalids.txt_iter30000\).t7
+CUB_IMG_DIR=/home/g/text_to_image/CUB_200_2011/images
+CUB_META_DIR=/home/g/text_to_image/cub_icml
+CUB_NET_TXT=/home/g/text_to_image/tori_all_enocoders\(lm_sje_nc4_cub_hybrid_gru18_a1_c512_0.00070_1_10_trainvalids.txt_iter30000\).t7
 
 # flowers related data
 FLOWERS_IMG_DIR=/mnt/brain1/scratch/reedscot/data/oxford102

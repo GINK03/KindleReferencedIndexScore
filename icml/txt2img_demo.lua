@@ -54,7 +54,7 @@ end
 for m in string.gmatch(text, '%S+') do 
   print( 'parsed with string.gmatch ' .. m )
 end
-os.exit(0)
+-- os.exit(0)
 
 -- Extract all text features.
 local fea_txt = {}
