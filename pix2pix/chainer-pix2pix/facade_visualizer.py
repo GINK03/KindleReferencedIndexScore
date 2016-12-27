@@ -9,7 +9,7 @@ import chainer
 import chainer.cuda
 from chainer import Variable
 
-def out_image(updater, enc, dec, rows, cols, seed, dst):
+def out_image(updater, enc, dec, rows, cols, seed, dst, in_ch=12):
     @chainer.training.make_extension()
     def make_image(trainer):
         np.random.seed(seed)
@@ -18,7 +18,6 @@ def out_image(updater, enc, dec, rows, cols, seed, dst):
         
         w_in = 256
         w_out = 256
-        in_ch = 12
         out_ch = 3
         
         in_all = np.zeros((n_images, in_ch, w_in, w_in)).astype("i")
@@ -64,11 +63,57 @@ def out_image(updater, enc, dec, rows, cols, seed, dst):
         x = np.asarray(np.clip(gen_all * 128 + 128, 0.0, 255.0), dtype=np.uint8)
         save_image(x, "gen")
         
-        x = np.ones((n_images, 3, w_in, w_in)).astype(np.uint8)*255
-        x[:,0,:,:] = 0
-        for i in range(12):
-            x[:,0,:,:] += np.uint8(15*i*in_all[:,i,:,:])
-        save_image(x, "in", mode='HSV')
+        #x = np.ones((n_images, 3, w_in, w_in)).astype(np.uint8)*255
+        ## ANCHOR
+        x = np.ones((w_in, w_in, 3)).astype(np.uint8)*255
+        xs1 = None
+        xs2 = None
+        xs3 = None
+        xs4 = None
+        xs5 = None
+        for _ in range(25):
+            for i in range(in_ch):
+              x[:,:,i] = np.uint8(in_all[_][i,:,:])
+            if _ < 5:
+              if xs1 is None:
+                xs1 = x
+                continue
+              else:
+                xs1 = np.concatenate( (xs1, x), axis = 1)
+                continue
+            elif _ < 10:
+              if xs2 is None:
+                xs2 = x
+                continue
+              else:
+                xs2 = np.concatenate( (xs2, x), axis = 1)
+                continue
+            elif _ < 15:
+              if xs3 is None:
+                xs3 = x
+                continue
+              else:
+                xs3 = np.concatenate( (xs3, x), axis = 1)
+                continue
+            elif _ < 20:
+              if xs4 is None:
+                xs4 = x
+                continue
+              else:
+                xs4 = np.concatenate( (xs4, x), axis = 1)
+                continue
+            elif _ < 25:
+              if xs5 is None:
+                xs5 = x
+                continue
+              else:
+                xs5 = np.concatenate( (xs5, x), axis = 1)
+                continue
+        xs = np.concatenate( (xs1, xs2, xs3, xs4, xs5), axis = 0 )
+        # edit and hack
+        # save_image(x, "in", mode='RGB')
+        Image.fromarray(xs, mode='RGB').save('out/preview/image_in_' + \
+                str(trainer.updater.iteration) + '.png')
         
         x = np.asarray(np.clip(gt_all * 128+128, 0.0, 255.0), dtype=np.uint8)
         save_image(x, "gt")
