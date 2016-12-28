@@ -17,12 +17,13 @@ dataset = dataset.astype('float32')
 """ ノーマライゼーション """
 dataset -= np.min(np.abs(dataset))
 dataset /= np.max(np.abs(dataset))
-
+DELTA = 1
 def create_dataset(dataset, steps_of_history, steps_in_future):
     X, Y = [], []
-    for i in range(0, len(dataset)-steps_of_history, steps_in_future):
-        X.append(dataset[i:i+steps_of_history])
-        Y.append(dataset[i + steps_of_history])
+    for i in range(0, len(dataset)-steps_of_history - DELTA, steps_in_future):
+          X.append(dataset[i:i+steps_of_history])
+          #Y.append(dataset[i + steps_of_history ])
+          Y.append(dataset[i + steps_of_history + DELTA])
     X = np.reshape(np.array(X), [-1, steps_of_history, 1])
     Y = np.reshape(np.array(Y), [-1, 1])
     return X, Y
@@ -41,12 +42,14 @@ trainX, trainY, testX, testY = split_data(X, Y, 0.33)
 
 net = tflearn.input_data(shape=[None, steps_of_history, 1])
 net = tflearn.lstm(net, n_units=6)
+# net = tflearn.gru(net, n_units=6, return_seq=True)
+# net = tflearn.gru(net, n_units=6)
 net = tflearn.fully_connected(net, 1, activation='linear')
 net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
         loss='mean_square')
 
 model = tflearn.DNN(net, tensorboard_verbose=0)
-model.fit(trainX, trainY, validation_set=0.1, batch_size=1, n_epoch=50)
+model.fit(trainX, trainY, validation_set=0.1, batch_size=1, n_epoch=30)
 
 
 train_predict = model.predict(trainX)
@@ -59,7 +62,7 @@ train_predict_plot[steps_of_history:len(train_predict)+steps_of_history, :] = \
 
 test_predict_plot = np.empty_like(dataset)
 test_predict_plot[:, :] = np.nan
-test_predict_plot[len(train_predict)+steps_of_history:len(dataset), :] = \
+test_predict_plot[len(train_predict)+steps_of_history:len(dataset) - DELTA , :] = \
         test_predict
 """
 暁の水平線に勝利を刻みなさい
@@ -70,4 +73,4 @@ plt.plot(dataset)
 plt.plot(train_predict_plot)
 plt.plot(test_predict_plot)
 plt.savefig('passenger.png')
-print(train_predict_plot)
+#print(train_predict_plot)
