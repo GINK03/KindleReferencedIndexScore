@@ -71,7 +71,7 @@ class FacadeUpdater(chainer.training.StandardUpdater):
             #print("IN_CONTAIN", in_contain)
             for c in in_contain:
                 path_through1.append(c)
-        print("path-through len", len(path_through1))
+        #print("path-through len", len(path_through1))
         """ ここまで """
 
         out_ch = batch[0][1].shape[0]
@@ -88,7 +88,7 @@ class FacadeUpdater(chainer.training.StandardUpdater):
         
         z = enc(x_in, test=False)
         """ このzベクトルを変化させれば、任意の方向性に持っていくことができる """
-        print("z", z)
+        #print("z", z)
         """ Zを直接編集するのは危険なので、decの引数を増やして対処したほうが良さそう """
         x_out = dec(z, path_through1, test=False)
 
