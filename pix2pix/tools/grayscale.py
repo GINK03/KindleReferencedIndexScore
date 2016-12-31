@@ -28,8 +28,9 @@ for k, v in json.loads(open('./linker_tags.json').read()).items():
     linkers.add(k)
 
 print('number of fleet girls', len(linkers), c)
-
-for e, fname in enumerate(glob.glob('./cp/*.jpg')):
+source = 'hp'
+target = 'ip'
+for e, fname in enumerate(glob.glob('./' + source + '/*.jpg')):
     im = cv2.imread(fname)
     if fname.split('/').pop() not in linkers:
         continue
@@ -79,7 +80,7 @@ for e, fname in enumerate(glob.glob('./cp/*.jpg')):
         result = cv2.subtract(shifted, edges)
         invedges = 255 - edges
         """
-        outfname = './gp/' + fname.split('/').pop()
+        outfname = './' + target + '/' + fname.split('/').pop()
         color = ':'.join(map(str, [r,g,b]))
         cv2.imwrite(outfname + '.cnv.png', dst_gray)
         cv2.imwrite(outfname + '.org.jpg', im)
