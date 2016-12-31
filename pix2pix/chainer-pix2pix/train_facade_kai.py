@@ -18,7 +18,7 @@ from updater import FacadeUpdater
 
 from facade_dataset import GGGDataset as FacadeDataset
 from facade_visualizer import out_image
-ALL_NUM = 2715
+ALL_NUM = 4000
 train_range = (1, int(ALL_NUM*0.8))
 test_range  = (int(ALL_NUM*0.8)+1, ALL_NUM)
 def main():
@@ -49,7 +49,7 @@ def main():
     print('')
 
     # Set up a neural network to train
-    IN_CH = 3
+    IN_CH = 4
     OUT_CH = 3
     enc = Encoder(in_ch=IN_CH)
     dec = Decoder(out_ch=OUT_CH)

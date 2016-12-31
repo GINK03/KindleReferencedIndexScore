@@ -71,8 +71,9 @@ def out_image(updater, enc, dec, rows, cols, seed, dst, in_ch=12):
         xs3 = None
         xs4 = None
         xs5 = None
+        G_FIX = 1
         for _ in range(25):
-            for i in range(in_ch):
+            for i in range(in_ch - G_FIX):
               x[:,:,i] = np.uint8(in_all[_][i,:,:])
             if _ < 5:
               if xs1 is None:
