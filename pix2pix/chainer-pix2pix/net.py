@@ -73,7 +73,7 @@ class Decoder(chainer.Chain):
         layers['c7'] = F.Convolution2D(128, out_ch, 3, 1, 1, initialW=w)
         super(Decoder, self).__init__(**layers)
 
-    def __call__(self, hs, test=False):
+    def __call__(self, hs, path_through, test=False):
         """ zのフォーマットはshape(1, 512, 2, 2)となっており、512bitが最大値だと思われる """
         """
         - device: <CUDA Device 0>
@@ -88,12 +88,15 @@ class Decoder(chainer.Chain):
         import cupy.manipulation.join as cujoin
         from chainer import Variable
         cucat = cujoin.concatenate
-        sample = cp.array([[[[1, 9],[2, 8]]]]).astype('float32')
-        print( sample.shape )
+        path_through
+        for i in range(len(path_through)-4):
+            p1, p2, p3, p4 = path_through[i:i+4]
+            sample = cp.array([[[[p1, p2], [p3, p4]]]]).astype('float32')
+        #print( sample.shape )
         vsample = Variable(sample)
         import chainer.functions.array.concat as cat
         hs[-1] = cat.concat([hs[-1], vsample])
-        print("hs", hs[-1], hs[-1].__len__(), hs[-1].debug_print())
+        #print("hs", hs[-1], hs[-1].__len__(), hs[-1].debug_print())
         h = self.c0(hs[-1], test=test)
         for i in range(1,8):
             h = F.concat([h, hs[-i-1]])
