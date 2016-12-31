@@ -62,7 +62,7 @@ class GGGDataset(dataset_mixin.DatasetMixin):
         self.IN_CH = 3
         self.dataDir = dataDir
         self.dataset = []
-        files = g('./mingp/*')
+        files = g('./gp/*')
         orgs = list(filter(lambda x:'.org.' in x, files))
         heads = []
         for org in orgs:

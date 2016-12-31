@@ -71,6 +71,9 @@ class FacadeUpdater(chainer.training.StandardUpdater):
         x_in = Variable(x_in)
         
         z = enc(x_in, test=False)
+        """ このzベクトルを変化させれば、任意の方向性に持っていくことができる """
+        print("z", z)
+        """ Zを直接編集するのは危険なので、decの引数を増やして対処したほうが良さそう """
         x_out = dec(z, test=False)
 
         y_fake = dis(x_in, x_out, test=False)
