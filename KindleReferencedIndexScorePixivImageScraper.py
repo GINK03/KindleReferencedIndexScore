@@ -48,17 +48,17 @@ def html_adhoc_fetcher(url):
     html = None
     retrys = [i for i in range(10)]
     for _ in retrys :
-	import cookielib, random
-	jar = cookielib.CookieJar()
-	jar.set_cookie(makeCookie("session-token", CM.SESSION_TOKEN))
-	jar.set_cookie(makeCookie("PHPSESSID", "375f0bb5f7425c4c75f3c7cd0123689a"))
-        ses_rand = int(random.random())
+        import cookielib, random
+        jar = cookielib.CookieJar()
+        jar.set_cookie(makeCookie("session-token", CM.SESSION_TOKEN))
+        jar.set_cookie(makeCookie("PHPSESSID", "375f0bb5f7425c4c75f3c7cd0123689a"))
+        ses_rand = round(random.random())
         if ses_rand == 0:
           jar.set_cookie(makeCookie("PHPSESSID", "5994399_b2be5341b1a9b7c34088e962b697a261"))
         else:
           jar.set_cookie(makeCookie("PHPSESSID", "5994399_79083e004df24ff1c4224888c65b60be"))
-	headers = {"Accept-Language": "en-US,en;q=0.5","User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Referer": "http://thewebsite.com","Connection": "keep-alive" } 
-	request = urllib2.Request(url=url, headers=headers)
+        headers = {"Accept-Language": "en-US,en;q=0.5","User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Referer": "http://thewebsite.com","Connection": "keep-alive" } 
+        request = urllib2.Request(url=url, headers=headers)
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
         _TIME_OUT = 5.
         try:
@@ -310,131 +310,174 @@ if __name__ == '__main__':
       NOTE: Snapshotが何もない場合、initialize_parse_and_map_data_to_local_dbを呼び出して初期化を行う
       """
       
-      links = set(["http://www.pixiv.net/search.php?word=%E8%89%A6%E3%81%93%E3%82%8C&order=date_d&p=29"])
+      links = set(["http://www.pixiv.net/member_illust.php?mode=medium&illust_id=60675452"])
 
       if db.get('___URLS___') != None:
         for link in json.loads(db.get('___URLS___')):
           links.add(link)
-        print("リカバリーしました")
+        print("URLをリカバリーしました")
 
-      while links != set() :
-        url = links.pop()
-        def analyzing(links):
-          html, title, soup = html_adhoc_fetcher(url)
-          if soup == None:
-            print('まじむりっす、ごめんなさい', url)
-            return
+      """
+      内側の画像を取得して保存用のスレッド 
+      """
+      def parse_img(url, imgurl, tagname):
+        import urllib, random
+        import cookielib
+        jar = cookielib.CookieJar()
+        jar.set_cookie(makeCookie("device_token", "08a49c60aaeb60e12623e7ba23b31e22"))
+        jar.set_cookie(makeCookie("PHPSESSID", "5994399_b2be5341b1a9b7c34088e962b697a261"))
+        ses_rand = int(random.random()*2 )
+      
+        if ses_rand == 0:
+          jar.set_cookie(makeCookie("PHPSESSID", "5994399_b2be5341b1a9b7c34088e962b697a261"))
+        else:
+          jar.set_cookie(makeCookie("PHPSESSID", "5994399_79083e004df24ff1c4224888c65b60be"))
 
-          tags = soup.find_all('a' )
-          tags_save = []
-          for tag in tags:
-              urllocal = tag.get('href')
-              if urllocal != None and '/tags.php?tag=' in urllocal:
-                urlparam = urllocal.split('=').pop()
-                decode_urlparam = urllib.unquote(urlparam.encode('utf-8'))
-                tags_save.append(decode_urlparam)
-          
-          def parse_img(url):
-            import urllib, random
-            import cookielib
-            jar = cookielib.CookieJar()
-            jar.set_cookie(makeCookie("device_token", "08a49c60aaeb60e12623e7ba23b31e22"))
-            jar.set_cookie(makeCookie("PHPSESSID", "5994399_b2be5341b1a9b7c34088e962b697a261"))
-            ses_rand = int(random.random()*2 )
-            
-            if ses_rand == 0:
-                jar.set_cookie(makeCookie("PHPSESSID", "5994399_b2be5341b1a9b7c34088e962b697a261"))
-            else:
-                jar.set_cookie(makeCookie("PHPSESSID", "5994399_79083e004df24ff1c4224888c65b60be"))
+        headers = {"Accept-Language": "en-US,en;q=0.5","User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Referer": "http://thewebsite.com","Connection": "keep-alive"  } 
+        request = urllib2.Request(url=imgurl, headers=headers)
+        request.add_header('Referer', url)
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
 
-            headers = {"Accept-Language": "en-US,en;q=0.5","User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Referer": "http://thewebsite.com","Connection": "keep-alive"  } 
-            request = urllib2.Request(url=imgurl, headers=headers)
-            request.add_header('Referer', url)
-            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
-
-            linker = str(random.random()) + "," + str(random.random())
-            for _ in range(1000):
-              n = 1024*1024
-              try:
-                con = opener.open(request).read(n)
-                if len(con) == 0:
-                    print("ゼロエラーです", url)
-                    continue
-                file('./tmp/' + linker + '.jpg', 'w').write(con)
-                break
-              except:
-                continue
+        linker = str(random.random()) + "," + str(random.random()) + "," + str(random.random())  + "," + tagname
+        for _ in range(1000):
+          n = 1024*1024
+          try:
+            con = opener.open(request).read(n)
+            if len(con) == 0:
+              print("ゼロエラーです", imgurl)
+              continue
+            file('./tmp/' + linker + '.jpg', 'w').write(con)
             db.put(str(url), json.dumps({'linker':linker + '.jpg', 'tags': tags_save }) )
             print("発見した画像", ' '.join(tags_save), url, imgurl)
-
-          for imgurl in filter(lambda x:x!=None, [img.get('src') for img in  soup.find_all('img')]):
-            #if '艦これ' not in tags_save and '艦隊これくしょん' not in tags_save:
-            #    print('目的以外の画像です', ' '.join(tags_save))
-            #    break
-            if '600x600' not in str(imgurl):
-              continue
-            import threading as T
-            t = T.Thread(target=parse_img, args=(url,))
-            t.start()
-          if db.get(str(url)) == None and 'member_illust.php?' in url:
-            db.put(str(url), 'miss')
-          
-          tags = soup.find_all('a' )
-          for tag in tags:
+            break
+          except:
+            continue
+      """
+      スパイダー部分、エントロピーがいくらでも上がるので、実装には気をつけないと行けない
+      """
+      def analyzing(url):
+        try:
+            str(url)
+        except:
+            print("URL情報が破損しています", url)
+            return 
+        if db.get(str(url)) != None:
+            print("解析対象ではありません、スキップします", url)
+            return
+        print("analyzerが起動しました。対象URLは", url)
+        html, title, soup = html_adhoc_fetcher(url)
+        if soup == None:
+          print('bs4がギブアップしました。まじむりっす、ごめんなさい', url)
+          db.put(str(url), 'majimuri')
+          return
+        tags = soup.find_all('a' )
+        tags_save = []
+        for tag in tags:
             urllocal = tag.get('href')
-            try:
-              str(urllocal)
-            except:
-              continue
             if urllocal != None and '/tags.php?tag=' in urllocal:
-              continue
-            #fullurl = 'http://www.pixiv.net/' + urllocal
-            #if db.get(str(fullurl)) == None:
-            #    links.add(fullurl)
-            #    db.put(str(fullurl), 'dummy')
-            if urllocal != None and '/search.php?word=' in urllocal:
-              fullurl = 'http://www.pixiv.net/' + urllocal
-              if '%E8%89%A6%E3%81%93%E3%82%8C' in fullurl and db.get(str(fullurl)) == None and 'novel' not in fullurl:
-                  urlparam = urllocal.split('=').pop()
-                  decode_urlparam = urllib.unquote(urlparam.encode('utf-8'))
-                  links.add(fullurl)
-                  db.put(str(fullurl), 'dummy')
-            if urllocal != None and '/member_illust.php?' in urllocal:
-              if 'http://' not in urllocal:
-                  fullurl = 'http://www.pixiv.net/' + urllocal
-              else:
-                  fullurl = urllocal
-              if db.get(str(fullurl)) == None and 'novel' not in fullurl:
-                  links.add(fullurl)
-          db.put('___URLS___', json.dumps(list(links)))
-          print("残りURLは", len(links), "です")
+              urlparam = urllocal.split('=').pop()
+              decode_urlparam = urllib.unquote(urlparam.encode('utf-8'))
+              tags_save.append(decode_urlparam)
+        if set(['艦これ', '東方', 'FGO', 'シャドウバース']).intersection(set(tags_save)) == set():
+            print("該当コンテンツはターゲットではありません、スキップします", ','.join(tags_save))
+            db.put(str(url), 'notarget')
+            return 
+        else:
+            print('解析対象は、こんな感じです', url, ','.join(tags_save) )
+            pass
+
+        for imgurl in filter(lambda x:x!=None, [img.get('src') for img in  soup.find_all('img')]):
+          if '600x600' not in str(imgurl):
+            continue
+          get_image_t = T.Thread(target=parse_img, args=(url, imgurl,','.join(tags_save)))
+          get_image_t.start()
+        if db.get(str(url)) == None and 'member_illust.php?' in url:
+          db.put(str(url), 'miss')
+        
+        tags = soup.find_all('a')
+        for tag in tags:
+          urllocal = tag.get('href')
+          try:
+            str(urllocal)
+          except:
+            continue
+          if urllocal != None and '/tags.php?tag=' in urllocal:
+            fullurl = 'http://www.pixiv.net/' + urllocal
+            if db.get(str(fullurl)) == None:
+                urlparam = urllocal.split('=').pop()
+                decode_urlparam = urllib.unquote(urlparam.encode('utf-8'))
+                #print("param", decode_urlparam)
+                links.add(fullurl)
+                
+          if urllocal != None and '/search.php?word=' in urllocal:
+            fullurl = 'http://www.pixiv.net/' + urllocal
+            if db.get(str(fullurl)) == None:
+                urlparam = urllocal.split('=').pop()
+                decode_urlparam = urllib.unquote(urlparam.encode('utf-8'))
+                #print("param2", decode_urlparam)
+                links.add(fullurl)
+          
+          if urllocal != None and '/member_illust.php?' in urllocal:
+            if 'http://' not in urllocal:
+                fullurl = 'http://www.pixiv.net/' + urllocal
+            else:
+                fullurl = urllocal
+            if db.get(str(fullurl)) == None:
+                links.add(fullurl)
+  
+        db.put('___URLS___', json.dumps(list(links)))
+        print("残りURLは", len(links), "です")
+      import time
+      while True:
         import threading as T
-        t = T.Thread(target=analyzing, args=(links,))
+        url = links.pop()
+        #analyzing(url)
+        t = T.Thread(target=analyzing, args=(url,))
         t.start()
-        #print("theadの数は" , T.active_count())
-        while T.active_count() > 10:
-            import time 
-            time.sleep(0.12)
+        print("theadの数は" , T.active_count())
+        time.sleep(0.1)
+        #while T.active_count() > 100:
+        #    pass
         #analyzing(links)
-
-
-
 
 if mode == 'leveldump' or mode == 'localdump':
         db = plyvel.DB('./tmp/pixiv_htmls', create_if_missing=True)
         for k, raw in db:
             if k == '___URLS___': continue
-            try:
-                json.loads(raw)
-            except:
-                continue
-            for k, v in json.loads(raw).items():
-                if isinstance(v, list):
-                    print(' '.join(map(lambda x:x.encode('utf-8'), set(v))), end=" ")
-                else:
-                    print(v, end=" ")
-            print()
+            if raw[0] != '{': continue
+            #print(k)
+            #print(raw)
+            v = json.loads(raw)
+            tags = v['tags']
+            tag_txt = ' '.join(map(lambda x:x.encode('utf-8'), tags))
+            tag_txt = re.sub('【', '', tag_txt)
+            tag_txt = re.sub('】', '', tag_txt)
+            tag_txt = tag_txt.lower()
+            print(tag_txt)
 
+if mode == 'chaine':
+        import os
+        db = plyvel.DB('./tmp/pixiv_htmls', create_if_missing=True)
+        for k, raw in map(lambda x:x, db):
+            if k == '___URLS___': continue
+            if raw[0] != '{': continue
+            #print(k)
+            #print(raw)
+            v = json.loads(raw)
+            tags = v['tags']
+            tag_txt = ' '.join(map(lambda x:x.encode('utf-8'), tags))
+            tag_txt = re.sub('【', '', tag_txt)
+            tag_txt = re.sub('】', '', tag_txt)
+            tag_txt = tag_txt.lower()
+            #print(v)
+
+            linker = v['linker']
+            if not os.path.exists('tmp/' + linker):
+                print(linker + ' is not exists.' )
+                db.put(k, 'miss')
+            else:
+                print(linker + ' is exists.' )
+                os.system('mv tmp/'+ linker + ' cp/')
 
 import MeCab
 import math

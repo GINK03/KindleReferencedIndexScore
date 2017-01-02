@@ -6,19 +6,47 @@ import cv2
 import sys
 import glob
 import numpy as np
+import plyvel
+import json
 
-for fname in glob.glob('./cp/*.jpg'):
+linkers = set()
+c = 1
+"""
+for k, v in plyvel.DB('./cp/pixiv_htmls'):
+    k = k.decode('utf-8')
+    v = v.decode('utf-8')
+    if 'URL' in k: continue
+    try:
+     o = json.loads(v)
+    except:
+     continue
+    c += 1
+    if '艦これ' in ''.join(o.get('tags')):
+        linkers.add(o['linker'])
+"""
+for k, v in json.loads(open('./linker_tags.json').read()).items():
+    linkers.add(k)
+
+print('number of fleet girls', len(linkers), c)
+source = 'hp'
+target = 'ip'
+for e, fname in enumerate(glob.glob('./' + source + '/*.jpg')):
     im = cv2.imread(fname)
+    if fname.split('/').pop() not in linkers:
+        continue
     h, w, channels = im.shape
-    if float(h)/w > 3 or float(h)/w < 0.33 : 
+    if float(h)/w > 2 or float(h)/w < 0.5 : 
         print('サイズ比がおかしいです', fname )
         continue
     else:
         hen = min( [h, w] )
+        """
+        # リサイザ、特に必要ないと思われるので一時的に無効にする
         if h > hen:
             im = im[h/2 - hen/2:h/2 + hen/2, :]
         else:
             im = im[:, w/2 - hen/2:w/2 + hen/2]
+        """
         r, g, b = 0., 0., 0.
         for i in range(hen):
             for j in range(hen):
@@ -29,8 +57,9 @@ for fname in glob.glob('./cp/*.jpg'):
         r = r/(hen**2)
         g = g/(hen**2)
         b = b/(hen**2)
-        if sum(map(abs, [r - g, g - b, b - r ]) )  < 10. :
+        if sum(map(abs, [r - g, g - b, b - r ]) )  < 12. :
             print('モノクロの可能性があります、スキップします')
+            continue
         gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
         blur = cv2.GaussianBlur(im, ksize=(21, 21), sigmaX=0, sigmaY=0) 
         inv  = 255 - blur
@@ -51,9 +80,9 @@ for fname in glob.glob('./cp/*.jpg'):
         result = cv2.subtract(shifted, edges)
         invedges = 255 - edges
         """
-        outfname = './gp/' + fname.split('/').pop()
+        outfname = './' + target + '/' + fname.split('/').pop()
         color = ':'.join(map(str, [r,g,b]))
         cv2.imwrite(outfname + '.cnv.png', dst_gray)
         cv2.imwrite(outfname + '.org.jpg', im)
-        print(fname)
-        print(outfname)
+        print(e, fname)
+        print(e, outfname)

@@ -58,6 +58,22 @@ class FacadeUpdater(chainer.training.StandardUpdater):
         batch = self.get_iterator('main').next()
         batchsize = len(batch)
         in_ch = batch[0][0].shape[0]
+        """ Edit g """
+        #print("Batch size", len(batch))
+        #print("Batch all", batch)
+        #print("Batch -1[0]", batch[-1][0])
+        #print("Batch -1[1]", batch[-1][1])
+        #print("Batch -1[0][0]", batch[-1][0][0])
+        """　最後のインデックスにアクセスして、情報を取り出す """
+        """ これは、バッチサイズが1のときのみ有効であるからして、気をつけること """
+        #path_through1 = []
+        #for in_contain in batch[-1][0][-1]:
+            #print("IN_CONTAIN", in_contain)
+        #    for c in in_contain:
+        #        path_through1.append(c)
+        #print("path-through len", len(path_through1))
+        """ ここまで """
+
         out_ch = batch[0][1].shape[0]
         w_in = 256
         w_out = 256
@@ -71,6 +87,10 @@ class FacadeUpdater(chainer.training.StandardUpdater):
         x_in = Variable(x_in)
         
         z = enc(x_in, test=False)
+        """ このzベクトルを変化させれば、任意の方向性に持っていくことができる """
+        #print("z", z)
+        """ Zを直接編集するのは危険なので、decの引数を増やして対処したほうが良さそう """
+        #x_out = dec(z, path_through1, test=False)
         x_out = dec(z, test=False)
 
         y_fake = dis(x_in, x_out, test=False)

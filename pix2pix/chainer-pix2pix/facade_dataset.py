@@ -59,17 +59,32 @@ class GGGDataset(dataset_mixin.DatasetMixin):
         print("load GGG-dataset start")
         print("    from: %s"%dataDir)
         print("    range: [%d, %d)"%(data_range[0], data_range[1]))
-        self.IN_CH = 3
+        self.IN_CH = 4
         self.dataDir = dataDir
         self.dataset = []
-        files = g('./mingp/*')
+        files = g('./ip/*')
         orgs = list(filter(lambda x:'.org.' in x, files))
         heads = []
         for org in orgs:
             heads.append( '.'.join(org.split('.')[1:5]).split('/').pop() )
-
+        import json
+        linker_tags = json.loads(open('./linker_tags.json').read())
         for i in range(data_range[0],data_range[1]):
             head = heads[i]
+            """
+            headが入っているのが、jsonのキーにもなる
+            """
+            print(i, "/", data_range[1] - data_range[0], head)
+            tagvec = np.array(linker_tags[head + '.jpg'])
+            """
+            meta tag vecを可変にする
+            """
+            #tagvec = np.repeat(tagvec, 256)
+            #tagvec = np.resize(tagvec, (286, 286))
+            #np.set_printoptions(threshold=np.nan)
+            tagvec = np.resize(tagvec, (256,256) )
+            #tagvec = np.repeat(tagvec,256)
+
             img_path = list(filter(lambda x: head in x and '.org.' in x, files)).pop()
             lbl_path = list(filter(lambda x: head in x and '.cnv.' in x, files)).pop()
             img = Image.open(img_path)
@@ -82,14 +97,41 @@ class GGGDataset(dataset_mixin.DatasetMixin):
             label = label.resize((int(r*w), int(r*h)), Image.NEAREST)
             img = np.asarray(img).astype("f").transpose(2,0,1)/128.0-1.0
             lbl_ = np.array(label)  # [0, 12)
-            
             #frombuffer = Image.frombuffer(data=lbl_, size=(img.shape[1], img.shape[2]), mode='RGB')
-            
+            """
+            FIX : このパラメータで、メタ情報領域を生成する
+            """
+            FIX = 1
             red, grn, blu = lbl_[:,:,0], lbl_[:,:,1], lbl_[:,:,2]
-            t = np.zeros((lbl_.shape[0], lbl_.shape[1], lbl_.shape[2])).astype('uint8')
+            """
+            ここで、スタンダライゼーションを行う
+            """
+            red = (red - red.mean())/red.std()
+            grn = (grn - grn.mean())/grn.std()
+            blu = (blu - blu.mean())/blu.std()
+            #>>> inser = np.array([[11, 12], [21, 22]])
+	    #>>> zeros = np.zeros(9).reshape( (3,3) )
+	    #>>> inser
+	    #array([[11, 12],
+       	    #[21, 22]])
+	    #   >>> zeros
+	    #array([[ 0.,  0.,  0.],
+            #	[ 0.,  0.,  0.],
+       	    #[ 0.,  0.,  0.]])
+	    #  >>> zeros[:inser.shape[0], :inser.shape[1]] = inser
+            # >>> zeros
+            #    array([[ 11.,  12.,   0.],
+            #     [ 21.,  22.,   0.],
+            #     [  0.,   0.,   0.]])
+            #print(tagvec)
+
+            t = np.zeros((lbl_.shape[0], lbl_.shape[1], lbl_.shape[2] + FIX)).astype('uint8')
+            #print( "red", red.size, red.shape, red)
             t[:, :, 0] = red
             t[:, :, 1] = grn
             t[:, :, 2] = blu
+            t[:tagvec.shape[0], :tagvec.shape[1], 3] = tagvec
+            #print(t[:,:,3])
             w, h, _ = lbl_.shape
             #frombuffer = Image.frombuffer(data=t, size=(w, h), mode='RGB')
             #frombuffer.save('test.png')

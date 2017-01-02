@@ -18,12 +18,14 @@ from updater import FacadeUpdater
 
 from facade_dataset import GGGDataset as FacadeDataset
 from facade_visualizer import out_image
-
+ALL_NUM = 4000
+train_range = (1, int(ALL_NUM*0.8))
+test_range  = (int(ALL_NUM*0.8)+1, ALL_NUM)
 def main():
     parser = argparse.ArgumentParser(description='chainer implementation of pix2pix')
     parser.add_argument('--batchsize', '-b', type=int, default=1,
                         help='Number of images in each mini-batch')
-    parser.add_argument('--epoch', '-e', type=int, default=200,
+    parser.add_argument('--epoch', '-e', type=int, default=400,
                         help='Number of sweeps over the dataset to train')
     parser.add_argument('--gpu', '-g', type=int, default=-1,
                         help='GPU ID (negative value indicates CPU)')
@@ -47,7 +49,7 @@ def main():
     print('')
 
     # Set up a neural network to train
-    IN_CH = 3
+    IN_CH = 4
     OUT_CH = 3
     enc = Encoder(in_ch=IN_CH)
     dec = Decoder(out_ch=OUT_CH)
@@ -69,8 +71,8 @@ def main():
     opt_dec = make_optimizer(dec)
     opt_dis = make_optimizer(dis)
 
-    train_d = FacadeDataset(args.dataset, data_range=(1,300))
-    test_d = FacadeDataset(args.dataset, data_range=(300,379))
+    train_d = FacadeDataset(args.dataset, data_range=train_range)
+    test_d = FacadeDataset(args.dataset, data_range=test_range)
     #train_iter = chainer.iterators.MultiprocessIterator(train_d, args.batchsize, n_processes=4)
     #test_iter = chainer.iterators.MultiprocessIterator(test_d, args.batchsize, n_processes=4)
     train_iter = chainer.iterators.SerialIterator(train_d, args.batchsize)
