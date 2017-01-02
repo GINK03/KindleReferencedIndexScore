@@ -12,20 +12,18 @@ import numpy as np
 from chainer import cuda, Variable, FunctionSet, optimizers
 import chainer.functions as F
 from DeepRNN import DeepRNN, make_initial_state
+import json
 #sys.exit(0)
 # input data
 def load_data(args):
     vocab = {}
-    print(('%s/input.txt'% args.data_dir))
+    print('%s/%s'%(args.data_dir,args.json))
     #words = codecs.open('%s/input.txt' % args.data_dir, 'rb', 'utf-8').read()
     words = ''
     line = ''
-    with open('%s/input.txt' % args.data_dir, 'r') as f:
-      line = f.read()
-      line = line.replace('\n', ' ')
-      words += line
-    #words = list(words)
-    words = words.split(' ')
+    raw = open('%s/%s' %(args.data_dir, args.json), 'r').read()
+    obj = json.loads(raw)
+    words = obj['contents']
     #print words
     dataset = np.ndarray((len(words),), dtype=np.int32)
     for i, word in enumerate(words):
@@ -39,7 +37,8 @@ def load_data(args):
 # arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir',                   type=str,   default='data/tinyshakespeare')
-parser.add_argument('--checkpoint_dir',             type=str,   default='cv')
+parser.add_argument('--checkpoint_dir',             type=str,   default='')
+parser.add_argument('--json',                       type=str,   default='1.json')
 parser.add_argument('--gpu',                        type=int,   default=-1)
 parser.add_argument('--rnn_size',                   type=int,   default=768)
 parser.add_argument('--learning_rate',              type=float, default=2e-3)
@@ -55,6 +54,8 @@ parser.add_argument('--init_from',                  type=str,   default='')
 
 args = parser.parse_args()
 
+if args.checkpoint_dir == '':
+    args.checkpoint_dir = args.data_dir
 if not os.path.exists(args.checkpoint_dir):
     os.mkdir(args.checkpoint_dir)
 
@@ -65,7 +66,7 @@ bprop_len   = args.seq_length
 grad_clip   = args.grad_clip
 
 train_data, words, vocab = load_data(args)
-pickle.dump(vocab, open('%s/vocab.bin'%args.data_dir, 'wb'))
+pickle.dump(vocab, open('%s/%s.vocab.bin'%(args.data_dir, args.json), 'wb'))
 filename = args.data_dir.split('/')[1]
 print('I will save a file name contains ', filename)
 
@@ -127,10 +128,11 @@ for i in range(int(jump * n_epochs)):
 #    if (i + 1) % 10000 == 0:
     if (i + 1) % 5000 == 0:
         print(' will save chainermodel data...')
-        fn = ('%s/deeprnn_%s_%d_epoch_%.2f_lr_%.2f.chainermodel' % (args.checkpoint_dir, filename, n_units, float(i)/jump, loss_rate ) )
-        copyed_obj = copy.deepcopy(model).to_cpu()
+        print( '%s/latest_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units) )
+        #fn = ('%s/deeprnn_%s_%d_epoch_%.2f_lr_%.2f.chainermodel' % (args.checkpoint_dir, filename, n_units, float(i)/jump, loss_rate ) )
         #pickle.dump(copyed_obj, open(fn, 'wb'))
-        pickle.dump(copyed_obj, open('%s/latest_deeprnn_%s_%d.chainermodel'%(args.checkpoint_dir, filename, n_units), 'wb'))
+        copyed_obj = copy.deepcopy(model).to_cpu()
+        pickle.dump(copyed_obj, open('%s/latest_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units), 'wb'))
 
     if (i + 1) % jump == 0:
         epoch += 1
@@ -139,3 +141,4 @@ for i in range(int(jump * n_epochs)):
             print('decayed learning rate by a factor {} to {}'.format(args.learning_rate_decay, optimizer.lr))
 
     sys.stdout.flush()
+pickle.dump(copyed_obj, open('%s/finished_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units), 'wb'))

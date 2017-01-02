@@ -25,7 +25,7 @@ class DeepRNN(FunctionSet):
     def forward_one_step(self, x_data, y_data, state, train=True, dropout_ratio=0.5):
         x = Variable(x_data, volatile=not train)
         t = Variable(y_data, volatile=not train)
-
+        #print(state)
         h0      = self.embed(x)
         h1_in   = self.l1_x(F.dropout(h0, ratio=dropout_ratio, train=train)) + self.l1_h(state['h1'])
         c1, h1  = F.lstm(state['c1'], h1_in)

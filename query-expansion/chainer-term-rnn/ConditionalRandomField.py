@@ -9,13 +9,17 @@ import codecs
 import numpy as np
 from chainer import cuda, Variable, FunctionSet
 import chainer.functions as F
-from CharRNN import CharRNN, make_initial_state
+if "deep" == "deep":
+    from DeepRNN import DeepRNN as CharRNN
+    from DeepRNN import make_initial_state
+else:
+    from CharRNN import CharRNN, make_initial_state
 
-vocab = pickle.load(open('/home/gimpei/KindleReferencedIndexScore/query-expansion/chainer-term-rnn/data/middlesuumo/vocab.bin', 'rb'))
+vocab = pickle.load(open('/home/gimpei/KindleReferencedIndexScore/query-expansion/chainer-term-rnn/data/yomiuri/vocab.bin', 'rb'))
 ivocab = {}
 for e, (c, i) in enumerate(vocab.items()):
     ivocab[i] = c
-model = pickle.load(open('/home/gimpei/KindleReferencedIndexScore/query-expansion/chainer-term-rnn/data/middlesuumo/latest_middlesuumo_768.chainermodel', 'rb'))
+model = pickle.load(open('/home/gimpei/KindleReferencedIndexScore/query-expansion/chainer-term-rnn/cv/latest_deeprnn_yomiuri_768.chainermodel', 'rb'))
 n_units = model.embed.W.data.shape[1]
 prev_char = np.array([0], dtype=np.int32)
 """
