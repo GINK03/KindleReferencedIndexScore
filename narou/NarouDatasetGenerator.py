@@ -52,7 +52,7 @@ def html_adhoc_fetcher(url, db):
     line = regex.sub('<style.*?/style>', '',  line)
     html = regex.sub('<script.*?/script>', '', line ).replace('^A^B^C', ' ')
  
-    soup = bs4.BeautifulSoup(html, "lxml")
+    soup = bs4.BeautifulSoup(html)
     title = (lambda x:unicode(x.string) if x != None else 'Untitled')( soup.title )
     links =  map( lambda x:'http://ncode.syosetu.com' + x, \
                 filter(lambda x: x[0] == '/' and regex.search('/[0-9a-z]{1,}/\d{1,}/', x), \
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     import MeCab
     tagger = MeCab.Tagger("-Owakati")
     if '--getall' in sys.argv:
-        seedurl = 'http://ncode.syosetu.com/n9669bk/1/'
+        seedurl = 'http://ncode.syosetu.com/n2267be/1/'
         html, title, links, soup = html_adhoc_fetcher(seedurl, db) 
         zipped = stemming_pair(soup)
         db.put(seedurl, zipped.encode('utf-8') )
