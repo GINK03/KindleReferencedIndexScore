@@ -9,7 +9,9 @@ from itertools import chain
 buff = []
 stringbuff = ''
 cnt = 1
-for line in filter(lambda x:x != '', open('./yomiuri.wakati.txt').read().split('\n')):
+TARGET_DIR = './data/middlesuumo/'
+FILE_NAME  = 'input.txt'
+for line in filter(lambda x:x != '', open(TARGET_DIR + FILE_NAME).read().split('\n')):
     buff.append(line.split(' '))
     stringbuff += line
     if 1024*1024*10 < sys.getsizeof(stringbuff):
@@ -20,7 +22,7 @@ for line in filter(lambda x:x != '', open('./yomiuri.wakati.txt').read().split('
             bow[k] = v
         obj['bow'] = bow
         obj['contents'] = flatten
-        open('./' + str(cnt) + '.json', 'w').write(json.dumps(obj))
+        open(TARGET_DIR + str(cnt) + '.json', 'w').write(json.dumps(obj))
         #for t in flatten:
         #    print(t)
         buff = []
