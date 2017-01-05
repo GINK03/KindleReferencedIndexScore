@@ -11,14 +11,13 @@ import codecs
 import numpy as np
 from chainer import cuda, Variable, FunctionSet, optimizers
 import chainer.functions as F
-from DeepRNN import DeepRNN, make_initial_state
+from DeepRNN import MoreDeepRNN as DeepRNN
+make_initial_state = DeepRNN.make_initial_state
 import json
-#sys.exit(0)
-# input data
+
 def load_data(args):
     vocab = {}
     print('%s/%s'%(args.data_dir,args.json))
-    #words = codecs.open('%s/input.txt' % args.data_dir, 'rb', 'utf-8').read()
     words = ''
     line = ''
     raw = open('%s/%s' %(args.data_dir, args.json), 'r').read()
