@@ -3,6 +3,7 @@ import numpy as np
 from chainer import Variable, FunctionSet
 import chainer.functions as F
 import chainer.links as L
+import chainer.links.connection.gru as GRU
 
 
 print("これは、CharRNNを改造したモデルです！メモリの使用量や、GPUのリソースの消費量に差があります!")
