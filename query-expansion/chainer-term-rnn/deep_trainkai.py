@@ -141,4 +141,4 @@ for i in range(int(jump * n_epochs)):
             print('decayed learning rate by a factor {} to {}'.format(args.learning_rate_decay, optimizer.lr))
 
     sys.stdout.flush()
-pickle.dump(copyed_obj, open('%s/finished_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units), 'wb'))
+pickle.dump(copy.deepcopy(model).to_cpu(), open('%s/finished_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units), 'wb'))
