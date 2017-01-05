@@ -11,25 +11,28 @@ import codecs
 import numpy as np
 from chainer import cuda, Variable, FunctionSet, optimizers
 import chainer.functions as F
-from DeepRNN import DeepRNN, make_initial_state
+from DeepRNN import MoreDeepRNN
+make_initial_state = MoreDeepRNN.make_initial_state
 import json
-#sys.exit(0)
-# input data
+import random
+
 def load_data(args):
     vocab = {}
     print('%s/%s'%(args.data_dir,args.json))
-    #words = codecs.open('%s/input.txt' % args.data_dir, 'rb', 'utf-8').read()
     words = ''
     line = ''
     raw = open('%s/%s' %(args.data_dir, args.json), 'r').read()
     obj = json.loads(raw)
     words = obj['contents']
-    #print words
     dataset = np.ndarray((len(words),), dtype=np.int32)
+    dataset = np.ndarray((len(words),2, ), dtype=np.int32)
     for i, word in enumerate(words):
         if word not in vocab:
             vocab[word] = len(vocab)
-        dataset[i] = vocab[word]
+        # optional-dataset
+        #dataset[i] = vocab[word]
+        print(dataset[i])
+        dataset[i] = np.array([vocab[word], int(random.random()*10)])
     print('corpus length:', len(words))
     print('vocab size:', len(vocab))
     return dataset, words, vocab
@@ -73,8 +76,7 @@ print('I will save a file name contains ', filename)
 if len(args.init_from) > 0:
     model = pickle.load(open(args.init_from, 'rb'))
 else:
-    model = DeepRNN(len(vocab), n_units)
-
+    model = MoreDeepRNN(len(vocab), n_units)
 if args.gpu >= 0:
     cuda.get_device(args.gpu).use()
     model.to_gpu()
@@ -125,12 +127,9 @@ for i in range(int(jump * n_epochs)):
             accum_loss = Variable(np.zeros((), dtype=np.float32))
         optimizer.clip_grads(grad_clip)
         optimizer.update()
-#    if (i + 1) % 10000 == 0:
     if (i + 1) % 5000 == 0:
         print(' will save chainermodel data...')
         print( '%s/latest_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units) )
-        #fn = ('%s/deeprnn_%s_%d_epoch_%.2f_lr_%.2f.chainermodel' % (args.checkpoint_dir, filename, n_units, float(i)/jump, loss_rate ) )
-        #pickle.dump(copyed_obj, open(fn, 'wb'))
         copyed_obj = copy.deepcopy(model).to_cpu()
         pickle.dump(copyed_obj, open('%s/latest_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units), 'wb'))
 
@@ -139,6 +138,5 @@ for i in range(int(jump * n_epochs)):
         if epoch >= args.learning_rate_decay_after:
             optimizer.lr *= args.learning_rate_decay
             print('decayed learning rate by a factor {} to {}'.format(args.learning_rate_decay, optimizer.lr))
-
     sys.stdout.flush()
-pickle.dump(copyed_obj, open('%s/finished_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units), 'wb'))
+pickle.dump(copy.deepcopy(model).to_cpu(), open('%s/finished_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units), 'wb'))
