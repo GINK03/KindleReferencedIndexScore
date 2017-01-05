@@ -31,7 +31,7 @@ def load_data(args):
             vocab[word] = len(vocab)
         # optional-dataset
         #dataset[i] = vocab[word]
-        print(dataset[i])
+        #print(dataset[i])
         dataset[i] = np.array([vocab[word], int(random.random()*10)])
     print('corpus length:', len(words))
     print('vocab size:', len(vocab))

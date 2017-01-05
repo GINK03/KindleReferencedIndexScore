@@ -9,8 +9,8 @@ from itertools import chain
 buff = []
 stringbuff = ''
 cnt = 1
-TARGET_DIR = sys.argv[1]
-FILE_NAME  = 'input.txt'
+TARGET_DIR = sys.argv[1] 
+FILE_NAME  = '/input.txt'
 def flash(buff):
     global cnt
     flatten = list(chain(*buff))
