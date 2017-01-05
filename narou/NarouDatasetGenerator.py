@@ -22,6 +22,7 @@ def html_adhoc_fetcher(url, db):
             print('[WARN] Cannot access url with EOFError, try number is...', e, _, url, mp.current_process() )
             continue
         except urllib2.URLError, e:
+            print(e)
             continue
         except urllib2.HTTPError, e:
             print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url, mp.current_process() )
@@ -86,7 +87,7 @@ if __name__ == '__main__':
     import MeCab
     tagger = MeCab.Tagger("-Owakati")
     if '--getall' in sys.argv:
-        seedurl = 'http://ncode.syosetu.com/n2267be/1/'
+        seedurl = 'http://ncode.syosetu.com/n2710db/1/'
         html, title, links, soup = html_adhoc_fetcher(seedurl, db) 
         zipped = stemming_pair(soup)
         db.put(seedurl, zipped.encode('utf-8') )
@@ -101,7 +102,9 @@ if __name__ == '__main__':
                 #print('\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
                 linkstack.extend(links)
     if '--plane' in sys.argv:
-        for k, v in db:
+        d = {}
+        [ d.update({"%04d"%int(k.split('/').pop(-2)):v}) for k, v in db]
+        for k, v in sorted(d.items(), key=lambda x:int(x[0])):
             print(v)
     if '--dumpall' in sys.argv:
         with open('narou.src.txt', 'w') as fsrc:
