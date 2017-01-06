@@ -8,7 +8,7 @@ import glob
 import numpy as np
 import plyvel
 import json
-
+from os.path import exists
 linkers = set()
 c = 1
 """
@@ -28,9 +28,12 @@ for k, v in json.loads(open('./linker_tags.json').read()).items():
     linkers.add(k)
 
 print('number of fleet girls', len(linkers), c)
-source = 'hp'
+source = 'kancolle.toho.fgo'
 target = 'ip'
 for e, fname in enumerate(glob.glob('./' + source + '/*.jpg')):
+    # すでにコンバート済み案件に関してはタッチしない
+    if exists(outfname + '.cnv.png') and exists(outfname + '.org.jpg'): 
+        continue
     im = cv2.imread(fname)
     if fname.split('/').pop() not in linkers:
         continue
@@ -82,7 +85,7 @@ for e, fname in enumerate(glob.glob('./' + source + '/*.jpg')):
         """
         outfname = './' + target + '/' + fname.split('/').pop()
         color = ':'.join(map(str, [r,g,b]))
-        cv2.imwrite(outfname + '.cnv.png', dst_gray)
+        cv2.imwrite(outfname + '.cnv.png', th3)
         cv2.imwrite(outfname + '.org.jpg', im)
         print(e, fname)
         print(e, outfname)

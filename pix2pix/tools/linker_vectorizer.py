@@ -12,7 +12,7 @@ import re
 linkers = set()
 c = 1
 linker_tags = {}
-global_fix = 'hp'
+global_fix = 'kancolle.toho.fgo'
 for k, v in plyvel.DB('./' + global_fix + '/pixiv_htmls'):
     k = k.decode('utf-8')
     v = v.decode('utf-8')
