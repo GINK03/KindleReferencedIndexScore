@@ -106,9 +106,9 @@ class GGGDataset(dataset_mixin.DatasetMixin):
             """
             ここで、スタンダライゼーションを行う
             """
-            red = (red - red.mean())/red.std()
-            grn = (grn - grn.mean())/grn.std()
-            blu = (blu - blu.mean())/blu.std()
+            #red = (red - red.mean())/red.std()
+            #grn = (grn - grn.mean())/grn.std()
+            #blu = (blu - blu.mean())/blu.std()
             #>>> inser = np.array([[11, 12], [21, 22]])
 	    #>>> zeros = np.zeros(9).reshape( (3,3) )
 	    #>>> inser
@@ -125,27 +125,31 @@ class GGGDataset(dataset_mixin.DatasetMixin):
             #     [  0.,   0.,   0.]])
             #print(tagvec)
 
-            t = np.zeros((lbl_.shape[0], lbl_.shape[1], lbl_.shape[2] + FIX)).astype('uint8')
+            t = np.zeros((self.IN_CH, lbl_.shape[0], lbl_.shape[1])).astype('uint8')
             #print( "red", red.size, red.shape, red)
-            t[:, :, 0] = red
-            t[:, :, 1] = grn
-            t[:, :, 2] = blu
-            t[:tagvec.shape[0], :tagvec.shape[1], 3] = tagvec
+            t[0, :, :] = red
+            t[1, :, :] = grn
+            t[2, :, :] = blu
+            t[3, :tagvec.shape[0], :tagvec.shape[1]] = tagvec
             #print(t[:,:,3])
-            w, h, _ = lbl_.shape
+            #w, h, _ = lbl_.shape
             #frombuffer = Image.frombuffer(data=t, size=(w, h), mode='RGB')
             #frombuffer.save('test.png')
 
             label = np.zeros((self.IN_CH, img.shape[1], img.shape[2])).astype("i")
-            for j, e in enumerate([red, grn, blu]):
-                label[j,:] = e
+            for j, e in enumerate([red, grn, blu, tagvec]):
+                if j != 3:
+                  label[j,:] = e 
+                else:
+                  label[j,:tagvec.shape[0], :tagvec.shape[1]] = tagvec
+
             """
             for j in range(self.IN_CH):
                     print("その他の処理です")
                     label[j,:] = label_==j
             """
             self.dataset.append((img,label))
-            
+            Image.fromarray(t, mode='RGB').save( 'out/preview/test.png' )
             
             
         """

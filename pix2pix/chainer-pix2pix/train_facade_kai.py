@@ -18,14 +18,14 @@ from updater import FacadeUpdater
 
 from facade_dataset import GGGDataset as FacadeDataset
 from facade_visualizer import out_image
-ALL_NUM = 4000
+ALL_NUM = 1500
 train_range = (1, int(ALL_NUM*0.8))
 test_range  = (int(ALL_NUM*0.8)+1, ALL_NUM)
 def main():
     parser = argparse.ArgumentParser(description='chainer implementation of pix2pix')
     parser.add_argument('--batchsize', '-b', type=int, default=1,
                         help='Number of images in each mini-batch')
-    parser.add_argument('--epoch', '-e', type=int, default=400,
+    parser.add_argument('--epoch', '-e', type=int, default=500,
                         help='Number of sweeps over the dataset to train')
     parser.add_argument('--gpu', '-g', type=int, default=-1,
                         help='GPU ID (negative value indicates CPU)')
