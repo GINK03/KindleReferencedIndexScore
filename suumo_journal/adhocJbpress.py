@@ -4,7 +4,6 @@ import math
 import sys
 import regex
 import urllib2
-import urllib2
 import httplib
 import ssl
 import multiprocessing as mp
@@ -14,8 +13,8 @@ import bs4
 def html_adhoc_fetcher(url):
     html = None
     for _ in range(5):
-        proxy_support = urllib2.ProxyHandler({'http': 'http://153.149.157.41:8086'})
-        opener = urllib2.build_opener(proxy_support)
+        #proxy_support = urllib2.ProxyHandler({'http': 'http://153.149.157.41:8086'})
+        opener = urllib2.build_opener()
         TIME_OUT = 10.
         try:
             html = opener.open(str(url), timeout = TIME_OUT).read()
@@ -23,6 +22,7 @@ def html_adhoc_fetcher(url):
             print('[WARN] Cannot access url with EOFError, try number is...', e, _, url, mp.current_process() )
             continue
         except urllib2.URLError, e:
+            print('[W] cannot urlli2.urlerror', e, _, url)
             continue
         except urllib2.HTTPError, e:
             print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url, mp.current_process() )
@@ -43,6 +43,7 @@ def html_adhoc_fetcher(url):
             print('[WARN] Cannot access url with UnicodeEncodeError, try number is...', e, _, url, mp.current_process() )
             continue
     #print "b"
+    print html
     if html == None:
         return None
     line = html.replace('\n', '^A^B^C')
@@ -56,32 +57,39 @@ def html_adhoc_fetcher(url):
     # contents0_text = (lambda x:x.text.encode('utf-8') if x != None else "" ) \
     #        ( soup.find('div', {'class': 'ui-section-body'}) )
     contents0_text = (lambda x:x.text.encode('utf-8') if x != None else "" ) \
-            ( soup.find('article') )
-    #contents0_text = "dummy"
+            ( soup.find('div', {'class': 'article-text'}) )
+        
+    print "c0t", soup.find('div', {'class': 'article-text'})
     links = set([a['href'] for a in soup.find_all('a', href=True)])
     return title, contents0_text, links
-html = open('./yomiuri.html').read()
+html = open('./48846').read()
 soup = bs4.BeautifulSoup(html, "html.parser")
 import plyvel
 import sys
-db = plyvel.DB('yomiuri.ldb', create_if_missing=True) 
+db = plyvel.DB('jbpress.ldb', create_if_missing=True) 
+print soup.find('div', {'class' : 'article-text' } )
 # クロウラーモード
 if '-c' in sys.argv:
   from threading import Thread as T
   from threading import active_count as CT
   import time
   import cPickle as P
-  links = P.loads(open('already_parsed_yomiuri.pkl').read())
+  try:
+    links = set()
+    links = P.loads(open('already_parsed_jbpress.pkl').read())
+  except:
+    pass
   [links.add(link) for link in set([a['href'] for a in soup.find_all('a', href=True)])]
 
   while links != set():
     link = links.pop()
-    print "残リンク数", len(link)
+    print "残リンク数", len(links)
     if len(link) <= 2:
         continue
     if link[0]  == '/':
-        link = "http://www.yomiuri.co.jp" + link
-    if "yomiuri" not in link:
+        link = "http://jbpress.co.jp" + link
+    print link
+    if "jbpress" not in link:
         print link, "これは範囲外ドメインです"
         continue
     #print '[[' + str(link) + ']]'
@@ -89,29 +97,37 @@ if '-c' in sys.argv:
        print link, "はすでにパース済みです"
        continue
     if db.get(str(link)) == None:
-      def runner():
-        tp = html_adhoc_fetcher(link)
+      print 'A'
+      def runner(_link):
+        tp = html_adhoc_fetcher(_link)
+        print tp
         if tp == None:
           return
         title, contents0, ls = tp
+        print "contents", contents0
         for l in ls:
-          utf8l = str(l)
+          try:
+            utf8l = str(l)
+          except:
+            print l
+            continue
           if db.get(utf8l) == None and l not in links:
               links.add(l)
         print title, "パースしたよ, 残リンク数", len(links)
+        print contents0
         contents = contents0
         db.put(str(link), contents )
         #print str(link), contents
-      t = T(target=runner)
-      t.start()
-      print CT()
+      runner(link)
+      #t = T(target=runner)
+      #t.start()
       while CT() > 250 :
         #time.sleep(0.001) 
         pass
       import cPickle as P
       import random
       if random.random() > 0.9:
-        open('already_parsed_yomiuri.pkl', 'w').write(P.dumps(links))
+        open('already_parsed_jbpress.pkl', 'w').write(P.dumps(links))
 # ダンプモード
 if '-d' in sys.argv:
   for url, contents in db:

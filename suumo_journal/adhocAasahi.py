@@ -4,7 +4,6 @@ import math
 import sys
 import regex
 import urllib2
-import urllib2
 import httplib
 import ssl
 import multiprocessing as mp
@@ -14,8 +13,8 @@ import bs4
 def html_adhoc_fetcher(url):
     html = None
     for _ in range(5):
-        proxy_support = urllib2.ProxyHandler({'http': 'http://153.149.157.41:8086'})
-        opener = urllib2.build_opener(proxy_support)
+        #proxy_support = urllib2.ProxyHandler({'http': 'http://153.149.157.41:8086'})
+        opener = urllib2.build_opener()
         TIME_OUT = 10.
         try:
             html = opener.open(str(url), timeout = TIME_OUT).read()
@@ -23,6 +22,7 @@ def html_adhoc_fetcher(url):
             print('[WARN] Cannot access url with EOFError, try number is...', e, _, url, mp.current_process() )
             continue
         except urllib2.URLError, e:
+            #print('[WARN] cannot urlli2.urlerror', _, url)
             continue
         except urllib2.HTTPError, e:
             print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url, mp.current_process() )
@@ -43,6 +43,7 @@ def html_adhoc_fetcher(url):
             print('[WARN] Cannot access url with UnicodeEncodeError, try number is...', e, _, url, mp.current_process() )
             continue
     #print "b"
+    #print html
     if html == None:
         return None
     line = html.replace('\n', '^A^B^C')
@@ -56,66 +57,87 @@ def html_adhoc_fetcher(url):
     # contents0_text = (lambda x:x.text.encode('utf-8') if x != None else "" ) \
     #        ( soup.find('div', {'class': 'ui-section-body'}) )
     contents0_text = (lambda x:x.text.encode('utf-8') if x != None else "" ) \
-            ( soup.find('article') )
-    #contents0_text = "dummy"
+            ( soup.find('div', {'class': 'ArticleBody'}) )
+        
+    #print "c0t", soup.find('div', {'class': 'ArticleBody'})
     links = set([a['href'] for a in soup.find_all('a', href=True)])
     return title, contents0_text, links
-html = open('./yomiuri.html').read()
+html = open('./asahi.html').read()
 soup = bs4.BeautifulSoup(html, "html.parser")
 import plyvel
 import sys
-db = plyvel.DB('yomiuri.ldb', create_if_missing=True) 
+db = plyvel.DB('asahi.ldb', create_if_missing=True) 
+#print soup.find('div', {'class' : 'CONTENTS_MAIN' } )
 # クロウラーモード
+def runner(_link, links):
+  tp = html_adhoc_fetcher(_link)
+  if tp == None:
+    return
+  title, contents0, ls = tp
+  for l in ls:
+    try:
+      utf8l = str(l)
+    except:
+      print l
+      continue
+    if db.get(utf8l) == None and l not in links:
+      links.add(l)
+  print "パースしたよ, 残リンク数", len(links)
+  contents = contents0
+  db.put(str(_link), contents )
 if '-c' in sys.argv:
   from threading import Thread as T
   from threading import active_count as CT
   import time
   import cPickle as P
-  links = P.loads(open('already_parsed_yomiuri.pkl').read())
+  import random
+  try:
+    links = set()
+    links = P.loads(open('already_parsed_asahi.pkl').read())
+    print "links are recovered"
+  except:
+    print "links are inited"
+    
   [links.add(link) for link in set([a['href'] for a in soup.find_all('a', href=True)])]
-
-  while links != set():
-    link = links.pop()
-    print "残リンク数", len(link)
+  counter = 0
+  while True:
+    if links != set():
+      link = links.pop()
+      print link
+    else:
+      pass
+      continue
+    
+    #if CT() > 1000:
+    #  pass
+    #  continue
     if len(link) <= 2:
         continue
     if link[0]  == '/':
-        link = "http://www.yomiuri.co.jp" + link
-    if "yomiuri" not in link:
-        print link, "これは範囲外ドメインです"
+        link = "http://www.asahi.com" + link
+    if "www.asahi.com" not in link:
+        #print link, "これは範囲外ドメインです"
         continue
     #print '[[' + str(link) + ']]'
     if db.get(str(link)) != None: 
-       print link, "はすでにパース済みです"
+       #print link, "はすでにパース済みです"
        continue
     if db.get(str(link)) == None:
-      def runner():
-        tp = html_adhoc_fetcher(link)
-        if tp == None:
-          return
-        title, contents0, ls = tp
-        for l in ls:
-          utf8l = str(l)
-          if db.get(utf8l) == None and l not in links:
-              links.add(l)
-        print title, "パースしたよ, 残リンク数", len(links)
-        contents = contents0
-        db.put(str(link), contents )
-        #print str(link), contents
-      t = T(target=runner)
+      print 'join'
+      t = T(target=runner, args=(link, links, ))
       t.start()
-      print CT()
-      while CT() > 250 :
-        #time.sleep(0.001) 
-        pass
-      import cPickle as P
-      import random
-      if random.random() > 0.9:
-        open('already_parsed_yomiuri.pkl', 'w').write(P.dumps(links))
+      #runner(link, links)
+      print counter, "残リンク数", len(links)
+      counter += 1
+      if random.random() > 0.99:
+        """ 強制終了でデータが飛んだのでその対策 """
+        os.system('cp already_parsed_asahi.pkl already_parsed_asahi2.pkl')
+        open('already_parsed_asahi.pkl', 'w').write(P.dumps(links))
 # ダンプモード
 if '-d' in sys.argv:
   for url, contents in db:
     contents = contents.lower().replace('\n', '')
+    if contents == '' : continue
     contents = regex.sub('　', ' ', contents)
     contents = regex.sub('\s{1,}', ' ', contents)
     contents = regex.sub('http.*?\s', '', contents)

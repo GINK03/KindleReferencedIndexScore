@@ -1,11 +1,14 @@
 # coding: utf-8
+from __future__ import print_function
 import os
 import math
 import sys
 import regex
-import urllib2
-import urllib2
-import httplib
+try:
+    import urllib2
+    import httplib
+except:
+    pass
 import ssl
 import multiprocessing as mp
 from socket import error as SocketError
@@ -18,27 +21,7 @@ def html_adhoc_fetcher(url):
         TIME_OUT = 5
         try:
             html = opener.open(str(url), timeout = TIME_OUT).read()
-        except EOFError, e:
-            print('[WARN] Cannot access url with EOFError, try number is...', e, _, url, mp.current_process() )
-            continue
-        except urllib2.URLError, e:
-            continue
-        except urllib2.HTTPError, e:
-            print('[WARN] Cannot access url with urllib2.httperror, try number is...', e, _, url, mp.current_process() )
-            continue
-        except ssl.SSLError, e:
-            print('[WARN] Cannot access url with ssl error, try number is...', e, _, url, mp.current_process() )
-            continue
-        except httplib.BadStatusLine, e:
-            print('[WARN] Cannot access url with BadStatusLine, try number is...', e, _, url, mp.current_process() )
-            continue
-        except httplib.IncompleteRead, e:
-            print('[WARN] Cannot access url with IncompleteRead, try number is...', e, _, url, mp.current_process() )
-            continue
-        except SocketError, e:
-            print('[WARN] Cannot access url with SocketError, try number is...', e, _, url, mp.current_process() )
-            continue
-        except UnicodeEncodeError, e:
+        except :
             print('[WARN] Cannot access url with UnicodeEncodeError, try number is...', e, _, url, mp.current_process() )
             continue
     #print "b"
@@ -79,10 +62,10 @@ if '-c' in sys.argv:
       if link[0]  == '/':
         link = "http://suumo.jp" + link
       if "suumo.jp" not in link:
-        print link, "これは範囲外ドメインです"
+        print( link, "これは範囲外ドメインです" )
         continue
       if db.get(str(link)) != None: 
-        print link, "はすでにパース済みです"
+        print( link, "はすでにパース済みです" )
         continue
       if db.get(str(link)) == None:
         def runner():
@@ -93,23 +76,35 @@ if '-c' in sys.argv:
           for l in ls:
             try:
                 utf8l = str(l)
-            except UnicodeEncodeError, e:
+            except:
                 return
             if db.get(utf8l) == None and l not in links:
                 links.add(l)
-          print title, "パースしたよ, 残リンク数", len(links)
+          print( title, "パースしたよ, 残リンク数", len(links) )
           contents = contents0
           db.put(str(link), contents )
         t = T(target=runner)
         t.start()
-        print CT()
+        print( CT() )
         while CT() > 100 :
           pass
         import cPickle as P
         import random
         open('already_parsed_suumo.pkl', 'w').write(P.dumps(links))
+
 # ダンプモード
+import re
 if '-d' in sys.argv:
   for url, contents in db:
-    print contents
-
+    url = url.decode('utf-8')
+    if 'journal' not in url : continue
+    contents = contents.decode('utf-8')
+    contents = contents.lower()
+    if contents == '' : continue
+    contents = re.sub('　', ' ', contents)
+    contents = re.sub(r'\s{1,}', ' ', contents)
+    contents = re.sub(r'http.*?\s', '', contents)
+    for r in ['１', '２', '３', '４', '５', '６', '７', '８', '９', '０' ]:
+        contents = re.sub(r, '', contents)
+    #contents = re.sub('\d{1,}', '__NUM__', contents)
+    print( contents )
