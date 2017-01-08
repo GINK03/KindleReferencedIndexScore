@@ -84,6 +84,10 @@ class GGGDataset(dataset_mixin.DatasetMixin):
             #np.set_printoptions(threshold=np.nan)
             tagvec = np.resize(tagvec, (256,256) )
             #tagvec = np.repeat(tagvec,256)
+            """
+            確実に見える素性にするために、255倍する
+            """
+            tagvec *= 255
 
             img_path = list(filter(lambda x: head in x and '.org.' in x, files)).pop()
             lbl_path = list(filter(lambda x: head in x and '.cnv.' in x, files)).pop()
