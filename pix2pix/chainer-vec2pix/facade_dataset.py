@@ -172,7 +172,17 @@ class VecDataset(dataset_mixin.DatasetMixin):
         x_r = x_l+crop_width
         y_l = np.random.randint(0,h-crop_width)
         y_r = y_l+crop_width
-        return self.dataset[i][1][:,y_l:y_r,x_l:x_r], self.dataset[i][0][:,y_l:y_r,x_l:x_r]
+        """ cropping する際に、メタ情報もクロッピングしてはならないので、クロッピング範囲を0:2に限定する"""
+        cnv = self.dataset[i][1]
+        red, grn, blu, meta = cnv[0,y_l:y_r,x_l:x_r], cnv[1,y_l:y_r,x_l:x_r], cnv[2,y_l:y_r,x_l:x_r], \
+                cnv[3:,0:256,0:256]
+        to_return = np.zeros((self.IN_CH, 256, 256))
+        to_return[0, :, :] = red
+        to_return[1, :, :] = grn
+        to_return[2, :, :] = blu
+        to_return[3:, :, :] =  meta
+        return to_return, self.dataset[i][0][:,y_l:y_r,x_l:x_r]
+        #return self.dataset[i][1][:,y_l:y_r,x_l:x_r], self.dataset[i][0][:,y_l:y_r,x_l:x_r]
 
 if __name__ == '__main__':
     vec = VecDataset( None )
