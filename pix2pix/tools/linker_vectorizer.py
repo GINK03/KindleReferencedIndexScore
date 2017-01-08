@@ -9,6 +9,12 @@ import numpy as np
 import plyvel
 import json
 import re
+
+if '--check' in sys.argv:
+    for k, v in json.loads(open('./linker_tags.json').read()).items():
+        print(k, v['vector'] )
+        print(k, v['terms'] )
+
 linkers = set()
 c = 1
 linker_tags = {}
@@ -42,7 +48,7 @@ for i, (k, v) in enumerate(sorted(C(alltags).items(), key=lambda x:x[1]*-1)[:256
     vec[i] = 1.
     term_vec[k] = vec
 result = {}
-for _, k, v in enumerate(linker_tags.items()):
+for _, (k, v) in enumerate(linker_tags.items()):
     if _ % 100001 == 0:
         print("iter", _ )
     base = np.array([0.]*256)
