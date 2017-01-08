@@ -42,13 +42,15 @@ for i, (k, v) in enumerate(sorted(C(alltags).items(), key=lambda x:x[1]*-1)[:256
     vec[i] = 1.
     term_vec[k] = vec
 result = {}
-for k, v in linker_tags.items():
+for _, k, v in enumerate(linker_tags.items()):
+    if _ % 100001 == 0:
+        print("iter", _ )
     base = np.array([0.]*256)
     for what in list(map( lambda x: term_vec[x], filter(lambda x: x in approval_set, v))):
         base += np.array(what)
     #print( k, list(filter(lambda x: x in approval_set, v)), base )
     linker_tags[k] = list(base)
-    result[k] = { 'vector': list(base), 'terms': v}
+    result[k] = { 'vector': list(base), 'terms': list(filter(lambda x:x in approval_set, v))}
 
 
 open('./linker_tags.json', 'w').write(json.dumps(result))
