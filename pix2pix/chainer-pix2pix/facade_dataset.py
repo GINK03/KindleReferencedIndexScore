@@ -137,11 +137,12 @@ class GGGDataset(dataset_mixin.DatasetMixin):
             #frombuffer.save('test.png')
 
             label = np.zeros((self.IN_CH, img.shape[1], img.shape[2])).astype("i")
-            for j, e in enumerate([red, grn, blu, tagvec]):
-                if j != 3:
-                  label[j,:] = e 
-                else:
+            for j, e in [(0, red), (1, grn), (2, blu), (3, tagvec)]:
+                if j == 3:
+                  print("Enter meta execution")
                   label[j,:tagvec.shape[0], :tagvec.shape[1]] = tagvec
+                else:
+                  label[j,:] = e 
 
             """
             for j in range(self.IN_CH):

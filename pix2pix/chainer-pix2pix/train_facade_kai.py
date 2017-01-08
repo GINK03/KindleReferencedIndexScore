@@ -18,7 +18,7 @@ from updater import FacadeUpdater
 
 from facade_dataset import GGGDataset as FacadeDataset
 from facade_visualizer import out_image
-ALL_NUM = 1500
+ALL_NUM = 6500
 train_range = (1, int(ALL_NUM*0.8))
 test_range  = (int(ALL_NUM*0.8)+1, ALL_NUM)
 def main():
@@ -37,7 +37,9 @@ def main():
                         help='Resume the training from snapshot')
     parser.add_argument('--seed', type=int, default=0,
                         help='Random seed')
-    parser.add_argument('--snapshot_interval', type=int, default=1000,
+    #parser.add_argument('--snapshot_interval', type=int, default=1000,
+    #                    help='Interval of snapshot')
+    parser.add_argument('--snapshot_interval', type=int, default=10000,
                         help='Interval of snapshot')
     parser.add_argument('--display_interval', type=int, default=100,
                         help='Interval of displaying log to console')
