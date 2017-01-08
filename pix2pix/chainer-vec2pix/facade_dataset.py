@@ -69,14 +69,13 @@ class VecDataset(dataset_mixin.DatasetMixin):
             heads.append( '.'.join(org.split('.')[1:5]).split('/').pop() )
         import json
         linker_tags = json.loads(open('./linker_tags.json').read())
-        print(linker_tags)
         for i in range(data_range[0],data_range[1]):
             head = heads[i]
             """
             headが入っているのが、jsonのキーにもなる
             """
             print(i, "/", data_range[1] - data_range[0], head)
-            tagvec = np.array(linker_tags[head + '.jpg'])
+            tagvec = np.array(linker_tags[head + '.jpg']['vector'])
             """
             meta tag vecを可変にする
             """
@@ -138,7 +137,6 @@ class VecDataset(dataset_mixin.DatasetMixin):
                     print("その他の処理です")
                     label[j,:] = label_==j
             """
-            #self.dataset.append((img,label))
             
             t = np.zeros((label.shape[1], label.shape[2], self.IN_CH -1)).astype('uint8')
             ##t[:tagvec.shape[0], :tagvec.shape[1], 0] = tagvec 
@@ -148,11 +146,20 @@ class VecDataset(dataset_mixin.DatasetMixin):
             
             to_save_img = Image.fromarray(t)
             draw = ImageDraw.Draw(to_save_img)
-            font = ImageFont.truetype("/usr/share/fonts/truetype/takao-gothic/TakaoGothic.ttf", 20)
-            draw.text((0,0), "sample", (255, 0, 0),font=font)
+            font = ImageFont.truetype("/usr/share/fonts/truetype/takao-gothic/TakaoGothic.ttf", 25)
+            draw.text((50,50), ',\n'.join(linker_tags[head + '.jpg']['terms']), (255, 0, 0),font=font)
             #t[3, :tagvec.shape[0], :tagvec.shape[1]] = tagvec
             #Image.fromarray(draw, mode='RGB').save( 'out/preview/' + head + '.vec.jpg' )
             to_save_img.save( 'out/preview/' + head + '.vec.jpg' )
+            to_return_ = np.asarray(to_save_img.convert('RGB'))
+            to_return = np.zeros((self.IN_CH, to_return_.shape[0], to_return_.shape[1])).astype('uint8')
+            to_return[0, :, :] = to_return_[:, :, 0]
+            to_return[1, :, :] = to_return_[:, :, 1]
+            to_return[2, :, :] = to_return_[:, :, 2]
+            to_return[3, :tagvec.shape[0], :tagvec.shape[1]] = tagvec
+
+            self.dataset.append((img, to_return))
+
         print("load Vec-dataset done")
     
     def __len__(self):
