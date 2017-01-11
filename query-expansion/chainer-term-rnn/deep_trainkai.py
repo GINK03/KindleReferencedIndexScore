@@ -11,7 +11,11 @@ import codecs
 import numpy as np
 from chainer import cuda, Variable, FunctionSet, optimizers
 import chainer.functions as F
-from DeepRNN import MoreDeepRNN as DeepRNN
+if '--moreDeep' in sys.argv:
+   from DeepRNN import MoreDeepRNN as DeepRNN
+else:
+   from DeepRNN import DeepRNN as DeepRNN
+
 make_initial_state = DeepRNN.make_initial_state
 import json
 
