@@ -1,0 +1,1 @@
+python3 train_facade_kai.py -g 0 -i base/ --out out --snapshot_interval 100 --resume $1

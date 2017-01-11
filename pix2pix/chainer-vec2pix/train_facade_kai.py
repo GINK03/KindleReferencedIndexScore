@@ -16,9 +16,10 @@ from net import Encoder
 from net import Decoder
 from updater import FacadeUpdater
 
-from facade_dataset import GGGDataset as FacadeDataset
+from facade_dataset import VecDataset as FacadeDataset
 from facade_visualizer import out_image
 ALL_NUM = 6500
+#ALL_NUM = 100
 train_range = (1, int(ALL_NUM*0.8))
 test_range  = (int(ALL_NUM*0.8)+1, ALL_NUM)
 def main():

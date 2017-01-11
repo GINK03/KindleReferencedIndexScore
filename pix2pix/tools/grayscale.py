@@ -31,11 +31,12 @@ print('number of fleet girls', len(linkers), c)
 source = 'kancolle.toho.fgo'
 target = 'ip'
 for e, fname in enumerate(glob.glob('./' + source + '/*.jpg')):
-    # すでにコンバート済み案件に関してはタッチしない
-    if exists(outfname + '.cnv.png') and exists(outfname + '.org.jpg'): 
-        continue
     im = cv2.imread(fname)
     if fname.split('/').pop() not in linkers:
+        continue
+    # すでにコンバート済み案件に関してはタッチしない
+    outfname = './' + target + '/' + fname.split('/').pop()
+    if exists(outfname + '.cnv.png') and exists(outfname + '.org.jpg'): 
         continue
     h, w, channels = im.shape
     if float(h)/w > 2 or float(h)/w < 0.5 : 
