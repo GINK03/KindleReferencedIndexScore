@@ -9,7 +9,7 @@ import chainer.links.connection.gru as GRU
 print("これは、CharRNNを改造したモデルです！メモリの使用量や、GPUのリソースの消費量に差があります!")
 class DeepRNN(FunctionSet):
     def __init__(self, n_vocab, n_units):
-        print("標準よりいっそう増加したDeepRNNです、より巨大なネットワークであるMoreDeepRNNもありますが、勾配発散が酷いです")
+        print("標準よりいっそう増加したDeepRNNです、より巨大なネットワークであるMoreDeepRNNもありますが、勾配消失が酷いです")
         super(DeepRNN, self).__init__(
             embed = F.EmbedID(n_vocab, n_units),
             l1_x = L.Linear(n_units, 4*n_units),
