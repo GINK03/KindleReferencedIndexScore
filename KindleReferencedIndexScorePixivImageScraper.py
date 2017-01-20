@@ -344,7 +344,7 @@ if __name__ == '__main__':
           n = 1024*1024
           try:
             con = opener.open(request).read(n)
-          except HTTPError, e:
+          except urllib2.HTTPError, e:
             continue
           if len(con) == 0:
             print("ゼロエラーです", imgurl)
@@ -450,7 +450,7 @@ if __name__ == '__main__':
         t = T.Thread(target=analyzing, args=(url,))
         t.start()
         #print("theadの数は" , T.active_count())
-        while T.active_count() > 300:
+        while T.active_count() > 30:
             time.sleep(0.01)
             #analyzing(url)
             pass
