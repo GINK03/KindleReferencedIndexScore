@@ -378,13 +378,15 @@ if __name__ == '__main__':
               urlparam = urllocal.split('=').pop()
               decode_urlparam = urllib.unquote(urlparam.encode('utf-8'))
               tags_save.append(decode_urlparam)
-        if set(['艦これ', '東方', 'FGO', 'シャドウバース']).intersection(set(tags_save)) == set():
-            print("該当コンテンツはターゲットではありません、スキップします", ','.join(tags_save))
-            db.put(str(url), 'notarget')
-            return 
-        else:
-            print('解析対象は、こんな感じです', url, ','.join(tags_save) )
-            pass
+        
+        #if set(['艦これ', '東方', 'FGO', 'シャドウバース']).intersection(set(tags_save)) == set():
+        #    print("該当コンテンツはターゲットではありません、スキップします", ','.join(tags_save))
+        #    db.put(str(url), 'notarget')
+        #    return 
+        #else:
+        #    print('解析対象は、こんな感じです', url, ','.join(tags_save) )
+        #    pass
+        print('解析対象は、こんな感じです', url, ','.join(tags_save) )
 
         for imgurl in filter(lambda x:x!=None, [img.get('src') for img in  soup.find_all('img')]):
           if '600x600' not in str(imgurl):
@@ -431,6 +433,8 @@ if __name__ == '__main__':
       while True:
         import threading as T
         url = links.pop()
+        if db.get(str(url)) is not None:
+            continue
         #analyzing(url)
         t = T.Thread(target=analyzing, args=(url,))
         t.start()
