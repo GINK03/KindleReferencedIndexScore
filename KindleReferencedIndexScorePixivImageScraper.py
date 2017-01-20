@@ -276,6 +276,7 @@ import plyvel
 import cPickle as pickle
 import re
 import json
+import random
 def url_stack_control( records ):
     pass
     return set()
@@ -338,20 +339,20 @@ if __name__ == '__main__':
         request.add_header('Referer', url)
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
 
-        linker = str(random.random()) + "," + str(random.random()) + "," + str(random.random())  + "," + tagname
-        for _ in range(1000):
+        linker = str(random.random()) + "," + str(random.random()) + "," + str(random.random())
+        for _ in range(20):
           n = 1024*1024
           try:
             con = opener.open(request).read(n)
-            if len(con) == 0:
-              print("ゼロエラーです", imgurl)
-              continue
-            file('./tmp/' + linker + '.jpg', 'w').write(con)
-            db.put(str(url), json.dumps({'linker':linker + '.jpg', 'tags': tags_save }) )
-            print("発見した画像", ' '.join(tags_save), url, imgurl)
-            break
-          except:
+          except HTTPError, e:
             continue
+          if len(con) == 0:
+            print("ゼロエラーです", imgurl)
+            continue
+          file('./tmp/' + linker + '.jpg', 'w').write(con)
+          db.put(str(url), json.dumps({'linker':linker + '.jpg', 'tags': tagname }) )
+          print("発見した画像", tagname, url, imgurl)
+          break
       """
       スパイダー部分、エントロピーがいくらでも上がるので、実装には気をつけないと行けない
       """
@@ -364,12 +365,19 @@ if __name__ == '__main__':
         if db.get(str(url)) != None:
             print("解析対象ではありません、スキップします", url)
             return
-        print("analyzerが起動しました。対象URLは", url)
+        #print("analyzerが起動しました。対象URLは", url)
         html, title, soup = html_adhoc_fetcher(url)
         if soup == None:
           print('bs4がギブアップしました。まじむりっす、ごめんなさい', url)
           db.put(str(url), 'majimuri')
           return
+       
+        if 'tags.php' in url:
+          db.put(str(url), 'this_is_tag')
+        if 'search.php' in url:
+          db.put(str(url), 'this_is_search')
+
+
         tags = soup.find_all('a' )
         tags_save = []
         for tag in tags:
@@ -386,13 +394,12 @@ if __name__ == '__main__':
         #else:
         #    print('解析対象は、こんな感じです', url, ','.join(tags_save) )
         #    pass
-        print('解析対象は、こんな感じです', url, ','.join(tags_save) )
+        #print('解析対象は、こんな感じです', url, ','.join(tags_save) )
 
         for imgurl in filter(lambda x:x!=None, [img.get('src') for img in  soup.find_all('img')]):
           if '600x600' not in str(imgurl):
             continue
-          get_image_t = T.Thread(target=parse_img, args=(url, imgurl,','.join(tags_save)))
-          get_image_t.start()
+          parse_img(url, imgurl,','.join(tags_save))
         if db.get(str(url)) == None and 'member_illust.php?' in url:
           db.put(str(url), 'miss')
         
@@ -426,23 +433,28 @@ if __name__ == '__main__':
                 fullurl = urllocal
             if db.get(str(fullurl)) == None:
                 links.add(fullurl)
-  
-        db.put('___URLS___', json.dumps(list(links)))
+        if random.random() > 0.99: 
+            db.put('___URLS___', json.dumps(list(links)))
         print("残りURLは", len(links), "です")
       import time
       while True:
         import threading as T
         url = links.pop()
         if db.get(str(url)) is not None:
+            if 'tags' in url:
+                print("スキップします", url, db.get(str(url)) )
             continue
-        #analyzing(url)
+        if 'novel' in url:
+            continue
+        
         t = T.Thread(target=analyzing, args=(url,))
         t.start()
-        print("theadの数は" , T.active_count())
-        time.sleep(0.1)
-        #while T.active_count() > 100:
-        #    pass
-        #analyzing(links)
+        #print("theadの数は" , T.active_count())
+        while T.active_count() > 300:
+            time.sleep(0.01)
+            #analyzing(url)
+            pass
+     
 
 if mode == 'leveldump' or mode == 'localdump':
         db = plyvel.DB('./tmp/pixiv_htmls', create_if_missing=True)
@@ -558,25 +570,3 @@ if mode == "dumplinear":
     for t, w in sorted(tw.items(), key=lambda x:x[1]*-1):
         print(t,w)
 
-if mode == 'score':
-    tsv = filter(lambda x:x != '', open('stash/star_ranking.tsv').read().split('\n'))
-    trank = {}
-    for t_w in tsv:
-        t, w = t_w.split(' ')
-        trank[t] = float(w)
-    import json
-    import math
-    idf = json.loads(open(filename + '.idf.json').read())
-    m = MeCab.Tagger ("-Owakati")
-    for line in sys.stdin:
-        score = 0.
-        line = line.strip()
-        for t in m.parse(line).strip().split(' '):
-            if idf.get(t.decode('utf-8')) != None and trank.get(t) != None:
-                score += idf.get(t.decode('utf-8')) * trank.get(t)
-        res = int(1. / (1. + math.pow(math.e, score*-1 ) ) * 100)
-        if res < 50.:
-            print("だめっぽい文章", end=" ")
-        else:
-            print("よいっぽい文章", end=" ")
-        print("score =", res)
