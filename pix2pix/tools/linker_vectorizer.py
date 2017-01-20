@@ -18,8 +18,10 @@ if '--check' in sys.argv:
 linkers = set()
 c = 1
 linker_tags = {}
-global_fix = 'kancolle.toho.fgo'
-for k, v in plyvel.DB('./' + global_fix + '/pixiv_htmls'):
+#global_fix = 'kancolle.toho.fgo'
+global_fix = '../chainer-mozaic2pix/hoppou/'
+os.system('cp -r ' + './' + global_fix + '/pixiv_htmls ' + './' + global_fix + '/pixiv_htmls.fuse')
+for k, v in plyvel.DB('./' + global_fix + '/pixiv_htmls.fuse'):
     k = k.decode('utf-8')
     v = v.decode('utf-8')
     if 'URL' in k: continue
@@ -28,20 +30,26 @@ for k, v in plyvel.DB('./' + global_fix + '/pixiv_htmls'):
     except:
      continue
     c += 1
-    context = ''.join(o.get('tags'))
+    if '艦これ' not in o.get('tags'):
+        continue
+    context = o.get('tags').split(',')
+    #print( context )
     linkers.add(o['linker'])
-    linker_tags[o['linker']] = sum(list(map(lambda x:x.split('/'), map(lambda x:re.sub('\(.*?\)', '',x), filter(lambda x: re.search('\d',x) == None,  o['tags']))) ), [])
-alltags = []
+    linker_tags[o['linker']] = sum(list(map(lambda x:x.split('/'), \
+            map(lambda x:re.sub('(【|】)', '', re.sub('\(.*?\)', '',x)), \
+            filter(lambda x: re.search('\d',x) == None,  context))) ), [])
+    #print(linker_tags[o['linker']])
 from collections import Counter as C
+alltags = []
 for k, v in linker_tags.items():
     #print(k, v)
     alltags.extend(v)
 
 approval_set = set()
-exchange_vec = [0.]*256
+exchange_vec = [0.]*768
 term_vec = {}
 from copy import copy
-for i, (k, v) in enumerate(sorted(C(alltags).items(), key=lambda x:x[1]*-1)[:256]):
+for i, (k, v) in enumerate(sorted(C(alltags).items(), key=lambda x:x[1]*-1)[:768]):
     print(k, v)
     approval_set.add(k)
     vec = copy(exchange_vec)
@@ -49,9 +57,9 @@ for i, (k, v) in enumerate(sorted(C(alltags).items(), key=lambda x:x[1]*-1)[:256
     term_vec[k] = vec
 result = {}
 for _, (k, v) in enumerate(linker_tags.items()):
-    if _ % 100001 == 0:
+    if _ % 100 == 0:
         print("iter", _ )
-    base = np.array([0.]*256)
+    base = np.array([0.]*768)
     for what in list(map( lambda x: term_vec[x], filter(lambda x: x in approval_set, v))):
         base += np.array(what)
     #print( k, list(filter(lambda x: x in approval_set, v)), base )
