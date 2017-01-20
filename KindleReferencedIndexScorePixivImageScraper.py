@@ -310,8 +310,8 @@ if __name__ == '__main__':
       NOTE: SQLの全アクセスは非常に動作コストが高く、推奨されない
       NOTE: Snapshotが何もない場合、initialize_parse_and_map_data_to_local_dbを呼び出して初期化を行う
       """
-      
-      links = set(["http://www.pixiv.net/member_illust.php?mode=medium&illust_id=60675452"])
+      seed = "http://www.pixiv.net/member_illust.php?mode=medium&illust_id=60675452" 
+      links = set([seed])
 
       if db.get('___URLS___') != None:
         for link in json.loads(db.get('___URLS___')):
@@ -433,7 +433,7 @@ if __name__ == '__main__':
                 fullurl = urllocal
             if db.get(str(fullurl)) == None:
                 links.add(fullurl)
-        if random.random() > 0.99: 
+        if random.random() > 0.99 or len(links) < 1000: 
             db.put('___URLS___', json.dumps(list(links)))
         print("残りURLは", len(links), "です")
       import time
