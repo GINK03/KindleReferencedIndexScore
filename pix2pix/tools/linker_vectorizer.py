@@ -23,7 +23,7 @@ linkers = set()
 c = 1
 linker_tags = {}
 #global_fix = 'kancolle.toho.fgo'
-global_fix = './hoppou/'
+global_fix = './kancolle.toho.fgo'
 os.system('cp -r ' + './' + global_fix + '/pixiv_htmls ' + './' + global_fix + '/pixiv_htmls.fuse')
 for k, v in plyvel.DB('./' + global_fix + '/pixiv_htmls.fuse'):
     k = k.decode('utf-8')
@@ -36,21 +36,24 @@ for k, v in plyvel.DB('./' + global_fix + '/pixiv_htmls.fuse'):
     c += 1
     if '艦これ' not in o.get('tags'):
         continue
-    context = o.get('tags').split(',')
+    if isinstance(o.get('tags'), list) == True:
+        context = o.get('tags')
+    else:
+        context = o.get('tags').split(',')
 
-    if '--only-one' in sys.argv:
-        if len( set(context) & chars ) != 1:
-            continue
-    #print( context )
     linkers.add(o['linker'])
     linker_tags[o['linker']] = sum(list(map(lambda x:x.split('/'), \
             map(lambda x:re.sub('(【|】)', '', re.sub('\(.*?\)', '',x)), \
             filter(lambda x: re.search('\d',x) == None,  context))) ), [])
+    if '--only-one' in sys.argv:
+        if len( set(linker_tags[o['linker']]) & chars ) != 1:
+            continue
+    print( (linker_tags[o['linker']]) )
     #print(linker_tags[o['linker']])
 from collections import Counter as C
 alltags = []
 for k, v in linker_tags.items():
-    #print(k, v)
+    print(k, v)
     alltags.extend(v)
 
 approval_set = set()
