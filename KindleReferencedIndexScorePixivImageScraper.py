@@ -453,8 +453,13 @@ if __name__ == '__main__':
         #analyzing(url)
         t = T.Thread(target=analyzing, args=(url,))
         t.start()
+<<<<<<< HEAD
         print("theadの数は" , T.active_count())
         while T.active_count() > active:
+=======
+        #print("theadの数は" , T.active_count())
+        while T.active_count() > 30:
+>>>>>>> dfc579b64edb6acef94a5d1e76fd2b927874e926
             time.sleep(0.01)
             #analyzing(url)
             pass
