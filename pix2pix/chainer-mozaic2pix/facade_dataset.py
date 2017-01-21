@@ -62,20 +62,22 @@ class GGGDataset(dataset_mixin.DatasetMixin):
         self.IN_CH = 4
         self.dataDir = dataDir
         self.dataset = []
-        files = g('./ip/*')
+        files = g('./hoppou/*')
         orgs = list(filter(lambda x:'.org.' in x, files))
         heads = []
         for org in orgs:
             heads.append( '.'.join(org.split('.')[1:5]).split('/').pop() )
         import json
-        linker_tags = json.loads(open('./linker_tags.json').read())
+        linker_tags = json.loads(open('./hoppou/linker_tags.json').read())
         for i in range(data_range[0],data_range[1]):
             head = heads[i]
             """
             headが入っているのが、jsonのキーにもなる
             """
             print(i, "/", data_range[1] - data_range[0], head)
-            tagvec = np.array(linker_tags[head + '.jpg'])
+            #print("head", head)
+            tagvec = np.array(linker_tags[head + '.jpg']['vector'])
+            #print("tagvec", tagvec)
             """
             meta tag vecを可変にする
             """
