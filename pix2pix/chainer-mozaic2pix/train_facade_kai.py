@@ -18,9 +18,9 @@ from updater import FacadeUpdater
 
 from facade_dataset import GGGDataset as FacadeDataset
 from facade_visualizer import out_image
-ALL_NUM = 330
+ALL_NUM = 6000/2
 train_range = (1, int(ALL_NUM*0.8))
-test_range  = (int(ALL_NUM*0.8)+1, ALL_NUM)
+test_range  = (int(ALL_NUM*0.8)+1, int(ALL_NUM))
 def main():
     parser = argparse.ArgumentParser(description='chainer implementation of pix2pix')
     parser.add_argument('--batchsize', '-b', type=int, default=1,

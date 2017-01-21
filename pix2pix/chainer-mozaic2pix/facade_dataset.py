@@ -62,24 +62,27 @@ class GGGDataset(dataset_mixin.DatasetMixin):
         self.IN_CH = 4
         self.dataDir = dataDir
         self.dataset = []
-        files = g('./hoppou/*')
+        files = g('./pics.mozaic/*')
         orgs = list(filter(lambda x:'.org.' in x, files))
         heads = []
         for org in orgs:
-            heads.append( '.'.join(org.split('.')[1:5]).split('/').pop() )
+            heads.append( '.'.join(org.split('.')[1:6]).split('/').pop() )
+            print( "filename", '.'.join(org.split('.')[1:6]).split('/').pop() ) 
         import json
-        linker_tags = json.loads(open('./hoppou/linker_tags.json').read())
+        linker_tags = json.loads(open('./linker_tags.json').read())
+        for k, v in linker_tags.items():
+            print("linker-key", k)
         for i in range(data_range[0],data_range[1]):
             head = heads[i]
             """
-            head$B$,F~$C$F$$$k$N$,!"(Bjson$B$N%-!<$K$b$J$k(B
+            headが入っているのが、jsonのキーにもなる
             """
             print(i, "/", data_range[1] - data_range[0], head)
             #print("head", head)
             tagvec = np.array(linker_tags[head + '.jpg']['vector'])
             #print("tagvec", tagvec)
             """
-            meta tag vec$B$r2DJQ$K$9$k(B
+            meta tag vecを可変にする
             """
             #tagvec = np.repeat(tagvec, 256)
             #tagvec = np.resize(tagvec, (286, 286))
@@ -87,7 +90,7 @@ class GGGDataset(dataset_mixin.DatasetMixin):
             tagvec = np.resize(tagvec, (256,256) )
             #tagvec = np.repeat(tagvec,256)
             """
-            $B3N<B$K8+$($kAG@-$K$9$k$?$a$K!"(B255$BG\$9$k(B
+            確実に見える素性にするために、255倍する
             """
             tagvec *= 255
 
@@ -105,12 +108,12 @@ class GGGDataset(dataset_mixin.DatasetMixin):
             lbl_ = np.array(label)  # [0, 12)
             #frombuffer = Image.frombuffer(data=lbl_, size=(img.shape[1], img.shape[2]), mode='RGB')
             """
-            FIX : $B$3$N%Q%i%a!<%?$G!"%a%?>pJsNN0h$r@8@.$9$k(B
+            FIX : このパラメータで、メタ情報領域を生成する
             """
             FIX = 1
             red, grn, blu = lbl_[:,:,0], lbl_[:,:,1], lbl_[:,:,2]
             """
-            $B$3$3$G!"%9%?%s%@%i%$%<!<%7%g%s$r9T$&(B
+            ここで、スタンダライゼーションを行う
             """
             #red = (red - red.mean())/red.std()
             #grn = (grn - grn.mean())/grn.std()
@@ -152,7 +155,7 @@ class GGGDataset(dataset_mixin.DatasetMixin):
 
             """
             for j in range(self.IN_CH):
-                    print("$B$=$NB>$N=hM}$G$9(B")
+                    print("その他の処理です")
                     label[j,:] = label_==j
             """
             self.dataset.append((img,label))
