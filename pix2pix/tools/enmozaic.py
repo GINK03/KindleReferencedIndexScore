@@ -24,7 +24,7 @@ for k, v in plyvel.DB('./cp/pixiv_htmls'):
     if '艦これ' in ''.join(o.get('tags')):
         linkers.add(o['linker'])
 """
-source = 'hoppou'
+source = './kancolle.toho.fgo'
 target = 'pics'
 for k, v in json.loads(open('./linker_tags.json').read()).items():
     linkers.add(k)

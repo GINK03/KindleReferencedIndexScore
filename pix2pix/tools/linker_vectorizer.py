@@ -18,38 +18,48 @@ if '--check' in sys.argv:
 # キャラクタがいる絵を抜き出す方法
 chars = set(filter(lambda x:x!='', open('./dataset.kancolle.dat').read().split('\n')))
 
-
+TH = 7000
 linkers = set()
-c = 1
+c = 0
 linker_tags = {}
 #global_fix = 'kancolle.toho.fgo'
 global_fix = './kancolle.toho.fgo'
 os.system('cp -r ' + './' + global_fix + '/pixiv_htmls ' + './' + global_fix + '/pixiv_htmls.fuse')
-for k, v in plyvel.DB('./' + global_fix + '/pixiv_htmls.fuse'):
+for _, (k, v) in enumerate(plyvel.DB('./' + global_fix + '/pixiv_htmls.fuse')):
     k = k.decode('utf-8')
     v = v.decode('utf-8')
     if 'URL' in k: continue
     try:
-     o = json.loads(v)
+      o = json.loads(v)
     except:
-     continue
-    c += 1
+      continue
     if '艦これ' not in o.get('tags'):
         continue
+    print("linker",  o.get('linker') )
     if isinstance(o.get('tags'), list) == True:
         context = o.get('tags')
     else:
         context = o.get('tags').split(',')
 
+    
+    if '--only-one' in sys.argv:
+        if len( set(sum(list(map(lambda x:x.split('/'), \
+                    map(lambda x:re.sub('(【|】)', '', re.sub('\(.*?\)', '',x)), \
+                    filter(lambda x: re.search('\d',x) == None,  context))) ), [])\
+                 ) & chars ) != 1:
+            continue
     linkers.add(o['linker'])
     linker_tags[o['linker']] = sum(list(map(lambda x:x.split('/'), \
             map(lambda x:re.sub('(【|】)', '', re.sub('\(.*?\)', '',x)), \
             filter(lambda x: re.search('\d',x) == None,  context))) ), [])
-    if '--only-one' in sys.argv:
-        if len( set(linker_tags[o['linker']]) & chars ) != 1:
-            continue
-    print( (linker_tags[o['linker']]) )
-    #print(linker_tags[o['linker']])
+    print( linker_tags[o['linker']] )
+    print( c,  set(linker_tags[o['linker']]) & chars )
+    c += 1
+    if c > TH:
+        print("終わり", c )
+        break
+#sys.exit()
+#print(linker_tags[o['linker']])
 from collections import Counter as C
 alltags = []
 for k, v in linker_tags.items():

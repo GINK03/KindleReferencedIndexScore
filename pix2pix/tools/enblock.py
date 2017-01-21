@@ -12,8 +12,8 @@ import copy
 from os.path import exists
 import random
 linkers = set()
-source = 'hoppou'
-target = 'pics'
+source = './kancolle.toho.fgo'
+target = 'pics.block'
 STEP = 5
 for k, v in json.loads(open('./linker_tags.json').read()).items():
     linkers.add(k)
