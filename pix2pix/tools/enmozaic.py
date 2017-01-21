@@ -24,17 +24,17 @@ for k, v in plyvel.DB('./cp/pixiv_htmls'):
     if '艦これ' in ''.join(o.get('tags')):
         linkers.add(o['linker'])
 """
-for k, v in json.loads(open('../chainer-mozaic2pix/hoppou/linker_tags.json').read()).items():
+source = 'hoppou'
+target = 'pics'
+for k, v in json.loads(open('./linker_tags.json').read()).items():
     linkers.add(k)
     print(k)
-sys.exit()
 print('number of fleet girls', len(linkers), c)
-source = 'ip'
-target = 'ip2'
 for e, fname in enumerate(glob.glob('./' + source + '/*.jpg')):
-    im = cv2.imread(fname)
     if fname.split('/').pop() not in linkers:
         continue
+    im = cv2.imread(fname)
+    print( fname )
     # すでにコンバート済み案件に関してはタッチしない
     outfname = './' + target + '/' + fname.split('/').pop()
     if exists(outfname + '.cnv.png') and exists(outfname + '.org.jpg'): 
@@ -55,18 +55,12 @@ for e, fname in enumerate(glob.glob('./' + source + '/*.jpg')):
         r = r/(hen**2)
         g = g/(hen**2)
         b = b/(hen**2)
+        ensmall = cv2.resize(im, (int(w/10), int(h/10) ) )
+        enlarge = cv2.resize(ensmall, (w, h), interpolation=cv2.INTER_NEAREST )
         if sum(map(abs, [r - g, g - b, b - r ]) )  < 12. :
             print('モノクロの可能性があります、スキップします')
             continue
-        gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
-        blur = cv2.GaussianBlur(im, ksize=(21, 21), sigmaX=0, sigmaY=0) 
-        inv  = 255 - blur
-        dst_gray, dst_color = cv2.pencilSketch(im, sigma_s=250, sigma_r=0.07, shade_factor=0.05) 
-        th3 = cv2.adaptiveThreshold(dst_gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
-                            cv2.THRESH_BINARY,3,2)
-        outfname = './' + target + '/' + fname.split('/').pop()
-        color = ':'.join(map(str, [r,g,b]))
-        #cv2.imwrite(outfname + '.cnv.png', th3)
-        #cv2.imwrite(outfname + '.org.jpg', im)
+        cv2.imwrite(outfname + '.cnv.png', enlarge)
+        cv2.imwrite(outfname + '.org.jpg', im)
         print(e, fname)
         print(e, outfname)

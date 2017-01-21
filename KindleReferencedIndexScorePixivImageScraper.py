@@ -292,6 +292,7 @@ if __name__ == '__main__':
     parser.add_argument('--mode', help='you can specify mode...')
     parser.add_argument('--refresh', help='create snapshot(true|false)')
     parser.add_argument('--file', help='input filespath')
+    parser.add_argument('--active', help='spcific active thread number')
 
     args_obj = vars(parser.parse_args())
   
@@ -300,6 +301,8 @@ if __name__ == '__main__':
     mode = (lambda x:x if x else 'undefined')( args_obj.get('mode') )
 
     refresh    = (lambda x:False if x=='false' else True)( args_obj.get('refresh') )
+
+    active    = (lambda x:15 if x==None else int(x) )( args_obj.get('active') )
 
     filename = args_obj.get('file')
 
@@ -344,7 +347,7 @@ if __name__ == '__main__':
           n = 1024*1024
           try:
             con = opener.open(request).read(n)
-          except urllib2.HTTPError, e:
+          except  urllib2.HTTPError, e:
             continue
           if len(con) == 0:
             print("ゼロエラーです", imgurl)
@@ -448,10 +451,16 @@ if __name__ == '__main__':
         if 'novel' in url:
             continue
         
+        #analyzing(url)
         t = T.Thread(target=analyzing, args=(url,))
         t.start()
+<<<<<<< HEAD
+        print("theadの数は" , T.active_count())
+        while T.active_count() > active:
+=======
         #print("theadの数は" , T.active_count())
         while T.active_count() > 30:
+>>>>>>> dfc579b64edb6acef94a5d1e76fd2b927874e926
             time.sleep(0.01)
             #analyzing(url)
             pass

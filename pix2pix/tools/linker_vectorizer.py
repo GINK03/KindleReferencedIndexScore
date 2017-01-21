@@ -15,11 +15,15 @@ if '--check' in sys.argv:
         print(k, v['vector'] )
         print(k, v['terms'] )
 
+# キャラクタがいる絵を抜き出す方法
+chars = set(filter(lambda x:x!='', open('./dataset.kancolle.dat').read().split('\n')))
+
+
 linkers = set()
 c = 1
 linker_tags = {}
 #global_fix = 'kancolle.toho.fgo'
-global_fix = '../chainer-mozaic2pix/hoppou/'
+global_fix = './hoppou/'
 os.system('cp -r ' + './' + global_fix + '/pixiv_htmls ' + './' + global_fix + '/pixiv_htmls.fuse')
 for k, v in plyvel.DB('./' + global_fix + '/pixiv_htmls.fuse'):
     k = k.decode('utf-8')
@@ -33,6 +37,10 @@ for k, v in plyvel.DB('./' + global_fix + '/pixiv_htmls.fuse'):
     if '艦これ' not in o.get('tags'):
         continue
     context = o.get('tags').split(',')
+
+    if '--only-one' in sys.argv:
+        if len( set(context) & chars ) != 1:
+            continue
     #print( context )
     linkers.add(o['linker'])
     linker_tags[o['linker']] = sum(list(map(lambda x:x.split('/'), \
