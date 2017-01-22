@@ -7,17 +7,18 @@ import pickle as pickle
 import copy
 import os
 import codecs
-
+import json
 import numpy as np
 from chainer import cuda, Variable, FunctionSet, optimizers
 import chainer.functions as F
 if '--moreDeep' in sys.argv:
+   print("[注意] このモードは非推奨です！")
    from DeepRNN import MoreDeepRNN as DeepRNN
 else:
    from DeepRNN import DeepRNN as DeepRNN
 
+# 関数をオーバーライド
 make_initial_state = DeepRNN.make_initial_state
-import json
 
 def load_data(args):
     vocab = {}
@@ -37,7 +38,7 @@ def load_data(args):
 
 # arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_dir',                   type=str,   default='data/tinyshakespeare')
+parser.add_argument('--data_dir',                   type=str,   default='data/my_name_is_happy_hardcore')
 parser.add_argument('--checkpoint_dir',             type=str,   default='')
 #parser.add_argument('--json',                       type=str,   default='1.json')
 parser.add_argument('--gpu',                        type=int,   default=-1)
@@ -48,10 +49,11 @@ parser.add_argument('--learning_rate_decay_after',  type=int,   default=10)
 parser.add_argument('--decay_rate',                 type=float, default=0.95)
 parser.add_argument('--dropout',                    type=float, default=0.0)
 parser.add_argument('--seq_length',                 type=int,   default=50)
-parser.add_argument('--batchsize',                  type=int,   default=50)
+parser.add_argument('--batchsize',                  type=int,   default=30)
 parser.add_argument('--epochs',                     type=int,   default=50)
 parser.add_argument('--grad_clip',                  type=int,   default=5)
 parser.add_argument('--init_from',                  type=str,   default='')
+parser.add_argument('--repeat',                     type=int,   default=100)
 
 args = parser.parse_args()
 
@@ -89,6 +91,7 @@ epoch        = 0
 start_at     = time.time()
 cur_at       = start_at
 state        = make_initial_state(n_units, batchsize=batchsize)
+
 if args.gpu >= 0:
     accum_loss   = Variable(cuda.zeros(()))
     for key, value in list(state.items()):
@@ -99,10 +102,8 @@ else:
 print('going to train {} iterations'.format(jump * n_epochs))
 loss_rate = 0.0
 for i in range(int(jump * n_epochs)):
-    x_batch = np.array([train_data[(jump * j + i) % whole_len]
-                        for j in range(batchsize)])
-    y_batch = np.array([train_data[(jump * j + i + 1) % whole_len]
-                        for j in range(batchsize)])
+    x_batch = np.array([train_data[(jump * j + i) % whole_len] for j in range(batchsize)])
+    y_batch = np.array([train_data[(jump * j + i + 1) % whole_len] for j in range(batchsize)])
 
     if args.gpu >=0:
         x_batch = cuda.to_gpu(x_batch)
