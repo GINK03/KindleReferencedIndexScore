@@ -126,14 +126,11 @@ for i in range(int(jump * n_epochs)):
             accum_loss = Variable(np.zeros((), dtype=np.float32))
         optimizer.clip_grads(grad_clip)
         optimizer.update()
-#    if (i + 1) % 10000 == 0:
-    if (i + 1) % 5000 == 0:
+    if (i + 1) % 1000 == 0:
         print(' will save chainermodel data...')
-        print( '%s/latest_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units) )
-        #fn = ('%s/deeprnn_%s_%d_epoch_%.2f_lr_%.2f.chainermodel' % (args.checkpoint_dir, filename, n_units, float(i)/jump, loss_rate ) )
-        #pickle.dump(copyed_obj, open(fn, 'wb'))
+        print( '%s/latest_deeprnn_%s_%d.chainermodel'%(args.checkpoint_dir, filename, n_units) )
         copyed_obj = copy.deepcopy(model).to_cpu()
-        pickle.dump(copyed_obj, open('%s/latest_deeprnn_%s_%s_%d.chainermodel'%(args.checkpoint_dir, filename, args.json, n_units), 'wb'))
+        pickle.dump(copyed_obj, open('%s/latest_deeprnn_%s_%d.chainermodel'%(args.checkpoint_dir, filename, n_units), 'wb'))
 
     if (i + 1) % jump == 0:
         epoch += 1
