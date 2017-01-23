@@ -17,24 +17,32 @@ if "deep" == "deep":
 else:
     from CharRNN import CharRNN, make_initial_state
 
-vocab = pickle.load(open('./data/tinyshakespeare/vocab.bin', 'rb'))
+parser = argparse.ArgumentParser()
+parser.add_argument('--data_dir', type=str, default='data/bad_apple')  
+args = parser.parse_args()
+
+vocab = pickle.load(open('%s/vocab.bin'%args.data_dir, 'rb'))
 ivocab = {}
 for e, (c, i) in enumerate(vocab.items()):
     ivocab[i] = c
-model = pickle.load(open('./data/tinyshakespeare/latest_deeprnn_tinyshakespeare_768.chainermodel', 'rb'))
+model = pickle.load(open('%s/latest_deeprnn_%s_1024.chainermodel'%\
+        (args.data_dir, args.data_dir.split('/').pop()), 'rb'))
 
 n_units = model.embed.W.data.shape[1]
 prev_char = np.array([0], dtype=np.int32)
 
 class TextList:
-    data = ['this', 'is', 'a']
+    data = ['v100q100o5l1^1a+']
     before_rank = None
     before_prob = None
     state = None
     @staticmethod
-    def update_data(inputs=""):
-        data = [term if vocab.get(term) != None else "___UNK___" for term in TextList.data]
-        TextList.data = data
+    def update_data(inputs=None):
+        if inputs is not None:
+            data = [term if vocab.get(term) != None else "___UNK___" for term in TextList.data]
+            TextList.data = data
+        else:
+            TextList.data = TextList.data
     @staticmethod
     def init_state():
         TextList.state =  make_initial_state(n_units, batchsize=1, train=False)
@@ -42,7 +50,7 @@ class TextList:
     def process_state():
         # stateの状態を作成する
         for index, term in [(vocab.get(term),term) for term in TextList.data]:
-            print("input", term)
+            print("predict", term, end=" ")
             char = np.array([index], dtype=np.int32)
             TextList.state, prob = model.forward_one_step(char, char, TextList.state, train=False)
             probability = cuda.to_cpu(prob.data)[0].astype(np.float64)
@@ -54,7 +62,7 @@ class TextList:
         prob, term = prob_with_term[0]
         
         # stateから予想を行う
-        for _ in range(100):
+        for _ in range(500):
             index = vocab.get(term)
             char = np.array([index], dtype=np.int32)
             TextList.state, prob = model.forward_one_step(char, char, TextList.state, train=False)
@@ -71,13 +79,12 @@ class TextList:
         return TextList.state
 
 if __name__ == '__main__':
-    for line in sys.stdin:
-        line = line.strip()
-        if line == '' or 'http' in line: continue
-        TextList.init_state()
-        line = line.strip()
-        TextList.update_data(line)
-        state = TextList.process_state()
+    #for line in sys.stdin:
+    #    line = line.strip()
+    #    if line == '' or 'http' in line: continue
+    TextList.init_state()
+    TextList.update_data(inputs=None)
+    state = TextList.process_state()
 
 
 if __name__ == '__test__':
