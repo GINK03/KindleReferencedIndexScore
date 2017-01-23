@@ -26,7 +26,9 @@ def load_data(args):
     words = ''
     line = ''
     raw = open('%s/input.txt' %(args.data_dir), 'r').read()
-    words = list(map(lambda x:x.replace('\n', ''), filter(lambda x:x!='', ((raw + ' ')*args.repeat).split(' '))) )
+    words = list(map(lambda x:x.replace('\n', ''), filter(lambda x:x!='', (raw*args.repeat).split('_'))) )
+    #print(words)
+    #sys.exit()
     dataset = np.ndarray((len(words),), dtype=np.int32)
     for i, word in enumerate(words):
         if word not in vocab:
@@ -42,7 +44,7 @@ parser.add_argument('--data_dir',                   type=str,   default='data/my
 parser.add_argument('--checkpoint_dir',             type=str,   default='')
 #parser.add_argument('--json',                       type=str,   default='1.json')
 parser.add_argument('--gpu',                        type=int,   default=-1)
-parser.add_argument('--rnn_size',                   type=int,   default=1024)
+parser.add_argument('--rnn_size',                   type=int,   default=128)
 parser.add_argument('--learning_rate',              type=float, default=2e-3)
 parser.add_argument('--learning_rate_decay',        type=float, default=0.97)
 parser.add_argument('--learning_rate_decay_after',  type=int,   default=10)

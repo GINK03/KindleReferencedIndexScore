@@ -3,8 +3,11 @@
 import re
 import math
 import os
+import sys
 
-text = open('./input.txt').read().split('\n')[0]
+filename = sys.argv[1]
+
+text = open(filename).read().split('\n')[0]
 
 # d f g
 for rep in [(r'<', '_<_'), (r'>', '_>_'), ('\+', '_+_'), ('\-', '_-_'), \
@@ -14,3 +17,5 @@ for rep in [(r'<', '_<_'), (r'>', '_>_'), ('\+', '_+_'), ('\-', '_-_'), \
 # distict underbar
 text = re.sub('_{1,}', '_', text)
 print(text)
+
+open("%s/input.txt"%'/'.join(filename.split('/')[:-1]), 'w').write(text)

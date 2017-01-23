@@ -32,7 +32,7 @@ n_units = model.embed.W.data.shape[1]
 prev_char = np.array([0], dtype=np.int32)
 
 class TextList:
-    data = ['v100q100o5l1^1a+']
+    data = ['v100']
     before_rank = None
     before_prob = None
     state = None
@@ -74,7 +74,7 @@ class TextList:
             prob_with_term = sorted(prob_with_term, key=lambda x:-1 * x[0] )[:10]
             # termのアップデート
             prob, term = prob_with_term[0]
-            print(term, end=" ")
+            print(term, end=",")
             
         return TextList.state
 
