@@ -12,13 +12,14 @@ import re
 
 if '--check' in sys.argv:
     for k, v in json.loads(open('./linker_tags.json').read()).items():
-        print(k, v['vector'] )
-        print(k, v['terms'] )
-
+        #print(k, v['vector'] )
+        #print(k, v['terms'] )
+        print(k)
+    sys.exit()
 # キャラクタがいる絵を抜き出す方法
 chars = set(filter(lambda x:x!='', open('./dataset.kancolle.dat').read().split('\n')))
 
-TH = 7000
+TH = 20000
 linkers = set()
 c = 0
 linker_tags = {}
@@ -67,10 +68,10 @@ for k, v in linker_tags.items():
     alltags.extend(v)
 
 approval_set = set()
-exchange_vec = [0.]*768
+exchange_vec = [0.]*256
 term_vec = {}
 from copy import copy
-for i, (k, v) in enumerate(sorted(C(alltags).items(), key=lambda x:x[1]*-1)[:768]):
+for i, (k, v) in enumerate(sorted(C(alltags).items(), key=lambda x:x[1]*-1)[:256]):
     print(k, v)
     approval_set.add(k)
     vec = copy(exchange_vec)
@@ -80,12 +81,12 @@ result = {}
 for _, (k, v) in enumerate(linker_tags.items()):
     if _ % 100 == 0:
         print("iter", _ )
-    base = np.array([0.]*768)
+    base = np.array([0.]*256)
     for what in list(map( lambda x: term_vec[x], filter(lambda x: x in approval_set, v))):
         base += np.array(what)
     #print( k, list(filter(lambda x: x in approval_set, v)), base )
     linker_tags[k] = list(base)
-    result[k] = { 'vector': list(base), 'terms': list(filter(lambda x:x in approval_set, v))}
+    result[k] = { 'vector': list(base), 'terms': list(filter(lambda x:x in approval_set, v)), 'term_vec': term_vec}
 
 
 open('./linker_tags.json', 'w').write(json.dumps(result))
