@@ -54,5 +54,5 @@ for e, fname in enumerate(glob.glob('./' + source + '/*.jpg')):
             continue
         cv2.imwrite(outfname + '.cnv.png', copyed)
         cv2.imwrite(outfname + '.org.jpg', im)
-        print(e, fname)
-        print(e, outfname)
+        #print(e, fname)
+        print("outfile", e, outfname)

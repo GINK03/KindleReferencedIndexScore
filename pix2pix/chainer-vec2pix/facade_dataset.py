@@ -55,14 +55,14 @@ class FacadeDataset(dataset_mixin.DatasetMixin):
     
 class VecDataset(dataset_mixin.DatasetMixin):
     def __init__(self, dataDir='./base', data_range=(1,100)):
-        from glob import glob as g
+        from glob import glob as glob
         print("load Vec-dataset start")
         print("    from: %s"%dataDir)
         print("    range: [%d, %d)"%(data_range[0], data_range[1]))
         self.IN_CH = 4
         self.dataDir = dataDir
         self.dataset = []
-        files = g('./ip/*')
+        files = glob('./ip/*')
         orgs = list(filter(lambda x:'.org.' in x, files))
         heads = []
         for org in orgs:
