@@ -19,7 +19,7 @@ if '--check' in sys.argv:
 # キャラクタがいる絵を抜き出す方法
 chars = set(filter(lambda x:x!='', open('./dataset.kancolle.dat').read().split('\n')))
 
-TH = 20000
+TH = 50000
 linkers = set()
 c = 0
 linker_tags = {}
@@ -35,6 +35,10 @@ for _, (k, v) in enumerate(plyvel.DB('./' + global_fix + '/pixiv_htmls.fuse')):
     except:
       continue
     if '艦これ' not in o.get('tags'):
+        continue
+    #if '第六駆逐隊' not in o.get('tags'):
+    #    continue
+    if '響' not in o.get('tags') and '暁' not in o.get('tags') and '電' not in o.get('tags') and '響' not in o.get('tags'):
         continue
     print("linker",  o.get('linker') )
     if isinstance(o.get('tags'), list) == True:
@@ -77,7 +81,7 @@ for i, (k, v) in enumerate(sorted(C(alltags).items(), key=lambda x:x[1]*-1)[:256
     vec = copy(exchange_vec)
     vec[i] = 1.
     term_vec[k] = vec
-result = {'___TERM_VEC___': term_vec}
+result = {'__TERM_VEC__': term_vec}
 for _, (k, v) in enumerate(linker_tags.items()):
     if _ % 100 == 0:
         print("iter", _ )
@@ -86,7 +90,7 @@ for _, (k, v) in enumerate(linker_tags.items()):
         base += np.array(what)
     #print( k, list(filter(lambda x: x in approval_set, v)), base )
     linker_tags[k] = list(base)
-    result[k] = { 'vector': list(base), 'terms': list(filter(lambda x:x in approval_set, v)) }
+    result[k] = { 'vector': list(base), 'terms': list(filter(lambda x:x in approval_set, v))}
 
 
-open('./linker_tags.json', 'w').write(json.dumps(result))
+open('./linker_tags_sixth.json', 'w').write(json.dumps(result))

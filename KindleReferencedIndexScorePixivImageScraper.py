@@ -16,7 +16,7 @@ from KindleReferencedIndexScoreClass import *
 #from KindleReferencedIndexScoreDBs import *
 #from KindleReferencedIndexScoreDBsSnapshotDealer import *
 from KindleReferencedIndexScoreConfigMapper import *
-
+import cPickle as pickle
 SEED_EXIST          = True
 SEED_NO_EXIST       = False
 # set default state to scrape web pages in Amazon Kindle
@@ -317,7 +317,7 @@ if __name__ == '__main__':
       links = set([seed])
 
       if db.get('___URLS___') != None:
-        for link in json.loads(db.get('___URLS___')):
+        for link in pickle.loads(db.get('___URLS___')):
           links.add(link)
         print("URLをリカバリーしました")
 
@@ -437,7 +437,8 @@ if __name__ == '__main__':
             if db.get(str(fullurl)) == None:
                 links.add(fullurl)
         if random.random() > 0.99 or len(links) < 1000: 
-            db.put('___URLS___', json.dumps(list(links)))
+            db.put('___URLS___', pickle.dumps(list(links)))
+            db.put('___URLS.DUP___', pickle.dumps(list(links)))
         print("残りURLは", len(links), "です")
       import time
       while True:
