@@ -1,9 +1,3 @@
-import sys
-import os
-import itertools
-import math
-
-N, K = map(int, raw_input().split(" "))
-
-for oon in itertools.permutations(range(1,N+1)):
- print oon
+N, K = map(int, input().split())
+baseline = 2**(N-K)
+print( baseline if K!=1 else baseline - N)
