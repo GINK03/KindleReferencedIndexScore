@@ -14,11 +14,13 @@ from chainer import function
 from chainer.utils import type_check
 import numpy
 
-class FacadeUpdater(chainer.training.StandardUpdater):
+class Updater(chainer.training.StandardUpdater):
 
     def __init__(self, *args, **kwargs):
-        self.enc, self.dec, self.dis = kwargs.pop('models')
-        super(FacadeUpdater, self).__init__(*args, **kwargs)
+        #print( kwargs ) 
+        #sys.exit()
+        self.enc, self.dec, self.dis, self.dec2 = kwargs.pop('models')
+        super(Updater, self).__init__(*args, **kwargs)
 
 
     def loss_enc(self, enc, x_out, t_out, y_out, lam1=100, lam2=1):
@@ -51,8 +53,9 @@ class FacadeUpdater(chainer.training.StandardUpdater):
         enc_optimizer = self.get_optimizer('enc')
         dec_optimizer = self.get_optimizer('dec')
         dis_optimizer = self.get_optimizer('dis')
+        dec2_optimizer = self.get_optimizer('dec2')
         
-        enc, dec, dis = self.enc, self.dec, self.dis
+        enc, dec, dis, dec2 = self.enc, self.dec, self.dis, self.dec2
         xp = enc.xp
 
         batch = self.get_iterator('main').next()
@@ -101,6 +104,9 @@ class FacadeUpdater(chainer.training.StandardUpdater):
         y_fake = dis(x_in, x_out, test=False)
         y_real = dis(x_in, t_out, test=False)
 
+        """ 二段目のGANの定義を作る """
+        x_out_data = x_out.data.get()[0,:]
+        x_out2 = dec2(x_out_data, path_through, test=False)
 
         enc_optimizer.update(self.loss_enc, enc, x_out, t_out, y_fake)
         for z_ in z:

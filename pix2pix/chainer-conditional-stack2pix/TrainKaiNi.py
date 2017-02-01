@@ -11,14 +11,16 @@ from chainer import training
 from chainer.training import extensions
 from chainer import serializers
 
-from net import Discriminator
-from net import Encoder
-from net import Decoder
-from Updater import FacadeUpdater
+from Net import Encoder
+from Net import Decoder
+from Net import Discriminator
+from Net import Decoder2
+from Net import Discriminator2
+from Updater import Updater as Updater
 
-from Dataset import VecDataset as FacadeDataset
+from Dataset import VecDataset as Dataset
 from Visualizer import out_image
-ALL_NUM = int(7948/2)
+ALL_NUM = int(100/2)
 train_range = (1, int(ALL_NUM*0.8))
 test_range  = (int(ALL_NUM*0.8)+1, ALL_NUM)
 def main():
@@ -56,12 +58,13 @@ def main():
     enc = Encoder(in_ch=IN_CH)
     dec = Decoder(out_ch=OUT_CH)
     dis = Discriminator(in_ch=IN_CH, out_ch=OUT_CH)
-    
+    dec2 = Decoder2(out_ch=OUT_CH)    
     if args.gpu >= 0:
         chainer.cuda.get_device(args.gpu).use()  # Make a specified GPU current
         enc.to_gpu()  # Copy the model to the GPU
         dec.to_gpu()
         dis.to_gpu()
+        dec2.to_gpu()
 
     # Setup an optimizer
     def make_optimizer(model, alpha=0.0002, beta1=0.5):
@@ -69,26 +72,30 @@ def main():
         optimizer.setup(model)
         optimizer.add_hook(chainer.optimizer.WeightDecay(0.00001), 'hook_dec')
         return optimizer
-    opt_enc = make_optimizer(enc)
-    opt_dec = make_optimizer(dec)
-    opt_dis = make_optimizer(dis)
+    opt_enc  = make_optimizer(enc)
+    opt_dec  = make_optimizer(dec)
+    opt_dis  = make_optimizer(dis)
+    opt_dec2 = make_optimizer(dec2)
 
-    train_d = FacadeDataset(args.dataset, data_range=train_range)
-    test_d = FacadeDataset(args.dataset, data_range=test_range)
+    train_d = Dataset(args.dataset, data_range=train_range)
+    test_d = Dataset(args.dataset, data_range=test_range)
     #train_iter = chainer.iterators.MultiprocessIterator(train_d, args.batchsize, n_processes=4)
     #test_iter = chainer.iterators.MultiprocessIterator(test_d, args.batchsize, n_processes=4)
     train_iter = chainer.iterators.SerialIterator(train_d, args.batchsize)
     test_iter = chainer.iterators.SerialIterator(test_d, args.batchsize)
 
     # Set up a trainer
-    updater = FacadeUpdater(
-        models=(enc, dec, dis),
+    updater = Updater(
+        models=(enc, dec, dis, dec2),
         iterator={
             'main': train_iter,
             'test': test_iter},
         optimizer={
-            'enc': opt_enc, 'dec': opt_dec, 
-            'dis': opt_dis},
+            'enc': opt_enc, 
+            'dec': opt_dec, 
+            'dis': opt_dis,
+            'dec2': opt_dec2,
+            },
         device=args.gpu)
     trainer = training.Trainer(updater, (args.epoch, 'epoch'), out=args.out)
 

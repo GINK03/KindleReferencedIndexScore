@@ -143,3 +143,56 @@ class Discriminator(chainer.Chain):
         h = self.c4(h)
         #h = F.average_pooling_2d(h, h.data.shape[2], 1, 0)
         return h
+
+class Decoder2(chainer.Chain):
+    def __init__(self, out_ch):
+        self.EXTRA_VECTOR = 256
+        layers = {}
+        w = chainer.initializers.Normal(0.02)
+        layers['c0'] = CBR(512 + self.EXTRA_VECTOR, 512 + self.EXTRA_VECTOR, bn=True, sample='up', activation=F.relu, dropout=True)
+        layers['c1'] = CBR(1024 + self.EXTRA_VECTOR, 512, bn=True, sample='up', activation=F.relu, dropout=True)
+        layers['c2'] = CBR(1024, 512, bn=True, sample='up', activation=F.relu, dropout=True)
+        layers['c3'] = CBR(1024, 512, bn=True, sample='up', activation=F.relu, dropout=False)
+        layers['c4'] = CBR(1024, 256, bn=True, sample='up', activation=F.relu, dropout=False)
+        layers['c5'] = CBR(512, 128, bn=True, sample='up', activation=F.relu, dropout=False)
+        layers['c6'] = CBR(256, 64, bn=True, sample='up', activation=F.relu, dropout=False)
+        layers['c7'] = F.Convolution2D(128, out_ch, 3, 1, 1, initialW=w)
+        super(Decoder2, self).__init__(**layers)
+
+    def __call__(self, hs, path_through, test=False):
+        #path_through_3 = cp.repeat(path_through, 3*256).astype('float32')
+        #path_through_2x2 = chainer.cuda.to_gpu(cp.reshape(path_through_3, (3, 256, 256)) )
+        #print( "shape meta", path_through_2x2.shape )
+        #print( "shape hs", hs.shape )
+        #hs[-1] = F.concat( (Variable(hs[-1]), Variable(path_through_2x2)) )
+        path_through_4 = cp.repeat(path_through, 4).astype('float32')
+        path_through_2x2 = chainer.cuda.to_gpu(cp.reshape(path_through_4, (1, 256, 2, 2)) )
+        h = self.c0(Variable(hs[-1]), test=test)
+        for i in range(1,8):
+            h = F.concat([h, hs[-i-1]])
+            if i<7:
+                h = self['c%d'%i](h, test=test)
+            else:
+                h = self.c7(h)
+        return h
+
+    
+class Discriminator2(chainer.Chain):
+    def __init__(self, in_ch, out_ch):
+        layers = {}
+        w = chainer.initializers.Normal(0.02)
+        layers['c0_0'] = CBR(in_ch, 32, bn=False, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c0_1'] = CBR(out_ch, 32, bn=False, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c1'] = CBR(64, 128, bn=True, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c2'] = CBR(128, 256, bn=True, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c3'] = CBR(256, 512, bn=True, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c4'] = F.Convolution2D(512, 1, 3, 1, 1, initialW=w)
+        super(Discriminator2, self).__init__(**layers)
+
+    def __call__(self, x_0, x_1, test=False):
+        h = F.concat([self.c0_0(x_0, test=test), self.c0_1(x_1, test=test)])
+        h = self.c1(h, test=test)
+        h = self.c2(h, test=test)
+        h = self.c3(h, test=test)
+        h = self.c4(h)
+        return h

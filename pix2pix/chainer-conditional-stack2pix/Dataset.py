@@ -62,27 +62,22 @@ class VecDataset(dataset_mixin.DatasetMixin):
         self.IN_CH = 4
         self.dataDir = dataDir
         self.dataset = []
-        files = glob('./pics.sixth/*')
+        files = glob('./fonts/*')
         orgs = list(filter(lambda x:'.org.' in x, files))
         heads = []
         for org in orgs:
-            heads.append( '.'.join(org.split('.')[1:6]).split('/').pop() )
             print(org)
-        import json
-        linker_tags = json.loads(open('./linker_tags_sixth.json').read())
+            heads.append( org.split('.')[1].split('/').pop() )
+            print( org.split('.')[1].split('/').pop()  )
         for i in range(data_range[0],data_range[1]):
             head = heads[i]
             """
             headが入っているのが、jsonのキーにもなる
             """
             print(i, "/", data_range[1] - data_range[0], head)
-            tagvec = np.array(linker_tags[head + '.jpg']['vector'])
             """
             meta tag vecを可変にする
             """
-            tagvec = np.resize(tagvec, (256,256) )
-            tagvec *= 255*tagvec
-            #tagvec = np.repeat(tagvec,256)
 
             img_path = list(filter(lambda x: head in x and '.org.' in x, files)).pop()
             lbl_path = list(filter(lambda x: head in x and '.cnv.' in x, files)).pop()
@@ -101,63 +96,12 @@ class VecDataset(dataset_mixin.DatasetMixin):
             """
             FIX = 1
             red, grn, blu = lbl_[:,:,0], lbl_[:,:,1], lbl_[:,:,2]
-            """
-            ここで、スタンダライゼーションを行う
-            """
-            #red = (red - red.mean())/red.std()
-            #grn = (grn - grn.mean())/grn.std()
-            #blu = (blu - blu.mean())/blu.std()
-            #>>> inser = np.array([[11, 12], [21, 22]])
-	    #>>> zeros = np.zeros(9).reshape( (3,3) )
-	    #>>> inser
-	    #array([[11, 12],
-       	    #[21, 22]])
-	    #   >>> zeros
-	    #array([[ 0.,  0.,  0.],
-            #	[ 0.,  0.,  0.],
-       	    #[ 0.,  0.,  0.]])
-	    #  >>> zeros[:inser.shape[0], :inser.shape[1]] = inser
-            # >>> zeros
-            #    array([[ 11.,  12.,   0.],
-            #     [ 21.,  22.,   0.],
-            #     [  0.,   0.,   0.]])
-            #print(tagvec)
-            #print(t[:,:,3])
-            #w, h, _ = lbl_.shape
-            #frombuffer = Image.frombuffer(data=t, size=(w, h), mode='RGB')
-            #frombuffer.save('test.png')
-            label = np.zeros((self.IN_CH, img.shape[1], img.shape[2])).astype("i")
-            for j, e in [(0, red), (1, grn), (2, blu), (3, tagvec)]:
-                if j == 3:
-                  print("Enter meta execution")
-                  label[j,:tagvec.shape[0], :tagvec.shape[1]] = tagvec
-                elif j == 0 or j == 1 or j == 2:
-                  label[j,:] = e 
-            """
-            for j in range(self.IN_CH):
-                    print("その他の処理です")
-                    label[j,:] = label_==j
-            """
             
-            t = np.zeros((label.shape[1], label.shape[2], self.IN_CH -1)).astype('uint8')
-            ##t[:tagvec.shape[0], :tagvec.shape[1], 0] = tagvec 
-            t[:, :, 0] = label[3, :, :]
-            t[:, :, 1] = label[1, :, :]
-            t[:, :, 2] = label[2, :, :]
-            
-            to_save_img = Image.fromarray(t)
-            draw = ImageDraw.Draw(to_save_img)
-            font = ImageFont.truetype("/usr/share/fonts/truetype/takao-gothic/TakaoGothic.ttf", 25)
-            draw.text((50,50), ',\n'.join(linker_tags[head + '.jpg']['terms']), (255, 0, 0),font=font)
-            #t[3, :tagvec.shape[0], :tagvec.shape[1]] = tagvec
-            #Image.fromarray(draw, mode='RGB').save( 'out/preview/' + head + '.vec.jpg' )
-            to_save_img.save( 'out/preview/' + head + '.vec.jpg' )
-            to_return_ = np.asarray(to_save_img.convert('RGB'))
-            to_return = np.zeros((self.IN_CH, to_return_.shape[0], to_return_.shape[1])).astype('uint8')
-            to_return[0, :, :] = to_return_[:, :, 0]
-            to_return[1, :, :] = to_return_[:, :, 1]
-            to_return[2, :, :] = to_return_[:, :, 2]
-            to_return[3, :tagvec.shape[0], :tagvec.shape[1]] = tagvec
+            to_return = np.zeros((self.IN_CH, lbl_.shape[0], lbl_.shape[1])).astype('uint8')
+            to_return[0, :, :] = lbl_[:, :, 0]
+            to_return[1, :, :] = lbl_[:, :, 1]
+            to_return[2, :, :] = lbl_[:, :, 2]
+            #to_return[3, :tagvec.shape[0], :tagvec.shape[1]] = tagvec
 
             self.dataset.append((img, to_return))
 
