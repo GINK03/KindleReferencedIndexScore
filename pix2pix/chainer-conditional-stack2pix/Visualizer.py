@@ -9,7 +9,7 @@ import chainer
 import chainer.cuda
 from chainer import Variable
 
-def out_image(updater, enc, dec, rows, cols, seed, dst, in_ch=12):
+def out_image(updater, enc, dec, enc2, dec2, rows, cols, seed, dst, in_ch=12):
     @chainer.training.make_extension()
     def make_image(trainer):
         np.random.seed(seed)
@@ -23,6 +23,7 @@ def out_image(updater, enc, dec, rows, cols, seed, dst, in_ch=12):
         in_all = np.zeros((n_images, in_ch, w_in, w_in)).astype("i")
         gt_all = np.zeros((n_images, out_ch, w_out, w_out)).astype("f")
         gen_all = np.zeros((n_images, out_ch, w_out, w_out)).astype("f")
+        gen2_all = np.zeros((n_images, out_ch, w_out, w_out)).astype("f")
         
         for it in range(n_images):
             batch = updater.get_iterator('test').next()
@@ -41,10 +42,12 @@ def out_image(updater, enc, dec, rows, cols, seed, dst, in_ch=12):
             z = enc(x_in, test=False)
             x_out = dec(z, path_through, test=False)
             
+            z2 = enc2(x_out, test=False)
+            x_out2 = dec2(z2, path_through, test=False)
             in_all[it,:] = x_in.data.get()[0,:]
             gt_all[it,:] = t_out.get()[0,:]
             gen_all[it,:] = x_out.data.get()[0,:]
-        
+            gen2_all[it, :] = x_out2.data.get()[0,:]
         
         def save_image(x, name, mode=None):
             _, C, H, W = x.shape
@@ -64,6 +67,9 @@ def out_image(updater, enc, dec, rows, cols, seed, dst, in_ch=12):
         
         x = np.asarray(np.clip(gen_all * 128 + 128, 0.0, 255.0), dtype=np.uint8)
         save_image(x, "gen")
+        
+        x = np.asarray(np.clip(gen2_all * 128 + 128, 0.0, 255.0), dtype=np.uint8)
+        save_image(x, "gen2")
         
         #x = np.ones((n_images, 3, w_in, w_in)).astype(np.uint8)*255
         ## ANCHOR

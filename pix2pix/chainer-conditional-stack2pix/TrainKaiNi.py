@@ -126,7 +126,7 @@ def main():
     trainer.extend(extensions.ProgressBar(update_interval=10))
     trainer.extend(
         out_image(
-            updater, enc, dec,
+            updater, enc, dec, enc2, dec2,
             5, 5, args.seed, args.out, IN_CH),
         trigger=snapshot_interval)
 
