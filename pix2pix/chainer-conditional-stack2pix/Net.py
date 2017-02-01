@@ -54,6 +54,10 @@ class Encoder(chainer.Chain):
         super(Encoder, self).__init__(**layers)
 
     def __call__(self, x, test=False):
+        """
+        INPUT xのshapeは
+        (1, 4, 256, 256)
+        """
         hs = [F.leaky_relu(self.c0(x))]
         for i in range(1,8):
             hs.append(self['c%d'%i](hs[i-1], test=test))
@@ -144,6 +148,30 @@ class Discriminator(chainer.Chain):
         #h = F.average_pooling_2d(h, h.data.shape[2], 1, 0)
         return h
 
+class Encoder2(chainer.Chain):
+    def __init__(self, in_ch):
+        """
+        IN_CHインターフェースは実際は二段目なので、あまり意味がなく、CHを3に固定する
+        """
+        CH = 3
+        layers = {}
+        w = chainer.initializers.Normal(0.02)
+        layers['c0'] = F.Convolution2D(CH, 64, 3, 1, 1, initialW=w)
+        layers['c1'] = CBR(64, 128, bn=True, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c2'] = CBR(128, 256, bn=True, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c3'] = CBR(256, 512, bn=True, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c4'] = CBR(512, 512, bn=True, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c5'] = CBR(512, 512, bn=True, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c6'] = CBR(512, 512, bn=True, sample='down', activation=F.leaky_relu, dropout=False)
+        layers['c7'] = CBR(512, 512, bn=True, sample='down', activation=F.leaky_relu, dropout=False)
+        super(Encoder2, self).__init__(**layers)
+    def __call__(self, x, test=False):
+        #print( "shape", x.data.shape )
+        hs = [F.leaky_relu(self.c0(x))]
+        for i in range(1,8):
+            hs.append(self['c%d'%i](hs[i-1], test=test))
+        return hs
+
 class Decoder2(chainer.Chain):
     def __init__(self, out_ch):
         self.EXTRA_VECTOR = 256
@@ -160,14 +188,12 @@ class Decoder2(chainer.Chain):
         super(Decoder2, self).__init__(**layers)
 
     def __call__(self, hs, path_through, test=False):
-        #path_through_3 = cp.repeat(path_through, 3*256).astype('float32')
-        #path_through_2x2 = chainer.cuda.to_gpu(cp.reshape(path_through_3, (3, 256, 256)) )
-        #print( "shape meta", path_through_2x2.shape )
-        #print( "shape hs", hs.shape )
-        #hs[-1] = F.concat( (Variable(hs[-1]), Variable(path_through_2x2)) )
         path_through_4 = cp.repeat(path_through, 4).astype('float32')
         path_through_2x2 = chainer.cuda.to_gpu(cp.reshape(path_through_4, (1, 256, 2, 2)) )
-        h = self.c0(Variable(hs[-1]), test=test)
+        hs[-1] = F.concat( (hs[-1], Variable(path_through_2x2)) )
+        path_through_4 = cp.repeat(path_through, 4).astype('float32')
+        path_through_2x2 = chainer.cuda.to_gpu(cp.reshape(path_through_4, (1, 256, 2, 2)) )
+        h = self.c0(hs[-1], test=test)
         for i in range(1,8):
             h = F.concat([h, hs[-i-1]])
             if i<7:

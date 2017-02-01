@@ -14,6 +14,7 @@ from chainer import serializers
 from Net import Encoder
 from Net import Decoder
 from Net import Discriminator
+from Net import Encoder2
 from Net import Decoder2
 from Net import Discriminator2
 from Updater import Updater as Updater
@@ -58,12 +59,14 @@ def main():
     enc = Encoder(in_ch=IN_CH)
     dec = Decoder(out_ch=OUT_CH)
     dis = Discriminator(in_ch=IN_CH, out_ch=OUT_CH)
+    enc2 = Encoder2(in_ch=IN_CH)
     dec2 = Decoder2(out_ch=OUT_CH)    
     if args.gpu >= 0:
         chainer.cuda.get_device(args.gpu).use()  # Make a specified GPU current
         enc.to_gpu()  # Copy the model to the GPU
         dec.to_gpu()
         dis.to_gpu()
+        enc2.to_gpu()
         dec2.to_gpu()
 
     # Setup an optimizer
@@ -75,6 +78,7 @@ def main():
     opt_enc  = make_optimizer(enc)
     opt_dec  = make_optimizer(dec)
     opt_dis  = make_optimizer(dis)
+    opt_enc2 = make_optimizer(enc2)
     opt_dec2 = make_optimizer(dec2)
 
     train_d = Dataset(args.dataset, data_range=train_range)
@@ -86,7 +90,7 @@ def main():
 
     # Set up a trainer
     updater = Updater(
-        models=(enc, dec, dis, dec2),
+        models=(enc, dec, dis, enc2, dec2),
         iterator={
             'main': train_iter,
             'test': test_iter},
@@ -94,6 +98,7 @@ def main():
             'enc': opt_enc, 
             'dec': opt_dec, 
             'dis': opt_dis,
+            'enc2': opt_enc2,
             'dec2': opt_dec2,
             },
         device=args.gpu)
