@@ -81,7 +81,7 @@ class VecDataset(dataset_mixin.DatasetMixin):
             meta tag vecを可変にする
             """
             tagvec = np.resize(tagvec, (256,256) )
-            tagvec *= 255*tagvec
+            tagvec = 255*tagvec
             #tagvec = np.repeat(tagvec,256)
 
             img_path = list(filter(lambda x: head in x and '.org.' in x, files)).pop()
