@@ -56,11 +56,12 @@ def main():
     # Set up a neural network to train
     IN_CH = 4
     OUT_CH = 3
-    enc = Encoder(in_ch=IN_CH)
-    dec = Decoder(out_ch=OUT_CH)
-    dis = Discriminator(in_ch=IN_CH, out_ch=OUT_CH)
+    enc  = Encoder(in_ch=IN_CH)
+    dec  = Decoder(out_ch=OUT_CH)
+    dis  = Discriminator(in_ch=IN_CH, out_ch=OUT_CH)
     enc2 = Encoder2(in_ch=IN_CH)
     dec2 = Decoder2(out_ch=OUT_CH)    
+    dis2 = Discriminator2(in_ch=IN_CH, out_ch=OUT_CH)
     if args.gpu >= 0:
         chainer.cuda.get_device(args.gpu).use()  # Make a specified GPU current
         enc.to_gpu()  # Copy the model to the GPU
@@ -68,6 +69,7 @@ def main():
         dis.to_gpu()
         enc2.to_gpu()
         dec2.to_gpu()
+        dis2.to_gpu()
 
     # Setup an optimizer
     def make_optimizer(model, alpha=0.0002, beta1=0.5):
@@ -80,6 +82,7 @@ def main():
     opt_dis  = make_optimizer(dis)
     opt_enc2 = make_optimizer(enc2)
     opt_dec2 = make_optimizer(dec2)
+    opt_dis2 = make_optimizer(dis2)
 
     train_d = Dataset(args.dataset, data_range=train_range)
     test_d = Dataset(args.dataset, data_range=test_range)
@@ -90,7 +93,7 @@ def main():
 
     # Set up a trainer
     updater = Updater(
-        models=(enc, dec, dis, enc2, dec2),
+        models=(enc, dec, dis, enc2, dec2, dis2),
         iterator={
             'main': train_iter,
             'test': test_iter},
@@ -100,6 +103,7 @@ def main():
             'dis': opt_dis,
             'enc2': opt_enc2,
             'dec2': opt_dec2,
+            'dis2': opt_dec2,
             },
         device=args.gpu)
     trainer = training.Trainer(updater, (args.epoch, 'epoch'), out=args.out)

@@ -17,7 +17,7 @@ import numpy
 class Updater(chainer.training.StandardUpdater):
 
     def __init__(self, *args, **kwargs):
-        self.enc, self.dec, self.dis, self.enc2, self.dec2 = kwargs.pop('models')
+        self.enc, self.dec, self.dis, self.enc2, self.dec2, self.dis2 = kwargs.pop('models')
         super(Updater, self).__init__(*args, **kwargs)
 
 
@@ -53,8 +53,9 @@ class Updater(chainer.training.StandardUpdater):
         dis_optimizer = self.get_optimizer('dis')
         enc2_optimizer = self.get_optimizer('enc2')
         dec2_optimizer = self.get_optimizer('dec2')
+        dis2_optimizer = self.get_optimizer('dis2')
         
-        enc, dec, dis, enc2, dec2 = self.enc, self.dec, self.dis, self.enc2, self.dec2
+        enc, dec, dis, enc2, dec2, dis2 = self.enc, self.dec, self.dis, self.enc2, self.dec2, self.dis2
         xp = enc.xp
 
         batch = self.get_iterator('main').next()
@@ -106,6 +107,8 @@ class Updater(chainer.training.StandardUpdater):
         """ 二段目のGANの定義を作る """
         z2 = enc2(x_out, test=False)
         x_out2 = dec2(z2, path_through, test=False)
+        y_fake2 = dis2(x_in, x_out2, test=False)
+        y_real2 = dis2(x_in, t_out, test=False)
 
         enc_optimizer.update(self.loss_enc, enc, x_out, t_out, y_fake)
         for z_ in z:
