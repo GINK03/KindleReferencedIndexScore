@@ -121,7 +121,7 @@ def main():
         dis, 'dis_iter_{.updater.iteration}.npz'), trigger=snapshot_interval)
     trainer.extend(extensions.LogReport(trigger=display_interval))
     trainer.extend(extensions.PrintReport([
-        'epoch', 'iteration', 'enc/loss', 'dec/loss', 'dis/loss',
+        'epoch', 'iteration', 'enc/loss', 'dec/loss', 'dis/loss', 'enc2/loss', 'dec2/loss', 'dis2/loss'
     ]), trigger=display_interval)
     trainer.extend(extensions.ProgressBar(update_interval=10))
     trainer.extend(

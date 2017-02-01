@@ -11,9 +11,9 @@ from PIL import Image
 
 from chainer import cuda
 from chainer import function
+from chainer import reporter
 from chainer.utils import type_check
 import numpy
-
 class Updater(chainer.training.StandardUpdater):
 
     def __init__(self, *args, **kwargs):
@@ -40,11 +40,36 @@ class Updater(chainer.training.StandardUpdater):
         
     def loss_dis(self, dis, y_in, y_out):
         batchsize,_,w,h = y_in.data.shape
-        
         L1 = F.sum(F.softplus(-y_in)) / batchsize / w / h
         L2 = F.sum(F.softplus(y_out)) / batchsize / w / h
         loss = L1 + L2
         chainer.report({'loss': loss}, dis)
+        return loss
+    
+    def loss_enc2(self, enc2, x_out, t_out, y_out, lam1=100, lam2=1):
+        batchsize,_,w,h = y_out.data.shape
+        loss_rec = lam1*(F.mean_absolute_error(x_out, t_out))
+        loss_adv = lam2*F.sum(F.softplus(-y_out)) / batchsize / w / h
+        loss = loss_rec + loss_adv
+        chainer.report({'loss': loss}, enc2)
+        return loss
+        
+    def loss_dec2(self, dec2, x_out, t_out, y_out, lam1=100, lam2=1):
+        batchsize,_,w,h = y_out.data.shape
+        loss_rec = lam1*(F.mean_absolute_error(x_out, t_out))
+        loss_adv = lam2*F.sum(F.softplus(-y_out)) / batchsize / w / h
+        loss = loss_rec + loss_adv
+        chainer.report({'loss': loss}, dec2)
+        return loss
+        
+        
+    def loss_dis2(self, dis2, y_in, y_out):
+        batchsize,_,w,h = y_in.data.shape
+        L1 = F.sum(F.softplus(-y_in)) / batchsize / w / h
+        L2 = F.sum(F.softplus(y_out)) / batchsize / w / h
+        loss = L1 + L2
+        #chainer.report({'loss': loss}, dis2)
+        #print("dis2", {'loss': loss})
         return loss
 
     def update_core(self):        
@@ -91,6 +116,7 @@ class Updater(chainer.training.StandardUpdater):
         
         for i in range(batchsize):
             x_in[i,:] = xp.asarray(batch[i][0])
+            """ T_OUTはすなわち、真実の姿 """
             t_out[i,:] = xp.asarray(batch[i][1])
         x_in = Variable(x_in)
         
@@ -117,3 +143,8 @@ class Updater(chainer.training.StandardUpdater):
         x_in.unchain_backward()
         x_out.unchain_backward()
         dis_optimizer.update(self.loss_dis, dis, y_real, y_fake)
+        
+        """ stack gan optimizerをアップデート """
+        enc2_optimizer.update(self.loss_enc2, enc2, x_out2, t_out, y_fake2)
+        dec2_optimizer.update(self.loss_dec2, dec2, x_out2, t_out, y_fake2)
+        dis2_optimizer.update(self.loss_dis2, dis2, y_real2, y_fake2)
