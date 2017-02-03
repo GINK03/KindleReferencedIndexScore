@@ -106,6 +106,65 @@ class SixthDataset(dataset_mixin.DatasetMixin):
     def __len__(self):
         return len(self.dataset)
 
+class FontDataset(dataset_mixin.DatasetMixin):
+    def __init__(self, dataDir='./base', data_range=(1,100)):
+        print("load Vec-dataset start")
+        print("    from: %s"%dataDir)
+        print("    range: [%d, %d)"%(data_range[0], data_range[1]))
+        self.IN_CH = 4
+        self.dataDir = dataDir
+        self.dataset = []
+        files = glob('./fonts-pixel/*')
+        orgs = list(filter(lambda x:'.org.' in x, files))
+        heads = []
+        for org in orgs:
+            print(org)
+            heads.append( org.split('.')[1].split('/').pop() )
+            print( org.split('.')[1].split('/').pop()  )
+        for i in range(data_range[0],data_range[1]):
+            head = heads[i]
+            print(i, "/", data_range[1] - data_range[0], head)
+            img_path = list(filter(lambda x: head in x and '.org.' in x, files)).pop()
+            lbl_path = list(filter(lambda x: head in x and '.cnv.' in x, files)).pop()
+            img = Image.open(img_path)
+            label = Image.open(lbl_path).convert('RGB')
+            label_org = label
+            w,h = img.size
+            r = 286/min(w,h)
+            # resize images so that min(w, h) == 286
+            img = img.resize((int(r*w), int(r*h)), Image.BILINEAR)
+            label = label.resize((int(r*w), int(r*h)), Image.NEAREST)
+            img = np.asarray(img).astype("f").transpose(2,0,1)/128.0-1.0
+            lbl_ = np.array(label)  # [0, 12)
+            FIX = 1
+            red, grn, blu = lbl_[:,:,0], lbl_[:,:,1], lbl_[:,:,2]
+            to_return = np.zeros((self.IN_CH, lbl_.shape[0], lbl_.shape[1])).astype('uint8')
+            to_return[0, :, :] = lbl_[:, :, 0]
+            to_return[1, :, :] = lbl_[:, :, 1]
+            to_return[2, :, :] = lbl_[:, :, 2]
+            to_return[3, :, :] = np.random.randint(0, 255, (lbl_.shape[0], lbl_.shape[1]))
+            self.dataset.append((img, to_return))
+        print("load Vec-dataset done")
+    def __len__(self):
+        return len(self.dataset)
+    def get_example(self, i, crop_width=256):
+        _,h,w = self.dataset[i][0].shape
+        x_l = np.random.randint(0,w-crop_width)
+        x_r = x_l+crop_width
+        y_l = np.random.randint(0,h-crop_width)
+        y_r = y_l+crop_width
+        """ cropping する際に、メタ情報もクロッピングしてはならないので、クロッピング範囲を0:2に限定する"""
+        cnv = self.dataset[i][1]
+        red, grn, blu, meta = cnv[0,y_l:y_r,x_l:x_r], cnv[1,y_l:y_r,x_l:x_r], cnv[2,y_l:y_r,x_l:x_r], \
+                cnv[3:,0:256,0:256]
+        to_return = np.zeros((self.IN_CH, 256, 256))
+        to_return[0, :, :] = red
+        to_return[1, :, :] = grn
+        to_return[2, :, :] = blu
+        to_return[3:, :, :] =  meta
+        return to_return, self.dataset[i][0][:,y_l:y_r,x_l:x_r]
+        #return self.dataset[i][1][:,y_l:y_r,x_l:x_r], self.dataset[i][0][:,y_l:y_r,x_l:x_r]
+
 
 class VecDataset(dataset_mixin.DatasetMixin):
     def __init__(self, dataDir='./base', data_range=(1,100)):

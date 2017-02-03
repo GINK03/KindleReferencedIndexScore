@@ -20,9 +20,10 @@ from Net import Discriminator2
 from Updater import Updater as Updater
 
 #from Dataset import VecDataset as Dataset
-from Dataset import SixthDataset as Dataset
+#from Dataset import SixthDataset as Dataset
+from Dataset import FontDataset as Dataset
 from Visualizer import out_image
-ALL_NUM = int(7900/2)
+ALL_NUM = int(6622/2)
 train_range = (1, int(ALL_NUM*0.8))
 test_range  = (int(ALL_NUM*0.8)+1, ALL_NUM)
 def main():
