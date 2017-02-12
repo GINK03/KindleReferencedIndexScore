@@ -7,7 +7,7 @@ from gensim.models import word2vec
 import sys
 from itertools import permutations as P
 import glob 
-
+import pickle as pkl
 if __name__ == '__main__':
   if '--train' in sys.argv:
     fname = sys.argv[1]
@@ -18,13 +18,24 @@ if __name__ == '__main__':
     open('/tmp/w2v.tmp', 'w').write( ' '.join(corpus) )
     data = word2vec.Text8Corpus('/tmp/w2v.tmp') 
     print("calculating w2v...")
-    model = word2vec.Word2Vec(data, size=100, window=5, min_count=1, workers=4)
+    model = word2vec.Word2Vec(data, size=256, window=5, min_count=1, workers=4)
     model.save(fname + '.w2v')
 
     out=model.most_similar(positive=['ゾンビ'])
     for x in out:
       print(x[0],x[1])
-   
+
+  if '--vectrize' in sys.argv:
+    fname = sys.argv[1]
+    print(fname)
+    vocs = set(sum([open(name).read().split() for name in glob.glob("%s/*wakati"%fname)], []))
+    #print(vocs)
+    model = word2vec.Word2Vec.load(fname + '.w2v')
+    word_vec = {}
+    for word in vocs:
+      word_vec[word] = list(model[word])
+      print(word, len(list(model[word])))
+    open(fname +'.pkl', 'wb').write( pkl.dumps(word_vec) )
   if '--perm' in sys.argv: 
     fname = sys.argv[1]
     print(fname)
