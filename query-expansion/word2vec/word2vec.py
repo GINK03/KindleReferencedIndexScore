@@ -1,26 +1,33 @@
 # coding: utf-8
+from __future__ import print_function
 import os
 import math
 import gensim
 from gensim.models import word2vec
 import sys
 from itertools import permutations as P
+import glob 
 
 if __name__ == '__main__':
   if '--train' in sys.argv:
     fname = sys.argv[1]
-    print fname
-    data = word2vec.Text8Corpus(fname) 
-    model = word2vec.Word2Vec(data, size=100, window=5, min_count=5, workers=4)
+    print(fname)
+    corpus = sum([open(name).read().split() for name in glob.glob("%s/*wakati"%fname)], [])
+    print(corpus[:10])
+    print("dumping tmp...")
+    open('/tmp/w2v.tmp', 'w').write( ' '.join(corpus) )
+    data = word2vec.Text8Corpus('/tmp/w2v.tmp') 
+    print("calculating w2v...")
+    model = word2vec.Word2Vec(data, size=100, window=5, min_count=1, workers=4)
     model.save(fname + '.w2v')
 
-    out=model.most_similar(positive=['艦これ'.decode('utf-8')])
+    out=model.most_similar(positive=['ゾンビ'])
     for x in out:
-      print x[0],x[1]
+      print(x[0],x[1])
    
   if '--perm' in sys.argv: 
     fname = sys.argv[1]
-    print fname
+    print(fname)
     model = word2vec.Word2Vec.load(fname)
     terms = filter(lambda x:x!='', open('./sample/dataset.kancolle.dat').read().split('\n'))
     t_tw = {}
@@ -36,7 +43,7 @@ if __name__ == '__main__':
             t_tw[ps[0]].append( [ps[1], \
                 int( model.similarity(ps_dec[0], ps_dec[1]) * 10000)] )
             t_tw[ps[0]].sort(key=lambda x:x[1]*-1)
-        except KeyError, e:
+        except KeyError as e:
             pass
 
     for t, tw in t_tw.items():
@@ -65,5 +72,5 @@ if __name__ == '__main__':
       flare['size'] = allweight
       flare['imports'] = map(lambda x:x[0], shadow)
       allflare.append(flare)
-    print json.dumps(allflare)
+    print(json.dumps(allflare) )
 
