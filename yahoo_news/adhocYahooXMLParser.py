@@ -42,41 +42,49 @@ def html_adhoc_fetcher(url):
             continue
     if html == None:
         return None
-    #line = html
-    #line = regex.sub('<!--.*?-->', '',  line)
-    #line = regex.sub('<style.*?/style>', '',  line)
-    #html = regex.sub('<script.*?/script>', '', line ).replace('^A^B^C', ' ')
  
     soup = bs4.BeautifulSoup(html)
     title = (lambda x:str(x.string) if x != None else 'Untitled')( soup.title )
-    contents0 = soup.findAll('p', {'class': 'ynDetailText'} )
+    contents0 = sum([soup.findAll('p', {'class': 'ynDetailText'} ), \
+                 soup.findAll('p', {'class': 'hbody'})], [] )
     if contents0 == []:
         return None
     contents_all_text = str(' '.join(map(lambda x:x.text, contents0)) )
     print( "code", soup.original_encoding )
     return title, contents_all_text
-html = open('./seed.html').read()
-soup = bs4.BeautifulSoup(html, "lxml")
-links = set()
 import feedparser
 import plyvel
 import sys
 from datetime import datetime as dt
-tdatetime = dt.now()
-time = tdatetime.strftime('%Y_%m_%d_%H')
-
-db = plyvel.DB('%s_yahoo_news.ldb'%time, create_if_missing=True) 
-# クロウラーモード
 if '-c' in sys.argv:
-  for link in set([a['href'] for a in soup.find_all('a', href=True)]):
-    obj = feedparser.parse(link)
-    for i, e in enumerate(obj.entries):
-      print('[[%d]]'%i)
-      print(e.title)
-      print(e.link)
-      link = e.link
+  while True:
+    try: 
+      del db
+    except: 
+      print("no instance")
+    tdatetime = dt.now()
+    time = tdatetime.strftime('%Y_%m_%d_%H')
+    #db = plyvel.DB('%s_yahoo_news.ldb'%time, create_if_missing=True) 
+    db = plyvel.DB('%snews.ldb'%time, create_if_missing=True) 
+
+    soup = bs4.BeautifulSoup(open('./seed').read())
+    xmls = list(filter(lambda x:'.xml' in x, [a['href'] for a in soup.findAll('a', href=True)]) )
+    tus = list(map(lambda x:(x.split('/')[-2], x), xmls))
+    buff = []
+    for tu in tus:
+      print(tu)
+      os.system('wget -O "tmp/%s.html" %s'%tu)
+      import xml.etree.ElementTree  as ET
+      tree = ET.parse('tmp/%s.html'%tu[0])
+      buff.append([e.text for e in tree.getiterator('link')])
+    allurl = sum(buff, [])
+    print(allurl)
+    # クロウラーモード
+    for link in allurl:
+      print("link", link)
       if db.get(bytes(link, 'utf-8')) == None:
-        tp = html_adhoc_fetcher(e.link)
+        tp = html_adhoc_fetcher(link)
+        print(tp)
         if tp == None:
           continue
         title, contents_all_text = tp
