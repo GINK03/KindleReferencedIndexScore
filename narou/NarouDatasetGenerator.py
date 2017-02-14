@@ -87,8 +87,9 @@ if __name__ == '__main__':
     import MeCab
     tagger = MeCab.Tagger("-Owakati")
     if '--getall' in sys.argv:
-        seedurl = 'http://ncode.syosetu.com/n2710db/1/'
+        seedurl = 'http://ncode.syosetu.com/n2267be/2/'
         html, title, links, soup = html_adhoc_fetcher(seedurl, db) 
+	print(title)
         zipped = stemming_pair(soup)
         db.put(seedurl, zipped.encode('utf-8') )
         linkstack = links
