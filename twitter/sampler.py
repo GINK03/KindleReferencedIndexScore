@@ -1,10 +1,10 @@
 import json
 from twitter import Twitter, OAuth, TwitterHTTPError, TwitterStream
 import re
-ACCESS_TOKEN = '2343754692-NagKE0CwUjHpe3hZNNdxdtJnavox5XmPPc8G675'
-ACCESS_SECRET = ''
-CONSUMER_KEY = 'XvvFplttoVqGzYublMqtEDRYR'
-CONSUMER_SECRET = ''
+ACCESS_TOKEN = '2342351682-V2zt9VW52IYTDkht8nRCKuLTgtDSlYDn3e6Jwxl'
+ACCESS_SECRET = 'H03OVwmX3mvJUfD0jDBemeRuaXd6kkUdhkV8KGZu5OALc'
+CONSUMER_KEY = 'K25LXr8ev6QcqQqcTgOdh98Hj'
+CONSUMER_SECRET = 'yCE0QTHGY2R2CwGyyU2fILP8R7JzSJTaqvbUrCJkRcxaJeXzHA'
 
 oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
 twitter_stream = TwitterStream(auth=oauth)
