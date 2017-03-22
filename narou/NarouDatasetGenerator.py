@@ -73,25 +73,23 @@ def stemming_pair(soup):
     return content
 
 if __name__ == '__main__':
-    db = plyvel.DB('./url_contents_pair.ldb', create_if_missing=True)
-    import MeCab
-    tagger = MeCab.Tagger("-Owakati")
-    if '--getall' in sys.argv:
-        seedurl = 'http://ncode.syosetu.com/n7975cr/1/'
-        html, title, links, soup = html_adhoc_fetcher(seedurl, db) 
-        print(title)
+  db = plyvel.DB('./url_contents_pair.ldb', create_if_missing=True)
+  import MeCab
+  tagger = MeCab.Tagger("-Owakati")
+  if '--getall' in sys.argv:
+    seedurl = 'http://ncode.syosetu.com/n7975cr/1/'
+    html, title, links, soup = html_adhoc_fetcher(seedurl, db) 
+    print(title)
+    zipped = stemming_pair(soup)
+    db.put(bytes(seedurl, 'utf-8'), bytes(zipped, 'utf-8') )
+    linkstack = links
+    for i, link in enumerate(linkstack):
+      if db.get(bytes(link, 'utf-8')) == None:
+        html, title, links, soup = html_adhoc_fetcher(link, db) 
         zipped = stemming_pair(soup)
-        db.put(bytes(seedurl, 'utf-8'), bytes(zipped, 'utf-8') )
-        linkstack = links
-        for i, link in enumerate(linkstack):
-            if db.get(bytes(link, 'utf-8')) == None:
-                html, title, links, soup = html_adhoc_fetcher(link, db) 
-                zipped = stemming_pair(soup)
-                db.put(bytes(link, 'utf-8'), bytes(zipped, 'utf-8'))
-                print(str(link), 'num=', i)
-                #db.put(str(link), '\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
-                #print('\n'.join([a for a in map(lambda x:x[0] + '@@@' + x[1], zipped)] ) )
-                linkstack.extend(links)
-    if '--plane' in sys.argv:
-      for link, text in db:
-        print(text.decode('utf-8'))
+        db.put(bytes(link, 'utf-8'), bytes(zipped, 'utf-8'))
+        print(str(link), 'num=', i)
+        linkstack.extend(links)
+  if '--plane' in sys.argv:
+    for link, text in db:
+      print(text.decode('utf-8'))
