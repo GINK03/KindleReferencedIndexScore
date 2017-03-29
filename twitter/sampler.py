@@ -5,19 +5,19 @@ import boto
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 ## boto api
-ACCESS_TOKEN = "AKIAJHOYKCP2J4UEZXRA"
-SECRET_TOKEN = input()
-conn = S3Connection(ACCESS_TOKEN, \
-                    SECRET_TOKEN, \
-                    ) 
+AWS              = {x[0]:x[1] for x in [x.split("=") for x in filter(lambda x:x!="", open('/home/ec2-user/private_configs/aws.irep.pairs', 'r').read().split('\n'))]}
+ACCESS_TOKEN     = AWS['ACCESS_TOKEN']
+SECRET_TOKEN     = AWS['SECRET_TOKEN']
+conn = S3Connection(ACCESS_TOKEN, SECRET_TOKEN, ) 
 bucket = conn.get_bucket("irep-ml-twitter-mini")
 key_   = Key(bucket)
 
 ## twitter api
-ACCESS_TOKEN = '2342351682-V2zt9VW52IYTDkht8nRCKuLTgtDSlYDn3e6Jwxl'
-ACCESS_SECRET = 'H03OVwmX3mvJUfD0jDBemeRuaXd6kkUdhkV8KGZu5OALc'
-CONSUMER_KEY = 'K25LXr8ev6QcqQqcTgOdh98Hj'
-CONSUMER_SECRET = 'yCE0QTHGY2R2CwGyyU2fILP8R7JzSJTaqvbUrCJkRcxaJeXzHA'
+TWITTER          = {x[0]:x[1] for x in [x.split("=") for x in filter(lambda x:x!="", open('/home/ec2-user/private_configs/twitter.api.pairs', 'r').read().split('\n'))]}
+ACCESS_TOKEN     = TWITTER['ACCESS_TOKEN']
+ACCESS_SECRET    = TWITTER['ACCESS_SECRET']
+CONSUMER_KEY     = TWITTER['CONSUMER_KEY']
+CONSUMER_SECRET  = TWITTER['CONSUMER_SECRET']
 
 oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
 twitter_stream = TwitterStream(auth=oauth)
@@ -46,13 +46,11 @@ for tweet in iterator:
       print("fr", friends)
       print("tx", text)
       obj = {'favs':favs, 'rt':rt_status, 'txt':text, 'fr':friends } 
-      #open(filename, 'w').write(json.dumps(obj))
       key_.key = filename
       key_.set_contents_from_string(json.dumps(obj))
       continue
 
     if tweet.get('retweeted_status') is not None:
-      #print(json.dumps(tweet, indent=4))
       friends_nested     = tweet.get('retweeted_status').get('user').get('friends_count')
       screen_name_nested = tweet.get('retweeted_status').get('user').get('screen_name')
       created_at_nested  = tweet.get('retweeted_status').get('user').get('created_at')
