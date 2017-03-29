@@ -1,6 +1,19 @@
 import json
 from twitter import Twitter, OAuth, TwitterHTTPError, TwitterStream
 import re
+import boto
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+## boto api
+ACCESS_TOKEN = "AKIAJHOYKCP2J4UEZXRA"
+SECRET_TOKEN = input()
+conn = S3Connection(ACCESS_TOKEN, \
+                    SECRET_TOKEN, \
+                    ) 
+bucket = conn.get_bucket("irep-ml-twitter-mini")
+key_   = Key(bucket)
+
+## twitter api
 ACCESS_TOKEN = '2342351682-V2zt9VW52IYTDkht8nRCKuLTgtDSlYDn3e6Jwxl'
 ACCESS_SECRET = 'H03OVwmX3mvJUfD0jDBemeRuaXd6kkUdhkV8KGZu5OALc'
 CONSUMER_KEY = 'K25LXr8ev6QcqQqcTgOdh98Hj'
@@ -33,7 +46,9 @@ for tweet in iterator:
       print("fr", friends)
       print("tx", text)
       obj = {'favs':favs, 'rt':rt_status, 'txt':text, 'fr':friends } 
-      open(filename, 'w').write(json.dumps(obj))
+      #open(filename, 'w').write(json.dumps(obj))
+      key_.key = filename
+      key_.set_contents_from_string(json.dumps(obj))
       continue
 
     if tweet.get('retweeted_status') is not None:
@@ -52,6 +67,8 @@ for tweet in iterator:
       print("tx", text)
       filename = "out/%s_%s"%(fixed_time_nested, screen_name_nested)
       obj = {'favs':favs, 'rt':rt_status, 'txt':text , 'fr':friends_nested } 
-      open(filename, 'w').write(json.dumps(obj))
+      key_.key = filename
+      key_.set_contents_from_string(json.dumps(obj))
+      #open(filename, 'w').write(json.dumps(obj))
       #url         = tweet.get('retweeted_status').get('entities').get('urls').get('expanded_url')
       #print("url", url)
