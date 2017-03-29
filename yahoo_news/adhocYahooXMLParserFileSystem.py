@@ -9,7 +9,6 @@ import ssl
 import multiprocessing as mp
 from socket import error as SocketError
 import bs4
-import feedparser
 import plyvel
 from datetime import datetime as dt
 import xml.etree.ElementTree  as ET
@@ -19,11 +18,10 @@ import concurrent.futures
 import boto
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
-ACCESS_TOKEN = "AKIAJHOYKCP2J4UEZXRA"
-SECRET_TOKEN = input()
-conn = S3Connection(ACCESS_TOKEN, \
-                    SECRET_TOKEN, \
-                    )
+AWS = {x[0]:x[1] for x in [x.split("=") for x in filter(lambda x:x!="", open('/home/ec2-user/private_configs/aws.irep.pairs', 'r').read().split('\n'))]}
+ACCESS_TOKEN = AWS['ACCESS_TOKEN']
+SECRET_TOKEN = AWS['SECRET_TOKEN']
+conn = S3Connection( ACCESS_TOKEN, SECRET_TOKEN )
 
 def html_adhoc_fetcher(url):
   html = None
@@ -92,7 +90,7 @@ if '-c' in sys.argv:
   while True:
     tdatetime    = dt.now()
     time_dirname = "%s"%( tdatetime.strftime('%Y_%m_%d_%H') )
-    os.system('mkdir %s'%time_dirname)
+    #os.system('mkdir %s'%time_dirname)
     soup         = bs4.BeautifulSoup(open('./seed').read())
     xmls         = list(filter(lambda x:'.xml' in x, [a['href'] for a in soup.findAll('a', href=True)]) )
     tus          = list(map(lambda x:(x.split('/')[-2], x), xmls))
