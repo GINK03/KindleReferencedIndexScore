@@ -1,0 +1,3396 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<title>Yahoo!ニュース - RSS</title>
+<link rel="stylesheet" type="text/css" media="all" href="http://i.yimg.jp/images/news/koukai2/css/style121018.css?v4">
+<link href="http://i.yimg.jp/images/css/yj2.css" rel="stylesheet" type="text/css" media="screen, print">
+<link href="http://i.yimg.jp/images/css/printexec.css" rel="stylesheet" type="text/css" media="print">
+<link href="http://i.yimg.jp/images/news/css/news_font.css" rel="stylesheet" type="text/css" media="screen, print">
+
+<!-- トピックス -->
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - トピックス - トップ" href="http://news.yahoo.co.jp/pickup/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - トピックス - 国内" href="http://news.yahoo.co.jp/pickup/domestic/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - トピックス - 海外" href="http://news.yahoo.co.jp/pickup/world/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - トピックス - 経済" href="http://news.yahoo.co.jp/pickup/economy/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - トピックス - エンターテインメント" href="http://news.yahoo.co.jp/pickup/entertainment/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - トピックス - スポーツ" href="http://news.yahoo.co.jp/pickup/sports/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - トピックス - コンピュータ" href="http://news.yahoo.co.jp/pickup/computer/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - トピックス - サイエンス" href="http://news.yahoo.co.jp/pickup/science/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - トピックス - 地域" href="http://news.yahoo.co.jp/pickup/local/rss.xml">
+<!-- ニュース -->
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - 国内" href="http://headlines.yahoo.co.jp/rss/all-dom.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - 国際" href="http://headlines.yahoo.co.jp/rss/all-c_int.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - 経済" href="http://headlines.yahoo.co.jp/rss/all-bus.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - エンタメ" href="http://headlines.yahoo.co.jp/rss/all-c_ent.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - スポーツ" href="http://headlines.yahoo.co.jp/rss/all-c_spo.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - IT・科学" href="http://headlines.yahoo.co.jp/rss/all-c_sci.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - ライフ" href="http://headlines.yahoo.co.jp/rss/all-c_life.xml">
+<link rel="alternate" type="application/rss+xml" title="Yahoo!ニュース - 地域" href="http://headlines.yahoo.co.jp/rss/all-loc.xml">
+
+<!-- SpaceID=0 robot -->
+</head>
+<body>
+
+<div id="container">
+
+<!-- header -->
+<script type="text/javascript">
+miffy_bucket_id = '';
+</script>
+<!-- SpaceID=0 robot -->
+<!-- SpaceID=0 robot -->
+<!-- SpaceID=0 robot -->
+<!-- SpaceID=0 robot -->
+<!-- /header -->
+
+<div id="wrapper" class="clearfix">
+
+<h1 class="stitle_rss"><i>RSS</i></h1>
+
+<!---------- トピックス ---------->
+<div class="rss_listbox">
+<h3 class="topics" id="topics" title="トピックス"><i>トピックス</i></h3>
+<div id="ynCopyright">
+<div class="ymuiContainer">
+    <ul class="ymuiList clearFix yjSt">
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://news.yahoo.co.jp/pickup/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>主要</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://news.yahoo.co.jp/pickup/domestic/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>国内</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://news.yahoo.co.jp/pickup/world/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>国際</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://news.yahoo.co.jp/pickup/economy/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>経済</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://news.yahoo.co.jp/pickup/entertainment/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>エンタメ</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://news.yahoo.co.jp/pickup/sports/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>スポーツ</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://news.yahoo.co.jp/pickup/computer/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>IT</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://news.yahoo.co.jp/pickup/science/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>科学</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://news.yahoo.co.jp/pickup/local/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>地域</dt>
+            </dl>
+        </li>
+    </ul>
+</div>
+</div>
+</div>
+<!---------- /トピックス ---------->
+
+
+<!---------- ニュース ---------->
+<div class="rss_listbox">
+<h3 class="news" id="news" title="ニュース"><i>ニュース</i></h3>
+<div id="ynCopyright">
+    <div class="ymuiHeaderBGLight">
+        <h4 class="ymuiTitle">国内<span class="btn"><a href="http://headlines.yahoo.co.jp/rss/all-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></span></h4>
+
+    </div>
+    <div class="ymuiContainer">
+        <ul class="ymuiList clearFix yjSt">
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/abema-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>AbemaTIMES</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/awire-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Aviation Wire</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bfj-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>BuzzFeed Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cbc-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>CBCテレビ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_mkt-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia ビジネスオンライン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/jct-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>J-CASTニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wordleaf-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>THE PAGE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tvk-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>tvkニュース（テレビ神奈川）</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/withnews-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>withnews</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/asahik-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>朝日新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/asiap-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>アジアプレス・ネットワーク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/storyfulv-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>アフロ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cbn-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>医療介護CBニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wmap-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ウェザーマップ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/okinawat-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>沖縄タイムス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kana-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>カナロコ by 神奈川新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kantele-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>関西テレビ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/koukousei-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>高校生新聞オンライン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/san-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>産経新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sanspo-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>サンケイスポーツ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/spnannex-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>スポニチアネックス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sph-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>スポーツ報知</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/senkyocom-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>選挙ドットコム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zeiricom-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>税理士ドットコム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/teletama-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>テレ玉</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nishinp-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>西日本新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nksports-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日刊スポーツ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/agrinews-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日本農業新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/newswitch-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ニュースイッチ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/socra-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ニュースソクラ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/videonewsv-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ビデオニュース・ドットコム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/fukushi-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>福祉新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bengocom-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>弁護士ドットコム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/houdouk-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ホウドウキョク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/doshin-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北海道新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/mbsnews-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>毎日放送</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rescuenow-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>レスキューナウニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rps-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>レスポンス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/logmi-dom.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ログミー</dt>
+            </dl>
+            </li>
+        </ul>
+    </div>
+    <div class="ymuiHeaderBGLight">
+        <h4 class="ymuiTitle">国際<span class="btn"><a href="http://headlines.yahoo.co.jp/rss/all-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></span></h4>
+
+    </div>
+    <div class="ymuiContainer">
+        <ul class="ymuiList clearFix yjSt">
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/abema-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>AbemaTIMES</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/afpbbnewsv-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>AFPBB News</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/aptsushinv-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>AP通信</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bbc-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>BBC News</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bfj-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>BuzzFeed Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cnn-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>CNN.co.jp</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/indowatch-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>INDO WATCHER ビジネスプレミアム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_mkt-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia ビジネスオンライン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/mbrasiln-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>MEGABRASIL</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/clc_nytv-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>The New York Times</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wordleaf-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>THE PAGE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/clc_teleg-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>The Telegraph</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/withnews-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>withnews</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wow-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>WoW!Korea</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/asahik-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>朝日新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/asiap-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>アジアプレス・ネットワーク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/storyfulv-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>アフロ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wsj-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ウォール・ストリート・ジャーナル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/san-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>産経新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/saopaulo-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>サンパウロ新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cnpress-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>済龍 China Press</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ftaiwan-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>中央社フォーカス台湾</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cnippou-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>中央日報日本語版</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/chosun-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>朝鮮日報日本語版</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nishinp-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>西日本新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nikkey-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ニッケイ新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/socra-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ニュースソクラ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/hankyoreh-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ハンギョレ新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/videonewsv-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ビデオニュース・ドットコム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/houdouk-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ホウドウキョク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/doshin-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北海道新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/macau-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>マカオ新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/minkei-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>みんなの経済新聞ネットワーク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ykf-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>夕刊フジ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rescuenow-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>レスキューナウニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/yonh-c_int.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>聯合ニュース</dt>
+            </dl>
+            </li>
+        </ul>
+    </div>
+    <div class="ymuiHeaderBGLight">
+        <h4 class="ymuiTitle">経済<span class="btn"><a href="http://headlines.yahoo.co.jp/rss/all-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></span></h4>
+
+    </div>
+    <div class="ymuiContainer">
+        <ul class="ymuiList clearFix yjSt">
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/abema-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>AbemaTIMES</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/awire-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Aviation Wire</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bfj-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>BuzzFeed Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/carv-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>carview！</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/it_eetimes-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>EE Times Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/impress-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Impress Watch</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_mkt-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia ビジネスオンライン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/jct-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>J-CASTニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sh_mon-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>MONEYzine</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/it_monoist-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>MONOist</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/qbiz-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>qBiz 西日本新聞経済電子版</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/fsi-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>SankeiBiz</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sensors-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>SENSORS</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ssonline-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Stereo Sound ONLINE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wordleaf-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>THE PAGE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/withnews-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>withnews</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zuuonline-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ZUU online</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/asahik-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>朝日新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wsj-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ウォール・ストリート・ジャーナル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/economic-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>エコノミックニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/autoconen-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>オートックワン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kantele-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>関西テレビ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/konline-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>経営者online</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kenkoshin-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>健康産業新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kenkosoku-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>健康産業速報</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/san-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>産経新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sanyo-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>山陽新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/biz_it_sj-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>スマートジャパン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zeiricom-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>税理士ドットコム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/teikokudb-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>帝国データバンク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tekkou-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>鉄鋼新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/dtohoku-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>デーリー東北新聞社</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/biz_shoko-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>東京商工リサーチ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/toushin-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>投信1</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/travelv-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>トラベルボイス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nkogyo-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日刊工業新聞電子版</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sangyo-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日刊産業新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/agrinews-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日本農業新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/newswitch-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ニュースイッチ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/socra-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ニュースソクラ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/norimono-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>乗りものニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/houdouk-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ホウドウキョク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/doshin-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北海道新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/mbsnews-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>毎日放送</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/manetatsun-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>マネーの達人</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/biz_mos-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>モーニングスター</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rps-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>レスポンス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/logmi-bus.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ログミー</dt>
+            </dl>
+            </li>
+        </ul>
+    </div>
+    <div class="ymuiHeaderBGLight">
+        <h4 class="ymuiTitle">エンタメ<span class="btn"><a href="http://headlines.yahoo.co.jp/rss/all-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></span></h4>
+
+    </div>
+    <div class="ymuiContainer">
+        <ul class="ymuiList clearFix yjSt">
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/abema-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>AbemaTIMES</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nallabout-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>All About</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bfj-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>BuzzFeed Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cine-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>cinemacafe.net</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cinranet-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>CINRA.NET</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/dmenueiga-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>dmenu映画</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/elleonline-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ELLE ONLINE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/etalent-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>E-TALENTBANK</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ignjapan-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>IGN JAPAN</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/impress-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Impress Watch</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_lp-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia LifeStyle</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_n-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia NEWS</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/jct-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>J-CASTニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/lmaga-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Lmaga.jp</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/mvwalk-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Movie Walker</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/musicv-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>MusicVoice</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rorock-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>RO69（アールオーロック）</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sensors-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>SENSORS</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ssonline-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Stereo Sound ONLINE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wordleaf-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>THE PAGE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tokyofm-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>TOKYO FM＋</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/withnews-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>withnews</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wow-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>WoW!Korea</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/asahik-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>朝日新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/storyfulv-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>アフロ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/isd-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>インサイド</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/eiga-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>映画.com</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nataliee-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>映画ナタリー</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/exmusic-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>エキサイトミュージック</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/okinawat-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>沖縄タイムス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/natalieo-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>お笑いナタリー</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/natalien-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>音楽ナタリー</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kana-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>カナロコ by 神奈川新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/crankinn-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>クランクイン！</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nataliec-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>コミックナタリー</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/san-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>産経新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sanspo-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>サンケイスポーツ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/flix-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>シネマトゥデイ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/spnannex-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>スポニチアネックス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sph-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>スポーツ報知</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/pia-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>チケットぴあ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/chosun-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>朝鮮日報日本語版</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/devi-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>デビュー</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tospoweb-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>東スポWeb</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/trendnewsn-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>トレンドニュース（GYAO）</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nishispo-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>西日本スポーツ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nkgendai-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日刊ゲンダイDIGITAL</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nksports-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日刊スポーツ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nshaberu-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ニッポン放送「しゃベル」</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/it_nlab-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ねとらぼ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/piaeiga-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ぴあ映画生活</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/houdouk-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ホウドウキョク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/doshin-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北海道新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ykf-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>夕刊フジ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/reallive-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>リアルライブ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rps-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>レスポンス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/yonh-c_ent.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>聯合ニュース</dt>
+            </dl>
+            </li>
+        </ul>
+    </div>
+    <div class="ymuiHeaderBGLight">
+        <h4 class="ymuiTitle">スポーツ<span class="btn"><a href="http://headlines.yahoo.co.jp/rss/all-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></span></h4>
+
+    </div>
+    <div class="ymuiContainer">
+        <ul class="ymuiList clearFix yjSt">
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/abema-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>AbemaTIMES</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/aptsushinv-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>AP通信</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bfj-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>BuzzFeed Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cyc-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>CycleStyle</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/fullcount-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Full-Count</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/goal-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>GOAL</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/mbrasiln-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>MEGABRASIL</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/msportcom-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>motorsport.com 日本版</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nfljapan-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>NFL公式サイト日本語版</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/soccerk-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>SOCCER KING</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tennisnet-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>tennis365.net</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tennisnavi-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>TENNIS.JP</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wordleaf-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>THE PAGE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/theworld-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>theWORLD（ザ・ワールド）</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/withnews-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>withnews</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wow-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>WoW!Korea</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/asahik-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>朝日新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/at_s-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>＠S［アットエス］ by 静岡新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/storyfulv-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>アフロ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ibaraki-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>茨城新聞クロスアイ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/gbr-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>イーファイト</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ubenippo-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>宇部日報</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/economic-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>エコノミックニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/okinawat-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>沖縄タイムス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rcg-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>オートスポーツweb</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/autoconen-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>オートックワン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kana-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>カナロコ by 神奈川新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kanpara-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>カンパラプレス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/gekisaka-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ゲキサカ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/koukousei-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>高校生新聞オンライン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/alba-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ゴルフ情報ALBA.Net</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/gdo-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ゴルフダイジェスト・オンライン（GDO）</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/saitama-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>埼玉新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/saga-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>佐賀新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/san-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>産経新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sanspo-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>サンケイスポーツ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/jomo-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>上毛新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/spnannex-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>スポニチアネックス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/spnavi-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>スポーツナビ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sph-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>スポーツ報知</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/pia-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>チケットぴあ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/chibach-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ちばとぴ！チャンネル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/chibatopi-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>千葉日報オンライン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/chosun-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>朝鮮日報日本語版</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tvtokyos-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>テレビ東京スポーツ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/dtohoku-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>デーリー東北新聞社</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tospoweb-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>東スポWeb</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nishispo-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>西日本スポーツ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nkgendai-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日刊ゲンダイDIGITAL</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nksports-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日刊スポーツ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nikkey-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ニッケイ新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bballk-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>バスケットボールキング</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/battlen-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>バトル・ニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/badspi-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>バド×スピ！／バドミントン・マガジン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/vbm-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>バレーボールマガジン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/baseballk-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ベースボールキング</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/houdouk-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ホウドウキョク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/doshin-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北海道新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ykf-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>夕刊フジ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rugbyrp-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ラグビーリパブリック（ラグビーマガジン）</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/reallive-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>リアルライブ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rps-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>レスポンス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/yonh-c_spo.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>聯合ニュース</dt>
+            </dl>
+            </li>
+        </ul>
+    </div>
+    <div class="ymuiHeaderBGLight">
+        <h4 class="ymuiTitle">IT・科学<span class="btn"><a href="http://headlines.yahoo.co.jp/rss/all-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></span></h4>
+
+    </div>
+    <div class="ymuiContainer">
+        <ul class="ymuiList clearFix yjSt">
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bcn-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>BCN</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bfj-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>BuzzFeed Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cnetj-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>CNET Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/it_edn-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>EDN Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/it_eetimes-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>EE Times Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/impress-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Impress Watch</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_lp-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia LifeStyle</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_m-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia Mobile</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_n-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia NEWS</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_pc-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia PC USER</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_ep-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia エンタープライズ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/biz_it_mk-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia マーケティング</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/jct-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>J-CASTニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sh_mar-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>MarkeZine</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/it_monoist-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>MONOist</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/biz_rwj-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ReadWrite Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/scan-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ScanNetSecurity</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sensors-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>SENSORS</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sorae_jp-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>sorae.jp</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ssonline-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Stereo Sound ONLINE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wordleaf-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>THE PAGE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cyberir-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>THE ZERO／ONE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/webtan-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Web担当者Forum</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/withnews-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>withnews</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/asahik-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>朝日新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ascii-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>アスキー</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zdn_ait-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>＠IT</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/economic-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>エコノミックニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/okinawat-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>沖縄タイムス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/giz-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ギズモード・ジャパン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/saga-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>佐賀新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/san-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>産経新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sanyo-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>山陽新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nishinp-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>西日本新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nkogyo-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日刊工業新聞電子版</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/newswitch-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ニュースイッチ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/netshop-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ネットショップ担当者フォーラム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/it_nlab-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ねとらぼ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/houdouk-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ホウドウキョク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/doshin-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北海道新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rps-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>レスポンス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/logmi-c_sci.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ログミー</dt>
+            </dl>
+            </li>
+        </ul>
+    </div>
+    <div class="ymuiHeaderBGLight">
+        <h4 class="ymuiTitle">ライフ<span class="btn"><a href="http://headlines.yahoo.co.jp/rss/all-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></span></h4>
+
+    </div>
+    <div class="ymuiContainer">
+        <ul class="ymuiList clearFix yjSt">
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nallabout-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>All About</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bfj-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>BuzzFeed Japan</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cinranet-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>CINRA.NET</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/elleonline-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ELLE ONLINE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/fashions-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Fashionsnap.com</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/impress-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Impress Watch</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/it_health-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ITmedia ヘルスケア</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/lmaga-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Lmaga.jp</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sensors-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>SENSORS</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sippo-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>sippo</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/storys-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>STORYS.JP</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/suumoj-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>SUUMOジャーナル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wordleaf-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>THE PAGE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tokyofm-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>TOKYO FM＋</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zuuonline-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ZUU online</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/asahik-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>朝日新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/koukousei-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>高校生新聞オンライン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/san-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>産経新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sanyo-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>山陽新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/zeiricom-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>税理士ドットコム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/toushin-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>投信1</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nishinp-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>西日本新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nkgendai-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日刊ゲンダイDIGITAL</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/it_nlab-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ねとらぼ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/benesseks-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ベネッセ 教育情報サイト</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/bengocom-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>弁護士ドットコム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/houdouk-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ホウドウキョク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/manetatsun-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>マネーの達人</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rshingakun-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>リクナビ進学</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/resemom-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>リセマム</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/logmi-c_life.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ログミー</dt>
+            </dl>
+            </li>
+        </ul>
+    </div>
+    <div class="ymuiHeaderBGLight">
+        <h4 class="ymuiTitle">地域<span class="btn"><a href="http://headlines.yahoo.co.jp/rss/all-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></span></h4>
+
+    </div>
+    <div class="ymuiContainer">
+        <ul class="ymuiList clearFix yjSt">
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/cbc-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>CBCテレビ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ibciwate-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>IBC岩手放送</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/lmaga-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Lmaga.jp</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/minkeiv-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>MINKEITV</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/wordleaf-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>THE PAGE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tvk-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>tvkニュース（テレビ神奈川）</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/colocal-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Webマガジン コロカル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/withnews-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>withnews</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/at_s-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>＠S［アットエス］ by 静岡新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/izu-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>伊豆新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ibaraki-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>茨城新聞クロスアイ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ubenippo-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>宇部日報</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/ehime-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>愛媛新聞ONLINE</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/okinawat-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>沖縄タイムス</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kana-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>カナロコ by 神奈川新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kantele-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>関西テレビ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/kitanihon-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北日本新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/gifuweb-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>岐阜新聞Ｗｅｂ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/saitama-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>埼玉新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/saga-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>佐賀新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/san-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>産経新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/sanyo-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>山陽新聞デジタル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/jomo-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>上毛新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/chibach-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ちばとぴ！チャンネル</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/chibatopi-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>千葉日報オンライン</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tuliptv-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>チューリップテレビ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/teletama-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>テレ玉</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/dtohoku-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>デーリー東北新聞社</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/tomamin-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>苫小牧民報</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nagasaki-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>長崎新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/nishinp-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>西日本新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/agrinews-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日本農業新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/it_nlab-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ねとらぼ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/norimono-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>乗りものニュース</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/hakoshin-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>函館新聞電子版</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/fukui-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>福井新聞ＯＮＬＩＮＥ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/fminpo-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>福島民報</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/minyu-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>福島民友新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/houdouk-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ホウドウキョク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/hokuriku-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北陸新幹線で行こう！　北陸・信越観光ナビ</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/doshin-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北海道新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/hokkaibun-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北海道文化放送</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/hokkoku-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>北國新聞社</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/mbsnews-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>毎日放送</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/mjikenbo-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ミニ事件簿</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/miyazaki-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>宮崎日日新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/minkei-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>みんなの経済新聞ネットワーク</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/yamanashi-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>山梨日日新聞</dt>
+            </dl>
+            </li>
+            <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://headlines.yahoo.co.jp/rss/rtn-loc.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>両丹日日新聞</dt>
+            </dl>
+            </li>
+        </ul>
+    </div>
+</div>
+</div>
+<!---------- /ニュース ---------->
+
+
+<!---------- 雑誌 ---------->
+<div class="rss_listbox">
+<h3 class="zasshi" id="zasshi" title="雑誌" style="position:relative;"><i>雑誌</i></h3>
+
+<div id="ynCopyright">
+<div class="ymuiContainer">
+    <ul class="ymuiList clearFix yjSt">
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/dime-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>＠ＤＩＭＥ</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/ourage-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>OurAge</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/rnijugo-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>R25</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/will-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>WiLL</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/wedge-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Wedge</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/sportiva-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>webスポルティーバ</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/eipub-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>エイ出版社</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/esse-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ESSE-online</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/nrin-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>NRI研究員の時事解説</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/nhktextv-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>NHKテキストビュー</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/tvfan-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>エンタメOVO</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/otapolz-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>おたぽる</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/otocoto-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>otoCoto</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/otonans-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>オトナンサー</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/alterna-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>オルタナ</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/ovo-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>オーヴォ</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/shikiho-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>会社四季報オンライン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/kaiyou-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>KAI-YOU.net</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/casabrutus-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Casa BRUTUS.com</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/kyousemi-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>教員養成セミナー</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/clicccarz-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>clicccar</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/creaweb-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>CREA WEB</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/globisv-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>GLOBIS知見録</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/sakae-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>月刊糖尿病ライフ さかえ</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/facta-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>月刊FACTA</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/gendaibiz-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>現代ビジネス</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/gentosha-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>幻冬舎plus</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/kjn-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>講談社　JOSEISHI.NET</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/cosmopoli-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>コスモポリタン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/oriconbiz-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>コンフィデンス</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/biz_coacha-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>コーチ・エィ</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/cyclespo-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>CYCLE SPORTS.jp</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/cyzoz-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>サイゾー</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/sdigestw-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>SOCCER DIGEST Web</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/seraijp-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>サライ.jp</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/the_tv-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ザテレビジョン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/scafe-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>シェアーズカフェ・オンライン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/kinyobi-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>週刊金曜日</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/jprime-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>週刊女性PRIME</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/sspa-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>週刊SPA!</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/sjournal-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>就職ジャーナル</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/playboyz-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>週プレNEWS</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/fsight-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>新潮社 フォーサイト</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/cgworld-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>CGWORLD.jp</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/cddldata-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ＣＤ＆ＤＬでーた</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/theanswer-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>THE ANSWER</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/jbpressz-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>JBpress</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/jindepth-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Japan In-depth</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/jspa-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>女子SPA！</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/gqjapan-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>GQ JAPAN</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/suitsw-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Suits-woman.jp</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/seijiyama-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>政治山</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/sentaku-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>選択</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/diamond-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ダイヤモンド・オンライン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/dzai-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ダイヤモンド・ザイ</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/wwdjapan-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>WWD JAPAN.com</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/davinci-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ダ・ヴィンチニュース</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/chuokou-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>中央公論</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/tsukuru-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>創</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/digiday-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>DIGIDAY［日本版］</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/shincho-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>デイリー新潮</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/tkwalk-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>東京ウォーカー</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/tokyocal-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>東京カレンダー</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/toyo-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>東洋経済オンライン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/sasahi-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>dot.</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/nknatiogeo-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ナショナル ジオグラフィック日本版</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/number-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Number Web</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/woman-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日経ウーマンオンライン（日経ウーマン）</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/health-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日経ウーマンオンライン（日経ヘルス）</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/nikkeisty-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>NIKKEI STYLE</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/nkdualz-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日経DUAL</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/trendy-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日経トレンディネット</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/bpnet-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>nikkei BPnet</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/nipponcom-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>nippon.com</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/biz_jinji-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>日本の人事部</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/pseven-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>NEWS ポストセブン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/newsweek-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ニューズウィーク日本版</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/numero-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Numero TOKYO</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/hbolz-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>HARBOR BUSINESS Online</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/bazaar-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ハーパーズ バザー・オンライン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/hathlete-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>広島アスリートマガジン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/biz_plus-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ビジネス＋IT</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/php_s-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>PHP Online 衆知</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/php_t-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>PHP Online 衆知（THE21）</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/voice-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>PHP Online 衆知（Voice）</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/php_r-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>PHP Online 衆知（歴史街道）</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/phpfamily-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ＰＨＰファミリー</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/fffbiki-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ファンファン福岡</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/forbes-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Forbes JAPAN</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/fballista-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>footballista</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/soccermzw-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Football ZONE web</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/footballc-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>フットボールチャンネル</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/friday-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>FRIDAY</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/webhon-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>BOOKSTAND</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/bookbang-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Book Bang</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/bunshun-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>文春オンライン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/president-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>プレジデント</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/besttimes-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ＢＥＳＴ ＴＩＭＥＳ</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/baseballc-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ベースボールチャンネル</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/magazinew-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>magazineworld</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/figaro-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>madame FIGARO.jp</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/moneypost-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>マネーポストWEB</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/meijinet-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>Meiji.net</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/mediagong-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>メディアゴン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/mensplus-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>MEN’S＋</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/biz_lifeh-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ライフハッカー［日本版］</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/realsound-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>リアルサウンド</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/riskts-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>リスク対策.com</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/livingfk-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>リビング福岡・北九州</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/ryokoyom-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>旅行読売</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/locationj-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ロケーションジャパン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/rollingsj-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ローリングストーン日本版</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/wired-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>WIRED.jp</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/vingtcinq-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>25ansオンライン</dt>
+            </dl>
+
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://zasshi.news.yahoo.co.jp/rss/vogue-all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>VOGUE JAPAN</dt>
+            </dl>
+
+        </li>
+    </ul>
+</div>
+</div>
+</div>
+<!---------- /雑誌 ---------->
+
+
+<!---------- 意識調査 ---------->
+<div class="rss_listbox">
+<h3 class="click" id="click" title="意識調査"><i>意識調査</i></h3>
+
+<div id="ynCopyright">
+<div class="ymuiContainer">
+    <ul class="ymuiList clearFix yjSt">
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://polls.dailynews.yahoo.co.jp/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>すべて</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://polls.dailynews.yahoo.co.jp/domestic/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>国内・政治</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://polls.dailynews.yahoo.co.jp/entertainment/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>エンタメ</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://polls.dailynews.yahoo.co.jp/sports/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>スポーツ</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://polls.dailynews.yahoo.co.jp/life/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ライフ</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://polls.dailynews.yahoo.co.jp/easy/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>ゆるネタ</dt>
+            </dl>
+        </li>
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://polls.dailynews.yahoo.co.jp/other/rss.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+            <dt>その他</dt>
+            </dl>
+        </li>
+    </ul>
+</div>
+</div>
+</div>
+<!---------- /意識調査 ---------->
+
+
+<!---------- 個人 ---------->
+<div class="rss_listbox" title="個人">
+<h3 class="bylines" id="bylines" style="position:relative;"><i>個人</i></h3>
+
+<div id="ynCopyright">
+<div class="ymuiContainer">
+    <ul class="ymuiList clearFix yjSt">
+        <li class="ymuiArrow">
+            <dl>
+            <dd><a href="http://bylines.news.yahoo.co.jp/rss/all.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+
+            <dt>新着順</dt>
+            </dl>
+        </li>
+    </ul>
+</div>
+</div>
+</div>
+<!---------- /個人 ---------->
+
+
+<!---------- ビジネス ---------->
+<div class="rss_listbox" title="ビジネス">
+<h3 class="biz" id="biz" style="position:relative;"><i>ビジネス</i></h3>
+
+<div id="ynCopyright">
+<div class="ymuiContainer">
+    <ul class="ymuiList clearFix yjSt">
+
+        <li class="ymuiArrow">
+            <dl>
+                <dd><a href="http://news.yahoo.co.jp/biz/rss/pickup.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+                <dt>ピックアップ</dt>
+            </dl>
+        </li>
+
+        <li class="ymuiArrow">
+            <dl>
+                <dd><a href="http://news.yahoo.co.jp/biz/rss/category/economy.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+                <dt>経済</dt>
+            </dl>
+        </li>
+
+        <li class="ymuiArrow">
+            <dl>
+                <dd><a href="http://news.yahoo.co.jp/biz/rss/category/enterprise.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+                <dt>企業</dt>
+            </dl>
+        </li>
+
+        <li class="ymuiArrow">
+            <dl>
+                <dd><a href="http://news.yahoo.co.jp/biz/rss/category/global.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+                <dt>グローバル</dt>
+            </dl>
+        </li>
+
+        <li class="ymuiArrow">
+            <dl>
+                <dd><a href="http://news.yahoo.co.jp/biz/rss/category/market.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+                <dt>マーケット</dt>
+            </dl>
+        </li>
+
+        <li class="ymuiArrow">
+            <dl>
+                <dd><a href="http://news.yahoo.co.jp/biz/rss/category/career.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+                <dt>キャリア</dt>
+            </dl>
+        </li>
+
+        <li class="ymuiArrow">
+            <dl>
+                <dd><a href="http://news.yahoo.co.jp/biz/rss/category/technology.xml" target="new"><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" alt="RSS" border="0"></a></dd>
+                <dt>テクノロジー</dt>
+            </dl>
+        </li>
+
+    </ul>
+</div>
+</div>
+</div>
+<!---------- /ビジネス ---------->
+
+
+<!---------- 説明 ----------->
+<div class="rss_explanation">
+<ul>
+<li class="bgC">
+    <dl>
+    <dt>RSSについて：</dt>
+
+    <dd>詳しくは<a href="http://help.yahoo.co.jp/help/jp/news/news-43.html" target="new">こちら</a>をご覧ください。</dd>
+    </dl>
+</li>
+<li class="bgC">
+    <dl>
+    <dt>アイコンについて：</dt>
+    <dd><img src="http://i.yimg.jp/images/common/rss.gif" width="36" height="17" border="0" alt="RSS">RSSファイルへのリンク</dd>
+    </dl>
+</li>
+</ul>
+</div>
+<!---------- /説明 ----------->
+
+
+<!------ ご利用上の注意 ------>
+<div class="rss_attention">
+<dl class="inbox">
+<dt>ご利用上の注意</dt>
+<dd>
+    <ul>
+    <li>Yahoo! JAPANは、お客様がRSSをご利用になるためのソフトウエアの準備、方法などについてはサポートしていません。</li>
+    <li>サービスは、予告なく機能を追加したり、または変更・削除することがあります。</li>
+    <li>フレームによるリンクは、情報提供元との契約にかかわる事項でもあり、また商標法、不正競争防止法等に照らしても問題がありますので、ご遠慮ください。なお、ご利用にあたっては<em><a href="http://docs.yahoo.co.jp/docs/info/terms/" target="new">Yahoo! JAPANのサービス利用規約</a></em>を事前にご確認ください。</li>
+    <li>RSSを商用目的で使用したいお客様は<a href="https://www.yahoo-help.jp/app/ask/p/2466/form/news-inquiry">こちらのお問い合わせフォーム</a>からご相談ください。</li>
+    </ul>
+
+</dd>
+</dl>
+</div>
+<!------ /ご利用上の注意 ------>
+
+
+<!--- FOOTER --->
+<div id="footer">
+<hr width="100%" size="0">
+<!-- SpaceID=0 robot -->
+<hr width="100%" size="0">
+<p class="fss">
+<a href="http://docs.yahoo.co.jp/docs/info/terms/chapter1.html#cf2nd" rel="nofollow">プライバシーポリシー</a> - <a href="http://docs.yahoo.co.jp/docs/info/terms/" rel="nofollow">利用規約</a> -
+<a href="http://headlines.yahoo.co.jp/docs/copyright.html" rel="nofollow">著作権</a>  -
+<a href="http://rdsig.yahoo.co.jp/media/news/footer/feedback/RV=1/RU=aHR0cHM6Ly9mZWVkYmFjay5tcy55YWhvby5jby5qcC92b2MvbmV3cy12b2MvaW5wdXQ-" rel="nofollow">ご意見・ご要望</a> - <a href="http://help.yahoo.co.jp/help/jp/news/" rel="nofollow">ヘルプ・お問い合わせ</a><br>
+Copyright (C) 2017 Yahoo Japan Corporation. All Rights Reserved.
+</p>
+</div>
+<!--- /FOOTER --->
+</div>
+</div>
+</body>
+</html>
