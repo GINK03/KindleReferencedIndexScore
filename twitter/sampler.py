@@ -4,8 +4,9 @@ import re
 import boto
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
+from os import environ as ENV
 ## boto api
-AWS              = {x[0]:x[1] for x in [x.split("=") for x in filter(lambda x:x!="", open('/home/ec2-user/private_configs/aws.irep.pairs', 'r').read().split('\n'))]}
+AWS              = {x[0]:x[1] for x in [x.split("=") for x in filter(lambda x:x!="", open('{home}/private_configs/aws.irep.pairs'.format(home=ENV['HOME']), 'r').read().split('\n'))]}
 ACCESS_TOKEN     = AWS['ACCESS_TOKEN']
 SECRET_TOKEN     = AWS['SECRET_TOKEN']
 conn = S3Connection(ACCESS_TOKEN, SECRET_TOKEN, ) 
@@ -13,7 +14,7 @@ bucket = conn.get_bucket("irep-ml-twitter-mini")
 key_   = Key(bucket)
 
 ## twitter api
-TWITTER          = {x[0]:x[1] for x in [x.split("=") for x in filter(lambda x:x!="", open('/home/ec2-user/private_configs/twitter.api.pairs', 'r').read().split('\n'))]}
+TWITTER          = {x[0]:x[1] for x in [x.split("=") for x in filter(lambda x:x!="", open('{home}/private_configs/twitter.api.pairs'.format(home=ENV['HOME']), 'r').read().split('\n'))]}
 ACCESS_TOKEN     = TWITTER['ACCESS_TOKEN']
 ACCESS_SECRET    = TWITTER['ACCESS_SECRET']
 CONSUMER_KEY     = TWITTER['CONSUMER_KEY']
